@@ -21,6 +21,7 @@
         var _year = null;
         var _month = null;
         var _doRender = true;
+        var _templates = undefined;
 
         // Internal types
         var LocalStoragePersistence = function () {
@@ -92,6 +93,9 @@
          * @constructor
          */
         var _init = function () {
+            _templates = CalendarTemplates;
+
+
             var o = options;
 
             // Dependency check
@@ -168,6 +172,9 @@
                 _setYearAndMonth(o.year, o.month);
             }
 
+            // Create elements
+            _createAddModal();
+
             // Render
             if (o.render != undefined) {
                 _doRender = o.render;
@@ -178,6 +185,12 @@
             }
         };
 
+
+        var _createAddModal = function () {
+            var html = _templates.AddModal();
+
+            $('body').append(html);
+        };
 
         /**
           * Validates and creates objects and array containers
@@ -399,7 +412,7 @@
                 weekdays: _getWeekDays(),
                 weeks: _getDataForMonthAndYear(_year, _month),
             };
-            var html = CalendarTemplates.calendar(data);
+            var html = _templates.calendar(data);
 
             cal.html(html);
         };

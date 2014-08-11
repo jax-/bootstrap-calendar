@@ -1,5 +1,14 @@
 this["CalendarTemplates"] = this["CalendarTemplates"] || {};
 
+this["CalendarTemplates"]["AddModal"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div id=\"myModal\" class=\"modal fade\">\r\n    <div class=\"modal-dialog\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-header\">\r\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>\r\n                <h4 class=\"modal-title\">Add new event for date <span id=\"modal-title-date\"></span></h4>\r\n            </div>\r\n            <div class=\"modal-body\">\r\n                <p>Please insert person name and event</p>\r\n\r\n                <input type=\"hidden\" id=\"hidden-event-day\" />\r\n\r\n                <span>Person name:</span>\r\n                <input id=\"person\" />\r\n\r\n                <span>Event name:</span>\r\n                <input id=\"eventName\" />\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary\" id=\"add-event\">Add</button>\r\n                <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\r\n            </div>\r\n        </div><!-- /.modal-content -->\r\n    </div><!-- /.modal-dialog -->\r\n</div><!-- /.modal -->";
+  });
+
 this["CalendarTemplates"]["calendar"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -80,13 +89,4 @@ function program7(depth0,data,depth1) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n\r\n</table>\r\n";
   return buffer;
-  });
-
-this["CalendarTemplates"]["template2"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div>\r\n    asdsadsadsadsads\r\n</div>";
   });

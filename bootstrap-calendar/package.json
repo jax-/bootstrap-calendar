@@ -1,0 +1,18 @@
+{
+  "name": "bootstrap-calendar",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "~0.4.3",
+    "grunt-contrib-less": "^0.11.4",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-handlebars": "0.8.0"
+  }
+}

@@ -1,14 +1,8 @@
 /**
  * @name Bootstrap Calendar
- * @author Jacek Zyœk (jzysk)
- * @version beta
- * @date 2014-08-06
- * @dependencies:
- *     - jquery-1.11.1.min.js or newer
- *     - handlebars-v1.3.0.js or newer
- * @recommended:
- *     - Bootstrap 3 (css + js)
- *     - LESS
+ * @author Jacek Zysk (jzysk)
+ * @version 0.1.0
+ * @date 2014-08-11
  */
 
 (function (env) {
@@ -341,7 +335,7 @@
 
                     var container = event.container;
 
-                    container.splice(1, event);
+                    container.splice();
                     _allEvents.splice(1, event);
                     _render();
                 }

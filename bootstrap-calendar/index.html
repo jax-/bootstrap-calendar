@@ -28,11 +28,12 @@
     var calendar = new Calendar({
         selector: '#calendar',
         debug: false,
-        persist: 'localStorage',
+        persist: 'remote',
         render: true,
         year: year,
         month: month,
         panel: 'bottom',
+        showEventList: true,
     });
 
     var events = calendar.getEvents();

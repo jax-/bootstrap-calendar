@@ -1,0 +1,40 @@
+﻿<div class="event-list text-center">
+
+    <h3>Event list</h3>
+    <table class="table table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Person name
+                </th>
+                <th>
+                    Event name
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each this}}
+            <tr>
+                <td>
+                    {{this.eventId}}
+                </td>
+                <td>
+                    {{this.year}}-{{this.month}}-{{this.day}}
+                </td>
+                <td>
+                    {{this.person}}
+                </td>
+                <td>
+                    {{this.eventName}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

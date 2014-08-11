@@ -24,6 +24,7 @@
         var _templates = undefined;
         var _panelPosition = 'top';
         var _calendarContainer = '';
+        var _showEventList = true;
 
         // Internal types
         var LocalStoragePersistence = function () {
@@ -68,7 +69,7 @@
             return this;
         };
 
-        var AjaxPersistence = function () {
+        var RemotePersistence = function () {
             // fake
             //todo
             this.saveAll = function () {
@@ -128,7 +129,7 @@
                     _persistenceType = o.persist;
 
                     if (_persistenceType != 'localStorage' &&
-                        _persistenceType != 'ajax') {
+                        _persistenceType != 'remote') {
                         throw new Error('Invalid persistence type');
                     }
 
@@ -136,8 +137,8 @@
                         case 'localStorage':
                             _persistenceModule = new LocalStoragePersistence();
                             break;
-                        case 'ajax':
-                            _persistenceModule = new AjaxPersistence();
+                        case 'remote':
+                            _persistenceModule = new RemotePersistence();
                             break;
                         default:
                             _persistenceModule = undefined;
@@ -146,6 +147,14 @@
 
                     if (_persistenceModule.readAll != undefined) {
                         _persistenceModule.readAll();
+                    }
+                }
+
+                // Event list
+                if (o.showEventList != undefined) {
+                    if (o.showEventList == true ||
+                        o.showEventList == false) {
+                        _showEventList = o.showEventList;
                     }
                 }
             }
@@ -577,14 +586,16 @@
         };
 
         var _renderEventList = function () {
-            var evData = _getEventsForMonth(_year, _month);
+            if (_showEventList) {
+                var evData = _getEventsForMonth(_year, _month);
 
-            var eventListHtml = _templates.events(evData);
+                var eventListHtml = _templates.events(evData);
 
-            if (evData.length > 0) {
-                $(_selector + ' .event-container').html(eventListHtml);
-            } else {
-                $(_selector + ' .event-container').html('');
+                if (evData.length > 0) {
+                    $(_selector + ' .event-container').html(eventListHtml);
+                } else {
+                    $(_selector + ' .event-container').html('');
+                }
             }
         };
 

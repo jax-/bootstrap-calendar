@@ -22,6 +22,8 @@
         var _month = null;
         var _doRender = true;
         var _templates = undefined;
+        var _panelPosition = 'top';
+        var _calendarContainer = '';
 
         // Internal types
         var LocalStoragePersistence = function () {
@@ -172,8 +174,18 @@
                 _setYearAndMonth(o.year, o.month);
             }
 
+            // Read panel position
+            if (o.panel != undefined && (o.panel == 'bottom' || 
+                                         o.panel == 'top')) {
+                _panelPosition = o.panel;
+            }
+
             // Create elements
+            _createContainer();
             _createAddModal();
+
+            _createPanel(_panelPosition);
+            _addPanelEvents();
 
             // Render
             if (o.render != undefined) {
@@ -185,11 +197,105 @@
             }
         };
 
+        var _createContainer = function () {
+            $(_selector).append('<div class="container"></div>');
+            _calendarContainer = _selector + ' .container';
+        };
 
         var _createAddModal = function () {
-            var html = _templates.AddModal();
+            var html = _templates.addModal();
 
             $('body').append(html);
+        };
+
+        var _createPanel = function (position) {
+            var html = _templates.panel();
+
+            if (position == 'bottom') {
+                $(_calendarContainer).after(html);
+            } else {
+                $(_calendarContainer).before(html);
+            }
+        };
+
+        var _addPanelEvents = function () {
+            var panelSelector = '.calendar-panel ';
+
+            $(panelSelector + '.prev-month').click(function () {
+                _month--;
+                if (_month < 0) {
+                    _month = 11;
+                    _year--;
+                }
+
+                _render();
+            });
+
+            $(panelSelector + '.next-month').click(function () {
+                _month++;
+                if (_month > 11) {
+                    _month = 0;
+                    _year++;
+                }
+
+                _render();
+            });
+
+            var changeYear = function (value) {
+                _year += value;
+                _render();
+            };
+
+            $(panelSelector + '.prev-year').click(function () {
+                changeYear(-1);
+            });
+            $(panelSelector + '.next-year').click(function () {
+                changeYear(1);
+            });
+
+            var addNewEvent = function (day) {
+                var person = $('#person').val();
+                var event = $('#eventName').val();
+
+                _addEvent(_year, _month, day, person, event);
+                _render();
+
+                $('#person').val('');
+                $('#eventName').val('');
+            };
+
+            $(_selector).on('dblclick', '.week-day', function () {
+                var day = $(this).data('day');
+
+                var dateStr = year + '-' + month + '-' + day;
+                $('#modal-title-date').html(dateStr);
+                $('#hidden-event-day').val(day);
+                var modal = $('#myModal').modal('show');
+            });
+
+            $(_selector).on('click', '.event', function (e) {
+                var day = $(this).data('day');
+                var eventId = $(this).data('eventid');
+                _removeEvent(_year, _month, day, eventId);
+                _render();
+            });
+
+            $('#myModal .add-event').click(function () {
+                var day = $('#hidden-event-day').val();
+                addNewEvent(day);
+
+                var modal = $('#myModal').modal('hide');
+            });
+
+            $(panelSelector + '.save-events').click(function () {
+                _saveEvents();
+                alert('events saved');
+            });
+
+            $(panelSelector + '.clear-events').click(function () {
+                _clearEvents();
+                _render();
+            });
         };
 
         /**
@@ -398,7 +504,7 @@
                 _setYearAndMonth(year, month);
             }
 
-            var cal = $(_selector);
+            var container = $(_calendarContainer);
             var currentString = _year;
 
             if (_month < 9) {
@@ -414,7 +520,7 @@
             };
             var html = _templates.calendar(data);
 
-            cal.html(html);
+            container.html(html);
         };
 
         var hexValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
@@ -434,6 +540,16 @@
             return str;
         };
 
+        var _saveEvents = function () {
+            if (_persistenceModule != undefined) {
+                _persistenceModule.saveAll();
+            }
+        };
+
+        var _clearEvents = function () {
+            _events = new CalendarEvents();
+        };
+
         // Initialization
         _init();
 
@@ -447,14 +563,8 @@
             getEvents: function () {
                 return _events;
             },
-            saveEvents: function () {
-                if (_persistenceModule != undefined) {
-                    _persistenceModule.saveAll();
-                }
-            },
-            clearEvents: function () {
-                _events = new CalendarEvents();
-            },
+            saveEvents: _saveEvents,
+            clearEvents: _clearEvents,
         };
     };
     

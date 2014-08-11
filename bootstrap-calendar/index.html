@@ -9,20 +9,8 @@
     <link rel="stylesheet" href="css/bs-calendar.css" />
 </head>
 <body>
-    <div class="text-center">
-        <button class="btn btn-primary" id="prev-year">Previous year</button>
-        <button class="btn btn-primary" id="prev-month">Previous month</button>
-        <button class="btn btn-primary" id="next-month">Next month</button>
-        <button class="btn btn-primary" id="next-year">Next year</button>
-
-        <button class="btn btn-default" id="save-events">Save events</button>
-        <button class="btn btn-default" id="clear-events">Clear events</button>
-    </div>
     <div id="calendar">
-
     </div>
-
-
 </body>
 
 </html>
@@ -44,82 +32,7 @@
         render: true,
         year: year,
         month: month,
-    });
-
-
-    $('#prev-month').click(function () {
-        month--;
-        if (month < 0) {
-            month = 11;
-            year--;
-        }
-
-        calendar.render(year, month);
-    });
-
-    $('#next-month').click(function () {
-        month++;
-        if (month > 11) {
-            month = 0;
-            year++;
-        }
-        
-        calendar.render(year, month);
-    });
-
-    var changeYear = function(value) {
-        year += value;
-        calendar.render(year, month);
-    };
-
-    $('#prev-year').click(function () {
-        changeYear(-1);
-    });
-    $('#next-year').click(function () {
-        changeYear(1);
-    });
-
-    var addNewEvent = function (day) {
-        var person = $('#person').val();
-        var event = $('#eventName').val();
-
-        calendar.addEvent(year, month, day, person, event);
-        calendar.render(year, month);
-
-        $('#person').val('');
-        $('#eventName').val('');
-    };
-
-    $('#calendar').on('dblclick', '.week-day', function () {
-        var day = $(this).data('day');
-
-        var dateStr = year + '-' + month + '-' + day;
-        $('#modal-title-date').html(dateStr);
-        $('#hidden-event-day').val(day);
-        var modal = $('#myModal').modal('show');
-    });
-    $('#calendar').on('click', '.event', function (e) {
-        var day = $(this).data('day');
-        var eventId = $(this).data('eventid');
-        calendar.removeEvent(year, month, day, eventId);
-        calendar.render(year, month);
-    });
-
-    $('#add-event').click(function () {
-        var day = $('#hidden-event-day').val();
-        addNewEvent(day);
-
-        var modal = $('#myModal').modal('hide');
-    });
-
-    $('#save-events').click(function () {
-        calendar.saveEvents();
-        alert('events saved');
-    });
-
-    $('#clear-events').click(function () {
-        calendar.clearEvents(); 
-        calendar.render();
+        panel: 'bottom',
     });
 
     var events = calendar.getEvents();

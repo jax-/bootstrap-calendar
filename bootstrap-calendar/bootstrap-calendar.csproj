@@ -35,19 +35,23 @@
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\bs-calendar.css" />
+    <Content Include="Gruntfile.js" />
     <Content Include="index.html" />
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\bs-calendar.js" />
+    <Content Include="js\hb-tmp-compiled.js" />
     <Content Include="js\handlebars-v1.3.0.js" />
-    <Content Include="js\handlebars.runtime.min.js" />
     <Content Include="js\jquery-1.11.1.min.js" />
-    <Content Include="js\compiled.js" />
-    <None Include="compile-templates.bat" />
-    <None Include="templates\calendar.handlebars" />
+    <None Include="package.json" />
+    <None Include="templates\addModal.hbs" />
+    <None Include="templates\calendar.hbs" />
+    <None Include="templates\panel.hbs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="build-less.bat" />
     <None Include="less\bs-calendar.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

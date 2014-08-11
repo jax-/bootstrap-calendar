@@ -399,11 +399,7 @@
                 weekdays: _getWeekDays(),
                 weeks: _getDataForMonthAndYear(_year, _month),
             };
-
-            var src = $('#calendar-block').html();
-            var template = Handlebars.compile(src);
-
-            var html = template(data);
+            var html = CalendarTemplates.calendar(data);
 
             cal.html(html);
         };

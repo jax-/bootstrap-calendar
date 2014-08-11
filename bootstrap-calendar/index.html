@@ -21,41 +21,6 @@
     <div id="calendar">
 
     </div>
-    <script id="calendar-block" type="text/x-handlebars-template">
-        <label class="label label-primary">{{current_year_month}}</label>
-        <table class="table calendar">
-            <thead>
-                <tr>
-                    {{#each weekdays}}
-                    <th>
-                        {{this}}
-                    </th>
-                    {{/each}}
-                  </tr>
-            </thead>
-            {{#each weeks}}
-            <tr class="week">
-                {{#each this.days}}
-                <td class="{{#if date_string}} week-day {{/if}}" data-day="{{dayValue}}">
-                    <div class="week-day-div">
-                        <ul style="list-style:none;">
-                            <li><span class="date">{{date_string}}</span></li>
-                            {{#each this.events}}
-                            <li>
-                                <span class="event" data-day="{{../dayValue}}" data-eventId="{{eventId}}" style="background-color:{{this.color}}">
-                                    <b>{{this.person}} - {{this.eventName}}</b>
-                                </span>
-                            </li>
-                            {{/each}}
-                        </ul>
-                    </div>
-                </td>
-                {{/each}}
-            </tr>
-            {{/each}}
-
-        </table>
-    </script>
 
     <div id="myModal" class="modal fade">
         <div class="modal-dialog">
@@ -89,6 +54,7 @@
 <script src="js/handlebars-v1.3.0.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bs-calendar.js"></script>
+<script src="js/hb-tmp-compiled.js"></script>
 
 <script>
     var currentDate = new Date();

@@ -111,11 +111,13 @@ function program1(depth0,data) {
     + escapeExpression(((stack1 = (depth0 && depth0.person)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n                </td>\r\n            </tr>\r\n            ";
+    + "\r\n                </td>\r\n              <td>\r\n                <a href=\"#\" class=\"remove-event\" data-id=\""
+    + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">Remove</a>\r\n              </td>\r\n            </tr>\r\n            ";
   return buffer;
   }
 
-  buffer += "<div class=\"event-list text-center\">\r\n\r\n    <h3>Event list</h3>\r\n    <table class=\"table table-hover table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
+  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>Event list</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n                <th></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n        </tbody>\r\n    </table>\r\n</div>";

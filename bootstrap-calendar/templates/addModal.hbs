@@ -1,0 +1,25 @@
+﻿<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Add new event for date <span id="modal-title-date"></span></h4>
+            </div>
+            <div class="modal-body">
+                <p>Please insert person name and event</p>
+
+                <input type="hidden" id="hidden-event-day" />
+
+                <span>Person name:</span>
+                <input id="person" />
+
+                <span>Event name:</span>
+                <input id="eventName" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary add-event">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

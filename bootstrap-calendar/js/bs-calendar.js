@@ -51,6 +51,9 @@
             this.readAll = function () {
                 var temp = localStorage.getItem('events');
                 try {
+                    if (temp == undefined || temp == undefined) {
+                        throw new Error('temp is undefined');
+                    }
                     _events = JSON.parse(temp);
                 }
                 catch (err) {
@@ -187,6 +190,8 @@
             _createPanel(_panelPosition);
             _addPanelEvents();
 
+            _createEventList();
+
             // Render
             if (o.render != undefined) {
                 _doRender = o.render;
@@ -198,8 +203,8 @@
         };
 
         var _createContainer = function () {
-            $(_selector).append('<div class="container"></div>');
-            _calendarContainer = _selector + ' .container';
+            $(_selector).append('<div class="calendar-container container"></div>');
+            _calendarContainer = _selector + ' .calendar-container';
         };
 
         var _createAddModal = function () {
@@ -298,27 +303,31 @@
             });
         };
 
+        var _createEventList = function () {
+            $(_selector).append('<div class="event-container container"></div>');
+        };
+
         /**
           * Validates and creates objects and array containers
           * for specific year, month and day
           */
-        var _initializeDayForEvents = function (year, month, day) {
+        var _initializeEventContainer = function (container, year, month, day) {
             var s = _getStringifiedDate(year, month, day);
             year = s.year;
             month = s.month;
             day = s.day;
 
-            if (_events == undefined || !_events instanceof Object) {
-                _events = new CalendarEvents();
+            if (container == undefined || !container instanceof Object) {
+                container = new CalendarEvents();
             }
-            if (_events[year] == undefined) {
-                _events[year] = {};
+            if (container[year] == undefined) {
+                container[year] = {};
             }
-            if (_events[year][month] == undefined) {
-                _events[year][month] = {};
+            if (container[year][month] == undefined) {
+                container[year][month] = {};
             }
-            if (_events[year][month][day] == undefined) {
-                _events[year][month][day] = [];
+            if (container[year][month][day] == undefined) {
+                container[year][month][day] = [];
             }
         };
 
@@ -354,19 +363,25 @@
             if (eventId == undefined) {
                 eventId = new Date().getTime();
             }
-            _initializeDayForEvents(year, month, day);
 
             var event = {
                 eventId: eventId,
                 person: person,
                 eventName: eventName,
                 color: color,
+                unsaved: true,
+                year: year,
+                month: month,
+                day: day,
             };
 
-            _events[year][month][day].push(event);
+            _initializeEventContainer(_events, year, month, day);
+            _initializeEventContainer(_unsavedEvents, year, month, day);
 
-            //_unsavedEvents[year][month][day].push(event);
+            _events[year][month][day].push(event);
+            _unsavedEvents[year][month][day].push(event);
         }
+
 
         var _removeEvent = function (year, month, day, eventId) {
             var s = _getStringifiedDate(year, month, day);
@@ -407,6 +422,28 @@
                 _events[year][month] != undefined &&
                 _events[year][month][day] != undefined) {
                 return _events[year][month][day];
+            } else {
+                return [];
+            }
+        };
+
+        var _getEventsForMonth = function (year, month) {
+            var events = [];
+
+            if (_events instanceof Object &&
+                _events[year] != undefined &&
+                _events[year][month] != undefined) {
+
+                for (var day in _events[year][month]) {
+                    var ev = _events[year][month][day];
+
+                    for (var i = 0; i < ev.length; i++)
+                    {
+                        events.push(ev[i]);
+                    }
+                }
+
+                return events;
             } else {
                 return [];
             }
@@ -467,7 +504,7 @@
                 }
 
                 var day = {
-                    date_string: date.toDateString(),
+                    date_string: _formatDate(year, month, dayValue),
                     bg_color: '#DEDEDE',
                     dayValue: dayValue,
                 };
@@ -499,12 +536,27 @@
         /**
          * Renders calendar
          */
-        var _render = function (year, month) {
+        var _render = function (year, month, elementsArr) {
             if (year != undefined && month != undefined) {
                 _setYearAndMonth(year, month);
             }
 
+            if (elementsArr == undefined) {
+                elementsArr = [ 'calendar', 'events']
+            }
+
+            _renderCalendar();
+            _renderEventList();
+            if (elementsArr.indexOf('calendar') != -1) {
+            }
+            if (elementsArr.indexOf('events') - 1) {
+            }
+
+        };
+
+        var _renderCalendar = function () {
             var container = $(_calendarContainer);
+
             var currentString = _year;
 
             if (_month < 9) {
@@ -513,14 +565,27 @@
                 currentString += " " + (_month + 1);
             }
 
+            var eventData = _getDataForMonthAndYear(_year, _month);
+
             var data = {
                 current_year_month: currentString,
                 weekdays: _getWeekDays(),
-                weeks: _getDataForMonthAndYear(_year, _month),
+                weeks: eventData,
             };
-            var html = _templates.calendar(data);
+            var calendarHtml = _templates.calendar(data);
+            container.html(calendarHtml);
+        };
 
-            container.html(html);
+        var _renderEventList = function () {
+            var evData = _getEventsForMonth(_year, _month);
+
+            var eventListHtml = _templates.events(evData);
+
+            if (evData.length > 0) {
+                $(_selector + ' .event-container').html(eventListHtml);
+            } else {
+                $(_selector + ' .event-container').html('');
+            }
         };
 
         var hexValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
@@ -540,6 +605,13 @@
             return str;
         };
 
+        var _formatDate = function (year, month, day) {
+            if (month < 10) month = "0" + month;
+            if (day < 10) day = "0" + day;
+
+            return year + '-' + month + '-' + day;
+        };
+
         var _saveEvents = function () {
             if (_persistenceModule != undefined) {
                 _persistenceModule.saveAll();
@@ -548,6 +620,7 @@
 
         var _clearEvents = function () {
             _events = new CalendarEvents();
+            _unsavedEvents = new CalendarEvents();
         };
 
         // Initialization

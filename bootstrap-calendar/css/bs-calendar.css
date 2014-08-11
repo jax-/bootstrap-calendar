@@ -10,10 +10,14 @@ table.calendar tbody td.week-day > div {
   height: 90px;
   background-color: #DEDEDE;
 }
+table.calendar tbody td.week-day > div > ul {
+  padding-left: 0px;
+}
 table.calendar tbody td.week-day > div:hover {
   background-color: #CCC;
   cursor: pointer;
 }
 table.calendar span.event {
   width: 100%;
+  display: block;
 }

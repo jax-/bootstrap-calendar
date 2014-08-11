@@ -42,7 +42,7 @@ function program4(depth0,data) {
   if (helper = helpers.dayValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.dayValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">\r\n            <div class=\"week-day-div\">\r\n                <ul style=\"list-style:none;\">\r\n                    <li><span class=\"date\">";
+    + "\">\r\n            <div class=\"week-day-div\">\r\n                <ul style=\"list-style:none;\">\r\n                    <li><span class=\"date bold\">";
   if (helper = helpers.date_string) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.date_string); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -69,11 +69,11 @@ function program7(depth0,data,depth1) {
   buffer += escapeExpression(stack1)
     + "\" style=\"background-color:"
     + escapeExpression(((stack1 = (depth0 && depth0.color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n                            <b>"
+    + "\">\r\n                            <span>"
     + escapeExpression(((stack1 = (depth0 && depth0.person)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " - "
     + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</b>\r\n                        </span>\r\n                    </li>\r\n                    ";
+    + "</span>\r\n                        </span>\r\n                    </li>\r\n                    ";
   return buffer;
   }
 
@@ -88,6 +88,37 @@ function program7(depth0,data,depth1) {
   stack1 = helpers.each.call(depth0, (depth0 && depth0.weeks), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n\r\n</table>\r\n";
+  return buffer;
+  });
+
+this["CalendarTemplates"]["events"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n            <tr>\r\n                <td>\r\n                    "
+    + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </td>\r\n                <td>\r\n                    "
+    + escapeExpression(((stack1 = (depth0 && depth0.year)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "-"
+    + escapeExpression(((stack1 = (depth0 && depth0.month)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "-"
+    + escapeExpression(((stack1 = (depth0 && depth0.day)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </td>\r\n                <td>\r\n                    "
+    + escapeExpression(((stack1 = (depth0 && depth0.person)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </td>\r\n                <td>\r\n                    "
+    + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </td>\r\n            </tr>\r\n            ";
+  return buffer;
+  }
+
+  buffer += "<div class=\"event-list text-center\">\r\n\r\n    <h3>Event list</h3>\r\n    <table class=\"table table-hover table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
+  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n        </tbody>\r\n    </table>\r\n</div>";
   return buffer;
   });
 

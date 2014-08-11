@@ -45,6 +45,7 @@
     <None Include="package.json" />
     <None Include="templates\addModal.hbs" />
     <None Include="templates\calendar.hbs" />
+    <None Include="templates\events.hbs" />
     <None Include="templates\panel.hbs" />
   </ItemGroup>
   <ItemGroup>

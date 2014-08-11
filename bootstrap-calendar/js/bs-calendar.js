@@ -77,7 +77,10 @@
             };
 
             this.readAll = function () {
-                console.log('read');
+                $.get('http://localhost/Portal/Events/GetAllEvents', function (data) {
+                    console.log(data);
+                    _events = data;
+                });
             };
 
             this.clearAll = function () {

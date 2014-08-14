@@ -11,21 +11,30 @@ table.calendar {
 
         td.week-day {
             width: 14.3%;
+            padding: 0 0;
+            border: 1px solid #DEDEDE;
 
             > div {
                 overflow-y: auto;
-                padding: 5px;
+                padding: 8px;
                 height: 90px;
-                background-color: #DEDEDE;
+                //background-color: #DEDEDE;
+                background-color: white;
 
                 > ul {
                     padding-left: 0px;
                 }
-            }
+                
+                &.current {
+                    background-color: #428bca;
+                    color: white;
+                }
 
-            > div:hover  {
-                background-color: #CCC;
-                cursor: pointer;
+                &:hover {
+                    background-color: #f3f3f3;
+                    cursor: pointer;
+                    color:black;
+                }
             }
         }
     }
@@ -33,5 +42,9 @@ table.calendar {
     span.event {
         width: 100%;
         display: block;
+    }
+
+    .bold {
+        font-weight: bold;
     }
 }

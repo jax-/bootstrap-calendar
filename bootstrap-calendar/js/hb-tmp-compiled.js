@@ -42,12 +42,15 @@ function program4(depth0,data) {
   if (helper = helpers.dayValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.dayValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">\r\n            <div class=\"week-day-div\">\r\n                <ul style=\"list-style:none;\">\r\n                    <li><span class=\"date bold\">";
+    + "\">\r\n            <div class=\"week-day-div ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.current), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\r\n                <ul style=\"list-style:none;\">\r\n                    <li><span class=\"date bold\">";
   if (helper = helpers.date_string) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.date_string); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "</span></li>\r\n                    ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.events), {hash:{},inverse:self.noop,fn:self.programWithDepth(7, program7, data, depth0),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.events), {hash:{},inverse:self.noop,fn:self.programWithDepth(9, program9, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                </ul>\r\n            </div>\r\n        </td>\r\n        ";
   return buffer;
@@ -58,7 +61,13 @@ function program5(depth0,data) {
   return " week-day ";
   }
 
-function program7(depth0,data,depth1) {
+function program7(depth0,data) {
+  
+  
+  return " current ";
+  }
+
+function program9(depth0,data,depth1) {
   
   var buffer = "", stack1, helper;
   buffer += "\r\n                    <li>\r\n                        <span class=\"event\" data-day=\""
@@ -115,7 +124,7 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "<div class=\"event-list text-center\">\r\n\r\n    <h3>Event list</h3>\r\n    <table class=\"table table-hover table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
+  buffer += "<div class=\"event-list text-center\">\r\n\r\n    <h3>Event list</h3>\r\n    <table class=\"table table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n        </tbody>\r\n    </table>\r\n</div>";

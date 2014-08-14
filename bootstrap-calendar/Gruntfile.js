@@ -27,13 +27,17 @@
             
         },
         watch: {
-            buildless: {
+            less: {
                 files: ['less/*.less'],
                 tasks: ['less'],
             },
-            compiletemplates: {
+            handlebars: {
                 files: ['templates/*.hbs'],
                 tasks: ['handlebars'],
+            },
+            javascript: {
+                files: ['js/bs-calendar.js'],
+                tasks: [],
             }
         }
     });

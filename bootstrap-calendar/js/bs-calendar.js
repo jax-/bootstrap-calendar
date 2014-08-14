@@ -215,7 +215,7 @@
         };
 
         var _createContainer = function () {
-            $(_selector).append('<div class="calendar-container container"></div>');
+            $(_selector).append('<div class="calendar-container"></div>');
             _calendarContainer = _selector + ' .calendar-container';
         };
 
@@ -284,7 +284,7 @@
             $(_selector).on('dblclick', '.week-day', function () {
                 var day = $(this).data('day');
 
-                var dateStr = year + '-' + month + '-' + day;
+                var dateStr = _year + '-' + _month + '-' + day;
                 $('#modal-title-date').html(dateStr);
                 $('#hidden-event-day').val(day);
                 var modal = $('#myModal').modal('show');
@@ -316,7 +316,7 @@
         };
 
         var _createEventList = function () {
-            $(_selector).append('<div class="event-container container"></div>');
+            $(_selector).append('<div class="event-container"></div>');
         };
 
         /**
@@ -479,6 +479,11 @@
          * Generates data for specific year and month and attaches events to days
          */
         var _getDataForMonthAndYear = function (year, month) {
+            var currentDate = new Date();
+            var currentYear = currentDate.getFullYear();
+            var currentMonth = currentDate.getMonth();
+            var currentDay = currentDate.getDate();
+
             var date = new Date(year, month);
             var monthValue = date.getMonth();
             var weeks = [];
@@ -520,6 +525,13 @@
                     bg_color: '#DEDEDE',
                     dayValue: dayValue,
                 };
+
+                // Check if is current date (can be optimized)
+                if (year == currentYear &&
+                    month == currentMonth &&
+                    dayValue == currentDay) {
+                    day.current = true;
+                }
                 
                 var eventsForDay = _getEventsForDate(year, month, dayValue);
                 day.events = eventsForDay;
@@ -620,6 +632,8 @@
         };
 
         var _formatDate = function (year, month, day) {
+            month += 1;
+
             if (month < 10) month = "0" + month;
             if (day < 10) day = "0" + day;
 

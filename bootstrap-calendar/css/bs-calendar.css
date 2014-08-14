@@ -6,21 +6,31 @@ table.calendar thead th {
 }
 table.calendar tbody td.week-day {
   width: 14.3%;
+  padding: 0 0;
+  border: 1px solid #DEDEDE;
 }
 table.calendar tbody td.week-day > div {
   overflow-y: auto;
-  padding: 5px;
+  padding: 8px;
   height: 90px;
-  background-color: #DEDEDE;
+  background-color: white;
 }
 table.calendar tbody td.week-day > div > ul {
   padding-left: 0px;
 }
+table.calendar tbody td.week-day > div.current {
+  background-color: #428bca;
+  color: white;
+}
 table.calendar tbody td.week-day > div:hover {
-  background-color: #CCC;
+  background-color: #f3f3f3;
   cursor: pointer;
+  color: black;
 }
 table.calendar span.event {
   width: 100%;
   display: block;
+}
+table.calendar .bold {
+  font-weight: bold;
 }

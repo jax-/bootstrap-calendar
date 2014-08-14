@@ -1,14 +1,8 @@
 /**
  * @name Bootstrap Calendar
- * @author Jacek Zyœk (jzysk)
- * @version beta
- * @date 2014-08-06
- * @dependencies:
- *     - jquery-1.11.1.min.js or newer
- *     - handlebars-v1.3.0.js or newer
- * @recommended:
- *     - Bootstrap 3 (css + js)
- *     - LESS
+ * @author Jacek Zysk (jzysk)
+ * @version 0.1.0
+ * @date 2014-08-11
  */
 
 (function (env) {
@@ -93,9 +87,16 @@
         var CalendarEvents = function () {
             return new Object(); //todo
         };
-
+        
+        // Tree-like structure based on objects for events
+        // eg. ["2014"]["1"]["24"][]
         var _events = new CalendarEvents();
-        var _unsavedEvents = new CalendarEvents();
+
+        // Events to-be-saved
+        var _unsavedEvents = [];
+
+        // Contains references to all events in flat list
+        var _allEvents = [];
 
         /**
          * Initializes calendar object
@@ -203,6 +204,7 @@
             _addPanelEvents();
 
             _createEventList();
+            _bindEventListEvents();
 
             // Render
             if (o.render != undefined) {
@@ -319,6 +321,29 @@
             $(_selector).append('<div class="event-container"></div>');
         };
 
+        var _bindEventListEvents = function () {
+            $('.event-container').on('click', '.remove-event', function () {
+                var eventId = $(this).data('id');
+                var events = _allEvents.filter(function (el) {
+                    if (el.eventId == eventId) {
+                        return el;
+                    };
+                });
+
+                if (events.length > 0) {
+                    var event = events[0];
+
+                    var container = event.container;
+
+                    container.splice();
+                    _allEvents.splice(1, event);
+                    _render();
+                }
+
+                return false;
+            });
+        };
+
         /**
           * Validates and creates objects and array containers
           * for specific year, month and day
@@ -388,10 +413,12 @@
             };
 
             _initializeEventContainer(_events, year, month, day);
-            _initializeEventContainer(_unsavedEvents, year, month, day);
 
             _events[year][month][day].push(event);
-            _unsavedEvents[year][month][day].push(event);
+            _unsavedEvents.push(event);
+
+            event.container = _events[year][month][day];
+            _allEvents.push(event);
         }
 
 

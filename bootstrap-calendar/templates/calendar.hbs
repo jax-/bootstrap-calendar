@@ -19,11 +19,11 @@
         <td class="{{#if date_string}} week-day {{/if}}" data-day="{{dayValue}}">
             <div class="week-day-div {{#if current }} current {{/if}}">
                 <ul style="list-style:none;">
-                    <li><span class="date bold">{{date_string}}</span></li>
+                    <li><span class="date ">{{date_string}}</span></li>
                     {{#each this.events}}
                     <li>
                         <span class="event" data-day="{{../dayValue}}" data-eventid="{{eventId}}" style="background-color:{{this.color}}">
-                            <span>{{this.person}} - {{this.eventName}}</span>
+                            <span>{{this.personName}} - {{this.eventName}}</span>
                         </span>
                     </li>
                     {{/each}}

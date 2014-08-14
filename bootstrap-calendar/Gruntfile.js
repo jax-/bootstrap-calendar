@@ -35,10 +35,10 @@
                 files: ['templates/*.hbs'],
                 tasks: ['handlebars'],
             },
-            javascript: {
-                files: ['js/bs-calendar.js'],
-                tasks: [],
-            }
+            //javascript: {
+            //    files: ['js/bs-calendar.js'],
+            //    tasks: [],
+            //}
         }
     });
 

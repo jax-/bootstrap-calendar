@@ -10,8 +10,8 @@
     var calendar = function (options) {
         var _selector = null;
         var _debug = false;
-        var _persistenceType = 'localStorage';
-        var _persistenceModule = undefined;
+        var _syncType = 'localStorage';
+        var _syncModule = undefined;
         var _year = null;
         var _month = null;
         var _doRender = true;
@@ -21,7 +21,7 @@
         var _showEventList = true;
 
         // Internal types
-        var LocalStoragePersistence = function () {
+        var LocalStorageSync = function () {
             if (localStorage == undefined) {
                 return;
             }
@@ -63,23 +63,79 @@
             return this;
         };
 
-        var RemotePersistence = function () {
+        var RemoteSync = function () {
+
+            var state = 'ready';
+            $('.calendar-loader').hide();
+
+            var changeState = function (s) {
+                switch (state) {
+                    case 'load':
+                        $('.calendar-loader').fadeIn(250); //todo
+                        break;
+                    case 'idle':
+                    case 'ready':
+                        $('.calendar-loader').fadeOut(500);
+                        break;
+                }
+            }
+
             // fake
             //todo
+            this.urls = {
+                getAllEvents: '',
+            };
+
+            this.setUrls = function (urls) {
+                this.urls = urls;
+            };
+            this.getUrls = function () {
+                return this.urls;
+            };
+
             this.saveAll = function () {
                 console.log('saved');
             };
 
-            this.readAll = function () {
-                $.get('http://localhost/Portal/Events/GetAllEvents', function (data) {
-                    console.log(data);
-                    _events = data;
-                });
+            this.readAll = function (async, callback) {
+                if (async == undefined) {
+                    async = false;
+                }
+
+                changeState('load');
+
+                $.ajax({
+                    type: 'GET',
+                    url: this.urls.getAllEvents,
+                    success: function (data) {
+                        if (data != undefined && data != null) {
+                            for (var i = 0; i < data.length; i++) {
+                                var event = data[i];
+
+                                event.month -= 1; //?
+
+                                _pushEvent(event, event.year, event.month, event.day);
+                            }
+                        }
+
+                        if (async && callback != undefined) {
+                            callback();
+                        }
+                        _render();
+                    },
+                    error: function(err) {
+                        alert(err);
+                    },
+                    complete: function () {
+                        changeState('idle');
+                    }
+                })
             };
 
             this.clearAll = function () {
                 console.log('cleared');
             };
+
 
             return this;
         }
@@ -118,6 +174,8 @@
                 throw new Error(error + 'jQuery.js');
             }
 
+            var async = false;
+
             // Options check
             if (typeof o == 'string') {
                 _selector = o;
@@ -128,29 +186,45 @@
                     _debug = o.debug;
                 }
 
-                // Initialize persistence module
-                if (o.persist != undefined) {
-                    _persistenceType = o.persist;
+                // Initialize sync module
+                if (o.sync != undefined) {
 
-                    if (_persistenceType != 'localStorage' &&
-                        _persistenceType != 'remote') {
-                        throw new Error('Invalid persistence type');
+                    var urls = {};
+                    if (typeof o.sync == 'string') {
+                        _syncType = o.sync;
+                    }
+                    else if (typeof o.sync == 'object') {
+                        if (o.sync.type != undefined &&
+                            typeof (o.sync.type == 'string')) {
+                            _syncType = o.sync.type;
+                        }
+
+                        urls.getAllEvents = o.sync.getAllEvents;
                     }
 
-                    switch (_persistenceType) {
+                    if (_syncType != 'localStorage' &&
+                        _syncType != 'remote') {
+                        throw new Error('Invalid sync type');
+                    }
+
+
+                    switch (_syncType) {
                         case 'localStorage':
-                            _persistenceModule = new LocalStoragePersistence();
+                            _syncModule = new LocalStorageSync();
                             break;
                         case 'remote':
-                            _persistenceModule = new RemotePersistence();
+                            _syncModule = new RemoteSync();
+                            _syncModule.setUrls(urls);
+
+                            async = true;
                             break;
                         default:
-                            _persistenceModule = undefined;
+                            _syncModule = undefined;
                             break;
                     }
 
-                    if (_persistenceModule.readAll != undefined) {
-                        _persistenceModule.readAll();
+                    if (_syncModule.readAll != undefined) {
+                        _syncModule.readAll(async);
                     }
                 }
 
@@ -386,9 +460,9 @@
         }
 
         /**
-          * Adds new event for specific date
+          * Adds new event for specific date with specific values as argument
           */
-        var _addEvent = function (year, month, day, person, eventName, color, eventId) {
+        var _addEvent = function (year, month, day, personName, eventName, color, eventId) {
             var s = _getStringifiedDate(year, month, day);
             year = s.year;
             month = s.month;
@@ -403,7 +477,7 @@
 
             var event = {
                 eventId: eventId,
-                person: person,
+                personName: personName,
                 eventName: eventName,
                 color: color,
                 unsaved: true,
@@ -412,15 +486,23 @@
                 day: day,
             };
 
-            _initializeEventContainer(_events, year, month, day);
-
-            _events[year][month][day].push(event);
-            _unsavedEvents.push(event);
-
-            event.container = _events[year][month][day];
-            _allEvents.push(event);
+            _pushEvent(event, year, month, day);
         }
 
+        /**
+          * Adds new event with event object and date as arguments
+          */
+        var _pushEvent = function (event, year, month, day) {
+            if (typeof event == 'object') {
+                _initializeEventContainer(_events, year, month, day);
+
+                _events[year][month][day].push(event);
+                _unsavedEvents.push(event);
+
+                event.container = _events[year][month][day];
+                _allEvents.push(event);
+            }
+        }
 
         var _removeEvent = function (year, month, day, eventId) {
             var s = _getStringifiedDate(year, month, day);
@@ -668,8 +750,8 @@
         };
 
         var _saveEvents = function () {
-            if (_persistenceModule != undefined) {
-                _persistenceModule.saveAll();
+            if (_syncModule != undefined) {
+                _syncModule.saveAll();
             }
         };
 

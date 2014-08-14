@@ -45,7 +45,7 @@ function program4(depth0,data) {
     + "\">\r\n            <div class=\"week-day-div ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.current), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\">\r\n                <ul style=\"list-style:none;\">\r\n                    <li><span class=\"date bold\">";
+  buffer += "\">\r\n                <ul style=\"list-style:none;\">\r\n                    <li><span class=\"date \">";
   if (helper = helpers.date_string) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.date_string); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -79,7 +79,7 @@ function program9(depth0,data,depth1) {
     + "\" style=\"background-color:"
     + escapeExpression(((stack1 = (depth0 && depth0.color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\r\n                            <span>"
-    + escapeExpression(((stack1 = (depth0 && depth0.person)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " - "
     + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</span>\r\n                        </span>\r\n                    </li>\r\n                    ";
@@ -96,7 +96,7 @@ function program9(depth0,data,depth1) {
   buffer += "\r\n        </tr>\r\n    </thead>\r\n    ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.weeks), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n\r\n</table>\r\n";
+  buffer += "\r\n\r\n</table>";
   return buffer;
   });
 
@@ -139,5 +139,5 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"calendar-panel text-center\">\r\n    <button class=\"btn btn-primary prev-year\">Previous year</button>\r\n    <button class=\"btn btn-primary prev-month\">Previous month</button>\r\n    <button class=\"btn btn-primary next-month\">Next month</button>\r\n    <button class=\"btn btn-primary next-year\">Next year</button>\r\n\r\n    <button class=\"btn btn-default save-events\">Save events</button>\r\n    <button class=\"btn btn-default clear-events\">Clear events</button>\r\n</div>";
+  return "<div class=\"calendar-panel text-center\">\r\n    <button class=\"btn btn-primary prev-year\">Previous year</button>\r\n    <button class=\"btn btn-primary prev-month\">Previous month</button>\r\n    <button class=\"btn btn-primary next-month\">Next month</button>\r\n    <button class=\"btn btn-primary next-year\">Next year</button>\r\n\r\n    <button class=\"btn btn-default save-events\">Save events</button>\r\n    <button class=\"btn btn-default clear-events\">Clear events</button>\r\n</div>\r\n\r\n<div class=\"calendar-loader\"></div>";
   });

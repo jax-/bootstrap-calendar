@@ -8,7 +8,7 @@
                     paths: ["less"]
                 },
                 files: {
-                    "css/bs-calendar.css": "less/bs-calendar.less"
+                    "css/bootstrap-calendar.css": "less/bootstrap-calendar.less"
                 }
             }
         },
@@ -21,7 +21,7 @@
             },
             compile: {
                 files: {
-                    'js/hb-tmp-compiled.js': ['templates/*.hbs']
+                    'js/bootstrap-calendar-templates.js': ['templates/*.hbs']
                 }
             },
             

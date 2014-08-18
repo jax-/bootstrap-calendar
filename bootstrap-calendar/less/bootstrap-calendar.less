@@ -1,3 +1,5 @@
+@selected #35cdff: 
+
 table.calendar {
     width: 100%;
 
@@ -18,7 +20,6 @@ table.calendar {
                 overflow-y: auto;
                 padding: 8px;
                 height: 90px;
-                //background-color: #DEDEDE;
                 background-color: white;
 
                 > ul {
@@ -35,6 +36,9 @@ table.calendar {
                     cursor: pointer;
                     color:black;
                 }
+                &.selected {
+                    border: 3px solid @selected;
+                }
             }
         }
     }
@@ -42,6 +46,10 @@ table.calendar {
     span.event {
         width: 100%;
         display: block;
+
+        &.selected {
+            border: 3px solid @selected;
+        }
     }
 
     .bold {

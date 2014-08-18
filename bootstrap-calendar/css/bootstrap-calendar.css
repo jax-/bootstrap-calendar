@@ -27,9 +27,15 @@ table.calendar tbody td.week-day > div:hover {
   cursor: pointer;
   color: black;
 }
+table.calendar tbody td.week-day > div.selected {
+  border: 3px solid #35cdff;
+}
 table.calendar span.event {
   width: 100%;
   display: block;
+}
+table.calendar span.event.selected {
+  border: 3px solid #35cdff;
 }
 table.calendar .bold {
   font-weight: bold;
@@ -37,6 +43,7 @@ table.calendar .bold {
 .calendar-loader {
   background: url('img/ajax-loader.gif') no-repeat;
   position: fixed;
+  display: none;
   float: none;
   left: 51%;
   margin-left: -15px;

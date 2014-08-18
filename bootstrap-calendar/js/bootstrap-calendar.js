@@ -8,6 +8,26 @@
 (function (env) {
 
     var calendar = function (options) {
+        var _defaultResources = {
+            MODAL_TITLE: 'Event modal',
+            MODAL_BODY: 'Please insert attendee and event names',
+            PERSON_NAME: "Attendee's name",
+            EVENT_NAME: "Event's name",
+            ADD_EVENT_TITLE: 'Add event',
+            EDIT_EVENT_TITLE: 'Edit event',
+            CLOSE: 'Close',
+            ADD: 'Add',
+            EDIT: 'Edit',
+            PREVIOUS_YEAR: 'Previous year',
+            NEXT_YEAR: 'Next year',
+            PREVIOUS_MONTH: 'Previous month',
+            NEXT_MONTH: 'Next month',
+            AUTOSAVE: 'Autosave',
+            SAVE_EVENTS: 'Save events',
+            CLEAR_EVENTS: 'Clear events',
+            REMOVE: 'Remove',
+        };
+
         var _selector = null;
         var _debug = false;
         var _syncType = 'localStorage';
@@ -36,8 +56,17 @@
             };
 
             this.saveAll = function () {
-                if (_events instanceof Object) {
-                    var s = _stringify(_events);
+                if (_allEvents instanceof Object) {
+                    var copyArr = [];
+                    for (var i = 0; i < _allEvents.length; i++) {
+                        var ev = _allEvents[i];
+                        var copy = {};
+                        jQuery.extend(copy, ev);
+                        copy.container = undefined;
+                        copyArr.push(copy);
+                    }
+
+                    var s = JSON.stringify(copyArr);
                     localStorage.setItem('events', s);
                 } else {
                     localStorage.removeItem('events');
@@ -49,13 +78,21 @@
                     if (temp == undefined || temp == undefined) {
                         throw new Error('temp is undefined');
                     }
-                    _events = JSON.parse(temp);
+
+                    var tempEvents = JSON.parse(temp);
+
+                    for (var i = 0; i < tempEvents.length; i++) {
+                        var ev = tempEvents[i];
+                        _pushEvent(ev, ev.year, ev.month, ev.day, false);
+                    }
                 }
                 catch (err) {
+                    _allEvents = new CalendarEvents();
                     _events = new CalendarEvents();
                 }
             };
             this.clearAll = function () {
+                _allEvents = new CalendarEvents();
                 _events = new CalendarEvents();
                 localStorage.removeItem('events');
             };
@@ -93,8 +130,27 @@
                 return this.urls;
             };
 
+            this.saveData = function () {
+                var data = {
+                    eventsToAdd: _unsavedEvents,
+                    eventsToRemove: _eventsToRemove,
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: this.urls.saveData,
+                    data: data.serialize(),
+                    success: function (data) {
+                        console.log('saved');
+                    },
+                    error: function () {
+                        console.log('error');
+                    },
+                });
+            };
+
             this.saveAll = function () {
-                console.log('saved');
+                this.saveData();
             };
 
             this.readAll = function (async, callback) {
@@ -114,7 +170,7 @@
 
                                 event.month -= 1; //?
 
-                                _pushEvent(event, event.year, event.month, event.day);
+                                _pushEvent(event, event.year, event.month, event.day, false);
                             }
                         }
 
@@ -124,7 +180,7 @@
                         _render();
                     },
                     error: function(err) {
-                        alert(err);
+                        console.log(err);
                     },
                     complete: function () {
                         changeState('idle');
@@ -151,6 +207,8 @@
         // Events to-be-saved
         var _unsavedEvents = [];
 
+        var _eventsToRemove = [];
+
         // Contains references to all events in flat list
         var _allEvents = [];
 
@@ -160,7 +218,6 @@
          */
         var _init = function () {
             _templates = CalendarTemplates;
-
 
             var o = options;
 
@@ -200,6 +257,7 @@
                         }
 
                         urls.getAllEvents = o.sync.getAllEvents;
+                        urls.saveData = o.sync.saveData;
                     }
 
                     if (_syncType != 'localStorage' &&
@@ -272,7 +330,7 @@
 
             // Create elements
             _createContainer();
-            _createAddModal();
+            _createModal();
 
             _createPanel(_panelPosition);
             _addPanelEvents();
@@ -295,14 +353,23 @@
             _calendarContainer = _selector + ' .calendar-container';
         };
 
-        var _createAddModal = function () {
-            var html = _templates.addModal();
+        var _createModal = function () {
+            var data = {
+                add: true,
+                RESOURCES: _defaultResources,
+            };
+            var html = _templates.eventModal(data);
 
             $('body').append(html);
         };
 
         var _createPanel = function (position) {
-            var html = _templates.panel();
+            var currentString = _year + ' - ' + (_month + 1);
+            var data = {
+                currentYearMonth: currentString,
+            };
+
+            var html = _templates.panel(data);
 
             if (position == 'bottom') {
                 $(_calendarContainer).after(html);
@@ -347,42 +414,117 @@
             });
 
             var addNewEvent = function (day) {
-                var person = $('#person').val();
-                var event = $('#eventName').val();
+                var modal = $('#calendarEventModal');
+
+                var personInput = modal.find('.person');
+                var eventInput = modal.find('.eventName');
+                var person = personInput.val();
+                var event = eventInput.val();
 
                 _addEvent(_year, _month, day, person, event);
                 _render();
 
-                $('#person').val('');
-                $('#eventName').val('');
+                // clear
+                personInput.val('');
+                eventInput.val('');
             };
 
-            $(_selector).on('dblclick', '.week-day', function () {
-                var day = $(this).data('day');
+            // Bind event add
+            $(_selector).on('click', '.panel-add-event', function () {
+                var modal = $('#calendarEventModal');
+                var selectedDay = $(_selector).find('.week-day-div.selected');
+                if (selectedDay.length > 0) {
+                    var day = $(selectedDay).parent().data('day');
+                    var dateStr = _year + '-' + _month + '-' + day;
 
-                var dateStr = _year + '-' + _month + '-' + day;
-                $('#modal-title-date').html(dateStr);
-                $('#hidden-event-day').val(day);
-                var modal = $('#myModal').modal('show');
+                    var dd1 = modal.find('.modalTitleDate');
+                    dd1.html(dateStr);
+                    var dd2 = modal.find('.eventDay');
+                    dd2.val(day);
+
+                    modal.modal('show');
+                }
             });
 
+            // Bind event edit
+            $(_selector).on('click', '.panel-edit-event', function () {
+                var modal = $('#calendarEventModal');
+
+                var selectedEvent = $(_selector).find('.event.selected');
+                if (selectedEvent.length > 0) {
+                    var day = $(selectedEvent).data('day');
+                    var eventId = $(selectedEvent).data('eventid');
+
+                    var dateStr = _year + '-' + _month + '-' + day;
+
+                    modal.find('.modalTitleDate').html(dateStr);
+                    modal.find('.eventDay').val(day);
+                    modal.find('.eventId').val(eventId);
+                    modal.modal('show');
+                }
+            });
+
+            // Bind event remove
+            $(_selector).on('click', '.panel-remove-event', function () {
+                var selectedEvent = $(_selector).find('.event.selected');
+                if (selectedEvent.length > 0) {
+                    var day = $(selectedEvent).data('day');
+                    var eventId = $(selectedEvent).data('eventid');
+                    if (eventId != undefined) {
+                        _removeEvent(eventId);
+                        _render();
+                    }
+                }
+            });
+
+            // On day select
+            $(_selector).on('click', '.week-day-div', function (e) {
+                var isSelected = $(this).hasClass('selected');
+                var addEventButton = $(_selector + ' ' + '.btn.panel-add-event');
+
+                if (isSelected) {
+                    $(this).removeClass('selected');
+                    addEventButton.hide();
+                } else {
+                    // Deselect all
+                    $(_selector + ' ' + '.week-day-div').removeClass('selected');
+                    $(this).addClass('selected');
+                    addEventButton.show();
+                }
+            });
+
+            // On event select
             $(_selector).on('click', '.event', function (e) {
-                var day = $(this).data('day');
-                var eventId = $(this).data('eventid');
-                _removeEvent(_year, _month, day, eventId);
-                _render();
+                e.stopPropagation();
+
+                var isSelected = $(this).hasClass('selected');
+                var editEventButton = $(_selector + ' ' + '.btn.panel-edit-event');
+                var removeEventButton = $(_selector + ' .btn.panel-remove-event')
+
+                if (isSelected) {
+                    $(this).removeClass('selected');
+                    editEventButton.hide();
+                    removeEventButton.hide();
+                } else {
+                    // Deselect all
+                    $(_selector + ' ' + '.event').removeClass('selected');
+                    $(this).addClass('selected');
+                    editEventButton.show();
+                    removeEventButton.show();
+                }
             });
 
-            $('#myModal .add-event').click(function () {
-                var day = $('#hidden-event-day').val();
+            $('#calendarEventModal .add-event').click(function () {
+                var day = $('#calendarEventModal .eventDay').val();
                 addNewEvent(day);
 
-                var modal = $('#myModal').modal('hide');
+                var modal = $('#calendarEventModal');
+                modal.modal('hide');
             });
-
+            
             $(panelSelector + '.save-events').click(function () {
                 _saveEvents();
-                alert('events saved');
+                alert('Events saved');
             });
 
             $(panelSelector + '.clear-events').click(function () {
@@ -396,21 +538,24 @@
         };
 
         var _bindEventListEvents = function () {
-            $('.event-container').on('click', '.remove-event', function () {
-                var eventId = $(this).data('id');
-                var events = _allEvents.filter(function (el) {
-                    if (el.eventId == eventId) {
-                        return el;
-                    };
-                });
+            $('.event-container').on('click', '.edit-event2', function () {
+                var eventId = $(this).data('eventid');
 
-                if (events.length > 0) {
-                    var event = events[0];
+                if (eventId != undefined) {
+                    var modal = $('#calendarEventModal');
 
-                    var container = event.container;
+                    modal.find('.eventId').val(eventId);
+                    modal.modal('show');
+                }
 
-                    container.splice();
-                    _allEvents.splice(1, event);
+                return false;
+            });
+
+            $('.event-container').on('click', '.remove-event2', function () {
+                var eventId = $(this).data('eventid');
+
+                if (eventId != undefined) {
+                    _removeEvent(eventId);
                     _render();
                 }
 
@@ -486,39 +631,70 @@
                 day: day,
             };
 
-            _pushEvent(event, year, month, day);
+            _pushEvent(event, year, month, day, true);
         }
 
         /**
           * Adds new event with event object and date as arguments
           */
-        var _pushEvent = function (event, year, month, day) {
+        var _pushEvent = function (event, year, month, day, unsaved) {
+            if (unsaved == undefined) unsaved = false;
+
             if (typeof event == 'object') {
                 _initializeEventContainer(_events, year, month, day);
 
+                if (unsaved) {
+                    event.unsaved = true;
+                }
+
                 _events[year][month][day].push(event);
-                _unsavedEvents.push(event);
+
+                if (unsaved) {
+                    _unsavedEvents.push(event);
+                }   
 
                 event.container = _events[year][month][day];
                 _allEvents.push(event);
             }
         }
 
-        var _removeEvent = function (year, month, day, eventId) {
-            var s = _getStringifiedDate(year, month, day);
-            year = s.year;
-            month = s.month;
-            day = s.day;
+        var _removeEvent = function (eventId) {
 
-            if (_anyEvents(year, month, day)) {
-                var eventContainer = _events[year][month][day];
-                for (var i = 0; i < eventContainer.length; i++) {
-                    var event = eventContainer[i];
-                    if (event.eventId == eventId) {
-                        eventContainer.splice(i, 1);
-                    }
+            // Find event
+            var event = null;
+            for (var i = 0; i < _allEvents.length; i++) {
+                if (_allEvents[i].eventId == eventId) {
+                    event = _allEvents[i];
+                    break;
                 }
             }
+
+            if (event != null) {
+                // Remove from container
+                var container = event.container;
+                if (container != undefined && container != null) {
+                    var indexInContainer = container.indexOf(event);
+
+                    if (indexInContainer != -1) {
+                        container.splice(indexInContainer, 1);
+                    }
+                }
+
+                // Remove from all events
+                var indexInAllEvents = _allEvents.indexOf(event);
+                
+                if (indexInAllEvents != -1) {
+                    _eventsToRemove.push(event);
+                    _allEvents.splice(indexInAllEvents, 1);
+                }
+                
+            } else {
+                // throw error
+            }
+
+
+            console.log(_allEvents);
+            console.log(_eventsToRemove);
         }
 
         /**
@@ -680,6 +856,11 @@
 
             _renderCalendar();
             _renderEventList();
+
+            // Update label
+            var currentYearMonth = _year + ' - ' + (_month + 1);
+            $('.calendar-panel .currentYearMonth').html(currentYearMonth);
+
             if (elementsArr.indexOf('calendar') != -1) {
             }
             if (elementsArr.indexOf('events') - 1) {
@@ -701,7 +882,6 @@
             var eventData = _getDataForMonthAndYear(_year, _month);
 
             var data = {
-                current_year_month: currentString,
                 weekdays: _getWeekDays(),
                 weeks: eventData,
             };

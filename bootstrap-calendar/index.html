@@ -6,7 +6,7 @@
     <title>Calendar test</title>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/bs-calendar.css" />
+    <link rel="stylesheet" href="css/bootstrap-calendar.css" />
 </head>
 <body>
     <div id="calendar">
@@ -17,8 +17,8 @@
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/handlebars-v1.3.0.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/bs-calendar.js"></script>
-<script src="js/hb-tmp-compiled.js"></script>
+<script src="js/bootstrap-calendar.js"></script>
+<script src="js/bootstrap-calendar-templates.js"></script>
 
 <script>
     var currentDate = new Date();
@@ -28,7 +28,7 @@
     var calendar = new Calendar({
         selector: '#calendar',
         debug: false,
-        sync: 'remote',
+        sync: 'localStorage',
         render: true,
         year: year,
         month: month,

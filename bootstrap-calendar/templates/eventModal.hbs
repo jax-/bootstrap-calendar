@@ -8,12 +8,24 @@
             <div class="modal-body">
                 <p>{{RESOURCES.MODAL_BODY}}</p>
 
-
+                {{#if enable_dropdown}}
+                    <span>Select person:</span>
+                    {{> selectPartial}}
+                {{else}}
                 <span>{{RESOURCES.PERSON_NAME}}:</span>
                 <input class="person" />
+                {{/if}}
 
+                <br />
                 <span>{{RESOURCES.EVENT_NAME}}:</span>
                 <input class="eventName" />
+
+                <br/>
+                Time from:
+                <input class="timeFrom" />
+
+                Time to:
+                <input class="timeTo" />
 
                 <input type="hidden" class="eventId" />
                 <input type="hidden" class="eventDay" />

@@ -7,7 +7,25 @@
 
 this["CalendarTemplates"] = this["CalendarTemplates"] || {};
 
-this["CalendarTemplates"]["src/templates/calendar"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["alert"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"alert alert-";
+  if (helper = helpers.alertType) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.alertType); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " alert-dismissible\" role=\"alert\">\r\n    <button type=\"button\" class=\"close\" data-dismiss=\"alert\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>\r\n    ";
+  if (helper = helpers.alertMessage) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.alertMessage); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\r\n</div>";
+  return buffer;
+  });
+
+this["CalendarTemplates"]["calendar"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -94,28 +112,49 @@ function program9(depth0,data,depth1) {
   return buffer;
   });
 
-this["CalendarTemplates"]["src/templates/eventModal"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["calendarContainer"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "\r\n<div class=\"calendar-alertarea\"></div>\r\n<div class=\"calendar-container\"></div>\r\n<div class=\"event-container\"></div>\r\n\r\n<div class=\"calendar-loader\"></div> ";
+  });
+
+this["CalendarTemplates"]["eventModal"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\r\n                    <span>Select person:</span>\r\n                    ";
-  stack1 = self.invokePartial(partials.selectPartial, 'selectPartial', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                ";
-  return buffer;
+  
+  return "\r\n                            <span>Select person:</span>\r\n                        ";
   }
 
 function program3(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n                <span>"
+  buffer += "\r\n                            <span>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</span>\r\n                <input class=\"person\" />\r\n                ";
+    + "</span>\r\n                        ";
   return buffer;
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                            ";
+  stack1 = self.invokePartial(partials.selectPartial, 'selectPartial', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                        ";
+  return buffer;
+  }
+
+function program7(depth0,data) {
+  
+  
+  return "\r\n                            <input class=\"person form-control\">\r\n                        ";
   }
 
   buffer += "<div id=\"calendarEventModal\" class=\"modal fade\">\r\n    <div class=\"modal-dialog\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-header\">\r\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">"
@@ -124,12 +163,15 @@ function program3(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.MODAL_TITLE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " <span class=\"modalTitleDate\"></span></h4>\r\n            </div>\r\n            <div class=\"modal-body\">\r\n                <p>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.MODAL_BODY)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</p>\r\n\r\n                ";
+    + "</p>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.enable_dropdown), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n\r\n                <br />\r\n                <span>"
+  buffer += "\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.enable_dropdown), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <span>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</span>\r\n                <input class=\"eventName\" />\r\n\r\n                <br/>\r\n                Time from:\r\n                <input class=\"timeFrom\" />\r\n\r\n                Time to:\r\n                <input class=\"timeTo\" />\r\n\r\n                <input type=\"hidden\" class=\"eventId\" />\r\n                <input type=\"hidden\" class=\"eventDay\" />\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary add-event\">"
+    + ":</span>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time from:\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeFrom form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time to:\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeTo form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <input type=\"hidden\" class=\"eventId\" />\r\n                <input type=\"hidden\" class=\"eventDay\" />\r\n\r\n                <div style=\"clear:both\"></div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary add-event\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ADD)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\r\n                <button type=\"button\" class=\"btn btn-primary edit-event\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -139,15 +181,18 @@ function program3(depth0,data) {
   return buffer;
   });
 
-this["CalendarTemplates"]["src/templates/events"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["events"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n            <tr>\r\n                <td>\r\n                    "
+  buffer += "\r\n            <tr class=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" >\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.year)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -156,7 +201,7 @@ function program1(depth0,data) {
     + "-"
     + escapeExpression(((stack1 = (depth0 && depth0.day)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
-    + escapeExpression(((stack1 = (depth0 && depth0.person)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n               <td>\r\n                   <a href=\"#\" class=\"edit-event2\" data-eventid=\""
@@ -166,6 +211,11 @@ function program1(depth0,data) {
     + "\">Remove</a>\r\n              </td>\r\n            </tr>\r\n            ";
   return buffer;
   }
+function program2(depth0,data) {
+  
+  
+  return "warning";
+  }
 
   buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>Event list</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n                <th></th>\r\n                <th></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
@@ -174,21 +224,21 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["CalendarTemplates"]["src/templates/panel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["panel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"calendar-panel text-center\">\r\n\r\n    <button class=\"btn btn-default panel-add-event\" style=\"display:none\">Add event</button>\r\n    <button class=\"btn btn-default panel-edit-event\" style=\"display:none\">Edit event</button>\r\n    <button class=\"btn btn-default panel-remove-event\" style=\"display:none\">Remove event</button>\r\n\r\n\r\n    <button class=\"btn btn-default save-events\">Save events</button>\r\n    <button class=\"btn btn-default reload-events\">Reload events</button>\r\n    <button class=\"btn btn-default clear-events\">Clear events</button>\r\n\r\n    <br/>\r\n\r\n    <button class=\"btn btn-primary prev-year\">Previous year</button>\r\n    <button class=\"btn btn-primary prev-month\">Previous month</button>\r\n\r\n    <h2 style=\"display:inline-block\">\r\n        <span class=\"label label-primary label-lg currentYearMonth\">";
+  buffer += "<div class=\"calendar-panel text-center\">\r\n\r\n    <button class=\"btn btn-default panel-add-event\" style=\"display:none\">Add event</button>\r\n    <button class=\"btn btn-default panel-edit-event\" style=\"display:none\">Edit event</button>\r\n    <button class=\"btn btn-default panel-remove-event\" style=\"display:none\">Remove event</button>\r\n\r\n\r\n    <button class=\"btn btn-default save-events\">Save events</button>\r\n    <label for=\"event-autosave\">Autosave</label>\r\n    <input type=\"checkbox\" id=\"event-autosave\" class=\"event-autosave\" />\r\n\r\n    <br/>\r\n\r\n    <button class=\"btn btn-primary prev-year\">Previous year</button>\r\n    <button class=\"btn btn-primary prev-month\">Previous month</button>  \r\n\r\n    <h2 style=\"display:inline-block\">\r\n        <span class=\"label label-primary label-lg currentYearMonth\">";
   if (helper = helpers.currentYearMonth) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.currentYearMonth); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\r\n    </h2>\r\n\r\n    <button class=\"btn btn-primary next-month\">Next month</button>\r\n    <button class=\"btn btn-primary next-year\">Next year</button>\r\n\r\n</div>\r\n\r\n<div class=\"calendar-loader\"></div>";
+    + "</span>\r\n    </h2>\r\n\r\n    <button class=\"btn btn-primary next-month\">Next month</button>\r\n    <button class=\"btn btn-primary next-year\">Next year</button>\r\n\r\n    <button class=\"btn btn-primary load-people\">Load people</button>\r\n</div>";
   return buffer;
   });
 
-this["CalendarTemplates"]["src/templates/selectPartial"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["selectPartial"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -208,7 +258,7 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "<select class=\"person\">\r\n    ";
+  buffer += "<select class=\"person form-control\">\r\n    ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.people), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n</select>";
@@ -217,6 +267,10 @@ function program1(depth0,data) {
 
 (function (env) {
     var calendar = function (options) {
+        Array.prototype.insert = function (index, item) {
+            this.splice(index, 0, item);
+        };
+
         var _defaultResources = {
             MODAL_TITLE: 'Event modal',
             MODAL_BODY: 'Please insert attendee and event names',
@@ -249,19 +303,13 @@ function program1(depth0,data) {
         var _calendarContainer = '';
         var _showEventList = true;
 
-        var _people = [
-            { personId: 1, personName: 'Test1', },
-            { personId: 2, personName: 'Test2', },
-            { personId: 3, personName: 'Test3', },
-        ]
-
         // Internal types
         var LocalStorageSync = function () {
             if (localStorage == undefined) {
                 return;
             }
 
-            this.saveAll = function () {
+            this.saveAllEvents = function () {
                 if (_allEvents instanceof Object) {
                     var copyArr = [];
                     for (var i = 0; i < _allEvents.length; i++) {
@@ -278,7 +326,8 @@ function program1(depth0,data) {
                     localStorage.removeItem('events');
                 }
             };
-            this.readAll = function () {
+
+            this.readAllEvents = function () {
                 var temp = localStorage.getItem('events');
                 try {
                     if (temp == undefined || temp == undefined) {
@@ -296,7 +345,8 @@ function program1(depth0,data) {
                     _allEvents = new CalendarEvents();
                 }
             };
-            this.clearAll = function () {
+
+            this.clearAllEvents = function () {
                 _allEvents = new CalendarEvents();
                 localStorage.removeItem('events');
             };
@@ -322,8 +372,6 @@ function program1(depth0,data) {
                 }
             }
 
-            // fake
-            //todo
             this.urls = {
                 getAllEvents: '',
             };
@@ -351,8 +399,21 @@ function program1(depth0,data) {
                     data: dataToSend,
                     success: function (dt) {
                         console.log('saved');
+                        _showAlert("Events have been saved", 'success');
+
+                        // todo
+                        for (var i = 0; i < _eventsToSave.length; i++) {
+                            var ev = _eventsToSave[i];
+                            ev.unsaved = false;
+                        }
+
+                        _eventsToSave = [];
+                        _eventsToRemove = [];
+
+                        _renderEventList();
                     },
                     error: function (err) {
+                        _showAlert("There was an error while trying to save events", 'danger');
                         console.log(err);
                     },
                     complete: function () {
@@ -361,11 +422,38 @@ function program1(depth0,data) {
                 });
             };
 
-            this.saveAll = function () {
+            this.saveAllEvents = function () {
                 this.saveData();
             };
 
-            this.readAll = function (async, callback) {
+            this.readAllPeople = function (async, callback) {
+                if (async == undefined) {
+                    async = false;
+                }
+
+                if (this.urls.getPeople == undefined) return;
+
+                changeState('load');
+                $.ajax({
+                    type: 'GET',
+                    url: this.urls.getPeople,
+                    success: function (data) {
+                        var selectorToReplace = $('#calendarEventModal .person');
+
+                        var dataForTemplate = {
+                            people: data,
+                        };
+
+                        var template = _templates.selectPartial(dataForTemplate);
+                        selectorToReplace.replaceWith(template);
+                    },
+                    complete: function () {
+                        changeState('idle');
+                    },
+                })
+            };
+
+            this.readAllEvents = function (async, callback) {
                 if (async == undefined) {
                     async = false;
                 }
@@ -373,7 +461,7 @@ function program1(depth0,data) {
                 changeState('load');
                 $.ajax({
                     type: 'GET',
-                    url: this.urls.getAllEvents,
+                    url: this.urls.getEvents,
                     success: function (data) {
                         if (data != undefined && data != null) {
                             for (var i = 0; i < data.length; i++) {
@@ -399,8 +487,8 @@ function program1(depth0,data) {
                 });
             };
 
-            this.clearAll = function () {
-                console.log('cleared');
+            this.clearAllEvents = function () {
+                console.log('This function is not supported');
             };
 
 
@@ -408,9 +496,9 @@ function program1(depth0,data) {
         }
 
         var CalendarEvents = function () {
-            return new Object(); //todo
+            return new Array();
         };
-        
+
         // Events to-be-saved
         var _eventsToSave = [];
 
@@ -419,6 +507,9 @@ function program1(depth0,data) {
 
         // Contains references to all events
         var _allEvents = [];
+
+        // People to be accessed in modal select
+        var _people = [];
 
         var _formatDate2 = function (year, month, day) {
             var tempMonth = month + 1;
@@ -489,8 +580,9 @@ function program1(depth0,data) {
                             _syncType = o.sync.type;
                         }
 
-                        urls.getAllEvents = o.sync.getAllEvents;
+                        urls.getEvents = o.sync.getEvents;
                         urls.saveData = o.sync.saveData;
+                        urls.getPeople = o.sync.getPeople;
                     }
 
                     if (_syncType != 'localStorage' &&
@@ -507,6 +599,8 @@ function program1(depth0,data) {
                             _syncModule = new RemoteSync();
                             _syncModule.setUrls(urls);
 
+                            _syncModule.readAllPeople();
+
                             async = true;
                             break;
                         default:
@@ -514,8 +608,8 @@ function program1(depth0,data) {
                             break;
                     }
 
-                    if (_syncModule.readAll != undefined) {
-                        _syncModule.readAll(async);
+                    if (_syncModule.readAllEvents != undefined) {
+                        _syncModule.readAllEvents(async);
                     }
                 }
 
@@ -539,7 +633,7 @@ function program1(depth0,data) {
                 for (var i = 0; i < 12; i++) {
                     for (var j = 1; j <= 31; j++) {
                         for (var k = 0; k < 1; k++) {
-                            _addEvent(2014, i, j, 'Jan Kowalski', 'Swimming', undefined, i * j * k);
+                            _addEvent(2014, i, j, 1, 'Jan Kowalski', 'Swimming', undefined, i * j * k);
                         }
                     }
                 }
@@ -568,7 +662,6 @@ function program1(depth0,data) {
             _createPanel(_panelPosition);
             _addPanelEvents();
 
-            _createEventList();
             _bindEventListEvents();
 
             // Render
@@ -581,9 +674,11 @@ function program1(depth0,data) {
             }
         };
 
-        var _createContainer = function () {
-            $(_selector).append('<div class="calendar-container"></div>');
-            _calendarContainer = _selector + ' .calendar-container';
+        var _createContainer = function() {
+            var html = _templates.calendarContainer();
+
+            $(_selector).append(html);
+            _calendarContainer = '.calendar-container';
         };
 
         var _createModal = function () {
@@ -611,6 +706,16 @@ function program1(depth0,data) {
             } else {
                 $(_calendarContainer).before(html);
             }
+        };
+
+        var _isAutosave = function () {
+            var checkBox = $('.calendar-panel .event-autosave');
+
+            if (checkBox != undefined && checkBox.length > 0) {
+                return checkBox[0].checked;
+            }
+
+            return false;
         };
 
         var _addPanelEvents = function () {
@@ -656,12 +761,18 @@ function program1(depth0,data) {
                 var person = personInput.val();
                 var event = eventInput.val();
 
-                _addEvent(_year, _month, day, person, event);
-                _render();
+                if (event != undefined && event != '') {
+                    _addEvent(_year, _month, day, person, 'none', event);
+                    _render();
 
-                // clear
-                personInput.val('');
-                eventInput.val('');
+                    // clear
+                    personInput.val('');
+                    eventInput.val('');
+
+                    return true;
+                }
+
+                return false;
             };
 
             // Bind event add
@@ -751,15 +862,17 @@ function program1(depth0,data) {
 
             $('#calendarEventModal .add-event').click(function () {
                 var day = $('#calendarEventModal .eventDay').val();
-                addNewEvent(day);
 
-                var modal = $('#calendarEventModal');
-                modal.modal('hide');
+                var result = addNewEvent(day);
+
+                if (result) {
+                    var modal = $('#calendarEventModal');
+                    modal.modal('hide');
+                }
             });
             
             $(panelSelector + '.save-events').click(function () {
                 _saveEvents();
-                //alert('Events saved');
             });
 
             $(panelSelector + '.clear-events').click(function () {
@@ -773,10 +886,13 @@ function program1(depth0,data) {
                     _render();
                 });
             });
-        };
 
-        var _createEventList = function () {
-            $(_selector).append('<div class="event-container"></div>');
+            $(panelSelector + '.load-people').click(function () {
+                debugger
+                if (_syncModule.readAllPeople != undefined) {
+                    _syncModule.readAllPeople(true);
+                }
+            });
         };
 
         var _bindEventListEvents = function () {
@@ -808,8 +924,7 @@ function program1(depth0,data) {
         /**
           * Adds new event for specific date with specific values as argument
           */
-        var _addEvent = function (year, month, day, personName, eventName, color, eventId) {
-
+        var _addEvent = function (year, month, day, personId, personName, eventName, color, eventId) {
             if (color == undefined) {
                 color = _getRandomColor();
             }
@@ -819,6 +934,7 @@ function program1(depth0,data) {
 
             var event = {
                 eventId: eventId,
+                personId: personId,
                 personName: personName,
                 eventName: eventName,
                 color: color,
@@ -829,6 +945,10 @@ function program1(depth0,data) {
             };
 
             _pushEvent(event, true);
+
+            if (_isAutosave()) {
+                _saveEvents();
+            }
         }
 
         /**
@@ -870,6 +990,10 @@ function program1(depth0,data) {
                 
             } else {
                 // throw error
+            }
+
+            if (_isAutosave()) {
+                _saveEvents();
             }
         }
 
@@ -1058,6 +1182,21 @@ function program1(depth0,data) {
             }
         };
 
+        var _showAlert = function (message, type) {
+            if (type == undefined) {
+                type = 'success';
+            }
+
+            var data = {
+                alertType: type,
+                alertMessage: message,
+            }
+
+            var html = _templates.alert(data);
+
+            $(_selector + ' .calendar-alertarea').html(html);
+        };
+
         var hexValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
         /**
@@ -1068,7 +1207,7 @@ function program1(depth0,data) {
             var str = '#';
 
             for (var i = 0; i < 6; i++) {
-                var ran = Math.floor(Math.random() * hexValues.length);
+                var ran = Math.round(Math.random() * (hexValues.length - 1));
                 str += hexValues[ran];
             };
 
@@ -1086,7 +1225,7 @@ function program1(depth0,data) {
 
         var _saveEvents = function () {
             if (_syncModule != undefined) {
-                _syncModule.saveAll();
+                _syncModule.saveAllEvents();
             }
         };
 
@@ -1098,6 +1237,7 @@ function program1(depth0,data) {
 
         // Initialization
         _init();
+
 
         /**
          * Public interface

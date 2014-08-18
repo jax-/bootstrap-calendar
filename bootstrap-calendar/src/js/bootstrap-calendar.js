@@ -1,6 +1,10 @@
 
 (function (env) {
     var calendar = function (options) {
+        Array.prototype.insert = function (index, item) {
+            this.splice(index, 0, item);
+        };
+
         var _defaultResources = {
             MODAL_TITLE: 'Event modal',
             MODAL_BODY: 'Please insert attendee and event names',
@@ -33,19 +37,13 @@
         var _calendarContainer = '';
         var _showEventList = true;
 
-        var _people = [
-            { personId: 1, personName: 'Test1', },
-            { personId: 2, personName: 'Test2', },
-            { personId: 3, personName: 'Test3', },
-        ]
-
         // Internal types
         var LocalStorageSync = function () {
             if (localStorage == undefined) {
                 return;
             }
 
-            this.saveAll = function () {
+            this.saveAllEvents = function () {
                 if (_allEvents instanceof Object) {
                     var copyArr = [];
                     for (var i = 0; i < _allEvents.length; i++) {
@@ -62,7 +60,8 @@
                     localStorage.removeItem('events');
                 }
             };
-            this.readAll = function () {
+
+            this.readAllEvents = function () {
                 var temp = localStorage.getItem('events');
                 try {
                     if (temp == undefined || temp == undefined) {
@@ -80,7 +79,8 @@
                     _allEvents = new CalendarEvents();
                 }
             };
-            this.clearAll = function () {
+
+            this.clearAllEvents = function () {
                 _allEvents = new CalendarEvents();
                 localStorage.removeItem('events');
             };
@@ -106,8 +106,6 @@
                 }
             }
 
-            // fake
-            //todo
             this.urls = {
                 getAllEvents: '',
             };
@@ -135,8 +133,21 @@
                     data: dataToSend,
                     success: function (dt) {
                         console.log('saved');
+                        _showAlert("Events have been saved", 'success');
+
+                        // todo
+                        for (var i = 0; i < _eventsToSave.length; i++) {
+                            var ev = _eventsToSave[i];
+                            ev.unsaved = false;
+                        }
+
+                        _eventsToSave = [];
+                        _eventsToRemove = [];
+
+                        _renderEventList();
                     },
                     error: function (err) {
+                        _showAlert("There was an error while trying to save events", 'danger');
                         console.log(err);
                     },
                     complete: function () {
@@ -145,11 +156,38 @@
                 });
             };
 
-            this.saveAll = function () {
+            this.saveAllEvents = function () {
                 this.saveData();
             };
 
-            this.readAll = function (async, callback) {
+            this.readAllPeople = function (async, callback) {
+                if (async == undefined) {
+                    async = false;
+                }
+
+                if (this.urls.getPeople == undefined) return;
+
+                changeState('load');
+                $.ajax({
+                    type: 'GET',
+                    url: this.urls.getPeople,
+                    success: function (data) {
+                        var selectorToReplace = $('#calendarEventModal .person');
+
+                        var dataForTemplate = {
+                            people: data,
+                        };
+
+                        var template = _templates.selectPartial(dataForTemplate);
+                        selectorToReplace.replaceWith(template);
+                    },
+                    complete: function () {
+                        changeState('idle');
+                    },
+                })
+            };
+
+            this.readAllEvents = function (async, callback) {
                 if (async == undefined) {
                     async = false;
                 }
@@ -157,7 +195,7 @@
                 changeState('load');
                 $.ajax({
                     type: 'GET',
-                    url: this.urls.getAllEvents,
+                    url: this.urls.getEvents,
                     success: function (data) {
                         if (data != undefined && data != null) {
                             for (var i = 0; i < data.length; i++) {
@@ -183,8 +221,8 @@
                 });
             };
 
-            this.clearAll = function () {
-                console.log('cleared');
+            this.clearAllEvents = function () {
+                console.log('This function is not supported');
             };
 
 
@@ -192,9 +230,9 @@
         }
 
         var CalendarEvents = function () {
-            return new Object(); //todo
+            return new Array();
         };
-        
+
         // Events to-be-saved
         var _eventsToSave = [];
 
@@ -203,6 +241,9 @@
 
         // Contains references to all events
         var _allEvents = [];
+
+        // People to be accessed in modal select
+        var _people = [];
 
         var _formatDate2 = function (year, month, day) {
             var tempMonth = month + 1;
@@ -273,8 +314,9 @@
                             _syncType = o.sync.type;
                         }
 
-                        urls.getAllEvents = o.sync.getAllEvents;
+                        urls.getEvents = o.sync.getEvents;
                         urls.saveData = o.sync.saveData;
+                        urls.getPeople = o.sync.getPeople;
                     }
 
                     if (_syncType != 'localStorage' &&
@@ -291,6 +333,8 @@
                             _syncModule = new RemoteSync();
                             _syncModule.setUrls(urls);
 
+                            _syncModule.readAllPeople();
+
                             async = true;
                             break;
                         default:
@@ -298,8 +342,8 @@
                             break;
                     }
 
-                    if (_syncModule.readAll != undefined) {
-                        _syncModule.readAll(async);
+                    if (_syncModule.readAllEvents != undefined) {
+                        _syncModule.readAllEvents(async);
                     }
                 }
 
@@ -323,7 +367,7 @@
                 for (var i = 0; i < 12; i++) {
                     for (var j = 1; j <= 31; j++) {
                         for (var k = 0; k < 1; k++) {
-                            _addEvent(2014, i, j, 'Jan Kowalski', 'Swimming', undefined, i * j * k);
+                            _addEvent(2014, i, j, 1, 'Jan Kowalski', 'Swimming', undefined, i * j * k);
                         }
                     }
                 }
@@ -352,7 +396,6 @@
             _createPanel(_panelPosition);
             _addPanelEvents();
 
-            _createEventList();
             _bindEventListEvents();
 
             // Render
@@ -365,9 +408,11 @@
             }
         };
 
-        var _createContainer = function () {
-            $(_selector).append('<div class="calendar-container"></div>');
-            _calendarContainer = _selector + ' .calendar-container';
+        var _createContainer = function() {
+            var html = _templates.calendarContainer();
+
+            $(_selector).append(html);
+            _calendarContainer = '.calendar-container';
         };
 
         var _createModal = function () {
@@ -395,6 +440,16 @@
             } else {
                 $(_calendarContainer).before(html);
             }
+        };
+
+        var _isAutosave = function () {
+            var checkBox = $('.calendar-panel .event-autosave');
+
+            if (checkBox != undefined && checkBox.length > 0) {
+                return checkBox[0].checked;
+            }
+
+            return false;
         };
 
         var _addPanelEvents = function () {
@@ -440,12 +495,18 @@
                 var person = personInput.val();
                 var event = eventInput.val();
 
-                _addEvent(_year, _month, day, person, event);
-                _render();
+                if (event != undefined && event != '') {
+                    _addEvent(_year, _month, day, person, 'none', event);
+                    _render();
 
-                // clear
-                personInput.val('');
-                eventInput.val('');
+                    // clear
+                    personInput.val('');
+                    eventInput.val('');
+
+                    return true;
+                }
+
+                return false;
             };
 
             // Bind event add
@@ -535,15 +596,17 @@
 
             $('#calendarEventModal .add-event').click(function () {
                 var day = $('#calendarEventModal .eventDay').val();
-                addNewEvent(day);
 
-                var modal = $('#calendarEventModal');
-                modal.modal('hide');
+                var result = addNewEvent(day);
+
+                if (result) {
+                    var modal = $('#calendarEventModal');
+                    modal.modal('hide');
+                }
             });
             
             $(panelSelector + '.save-events').click(function () {
                 _saveEvents();
-                //alert('Events saved');
             });
 
             $(panelSelector + '.clear-events').click(function () {
@@ -557,10 +620,13 @@
                     _render();
                 });
             });
-        };
 
-        var _createEventList = function () {
-            $(_selector).append('<div class="event-container"></div>');
+            $(panelSelector + '.load-people').click(function () {
+                debugger
+                if (_syncModule.readAllPeople != undefined) {
+                    _syncModule.readAllPeople(true);
+                }
+            });
         };
 
         var _bindEventListEvents = function () {
@@ -592,8 +658,7 @@
         /**
           * Adds new event for specific date with specific values as argument
           */
-        var _addEvent = function (year, month, day, personName, eventName, color, eventId) {
-
+        var _addEvent = function (year, month, day, personId, personName, eventName, color, eventId) {
             if (color == undefined) {
                 color = _getRandomColor();
             }
@@ -603,6 +668,7 @@
 
             var event = {
                 eventId: eventId,
+                personId: personId,
                 personName: personName,
                 eventName: eventName,
                 color: color,
@@ -613,6 +679,10 @@
             };
 
             _pushEvent(event, true);
+
+            if (_isAutosave()) {
+                _saveEvents();
+            }
         }
 
         /**
@@ -654,6 +724,10 @@
                 
             } else {
                 // throw error
+            }
+
+            if (_isAutosave()) {
+                _saveEvents();
             }
         }
 
@@ -842,6 +916,21 @@
             }
         };
 
+        var _showAlert = function (message, type) {
+            if (type == undefined) {
+                type = 'success';
+            }
+
+            var data = {
+                alertType: type,
+                alertMessage: message,
+            }
+
+            var html = _templates.alert(data);
+
+            $(_selector + ' .calendar-alertarea').html(html);
+        };
+
         var hexValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
         /**
@@ -852,7 +941,7 @@
             var str = '#';
 
             for (var i = 0; i < 6; i++) {
-                var ran = Math.floor(Math.random() * hexValues.length);
+                var ran = Math.round(Math.random() * (hexValues.length - 1));
                 str += hexValues[ran];
             };
 
@@ -870,7 +959,7 @@
 
         var _saveEvents = function () {
             if (_syncModule != undefined) {
-                _syncModule.saveAll();
+                _syncModule.saveAllEvents();
             }
         };
 
@@ -882,6 +971,7 @@
 
         // Initialization
         _init();
+
 
         /**
          * Public interface

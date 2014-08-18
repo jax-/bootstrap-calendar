@@ -8,27 +8,55 @@
             <div class="modal-body">
                 <p>{{RESOURCES.MODAL_BODY}}</p>
 
-                {{#if enable_dropdown}}
-                    <span>Select person:</span>
-                    {{> selectPartial}}
-                {{else}}
-                <span>{{RESOURCES.PERSON_NAME}}:</span>
-                <input class="person" />
-                {{/if}}
+                <div class="row row-mar">
+                    <div class="col-md-5 col-lg-5">
+                        {{#if enable_dropdown}}
+                            <span>Select person:</span>
+                        {{else}}
+                            <span>{{RESOURCES.PERSON_NAME}}</span>
+                        {{/if}}
+                    </div>
+                    <div class="col-md-7 col-lg-7">
+                        {{#if enable_dropdown}}
+                            {{> selectPartial}}
+                        {{else}}
+                            <input class="person form-control">
+                        {{/if}}
+                    </div>
+                </div>
 
-                <br />
-                <span>{{RESOURCES.EVENT_NAME}}:</span>
-                <input class="eventName" />
+                <div class="row row-mar">
+                    <div class="col-md-5 col-lg-5">
+                        <span>{{RESOURCES.EVENT_NAME}}:</span>
+                    </div>
+                    <div class="col-md-7 col-lg-7">
+                        <input class="eventName form-control" />
+                    </div>
+                </div>
 
-                <br/>
-                Time from:
-                <input class="timeFrom" />
+                <div class="row row-mar">
+                    <div class="col-md-5 col-lg-5">
+                        Time from:
+                    </div>
+                    <div class="col-md-7 col-lg-7">
+                        <input class="timeFrom form-control" />
+                    </div>
+                </div>
 
-                Time to:
-                <input class="timeTo" />
+                <div class="row row-mar">
+                    <div class="col-md-5 col-lg-5">
+                        Time to:
+                    </div>
+
+                    <div class="col-md-7 col-lg-7">
+                        <input class="timeTo form-control" />
+                    </div>
+                </div>
 
                 <input type="hidden" class="eventId" />
                 <input type="hidden" class="eventDay" />
+
+                <div style="clear:both"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary add-event">{{RESOURCES.ADD}}</button>

@@ -22,7 +22,7 @@
         </thead>
         <tbody>
             {{#each this}}
-            <tr>
+            <tr class="{{#if unsaved}}warning{{/if}}" >
                 <td>
                     {{this.eventId}}
                 </td>
@@ -30,7 +30,7 @@
                     {{this.year}}-{{this.month}}-{{this.day}}
                 </td>
                 <td>
-                    {{this.person}}
+                    {{this.personName}}
                 </td>
                 <td>
                     {{this.eventName}}

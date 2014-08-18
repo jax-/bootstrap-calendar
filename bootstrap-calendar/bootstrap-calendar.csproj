@@ -32,24 +32,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="css\bootstrap-theme.min.css" />
-    <Content Include="css\bootstrap.min.css" />
-    <Content Include="css\bs-calendar.css" />
+    <Content Include="build\js\bootstrap-calendar.js" />
+    <Content Include="build\js\bootstrap-calendar.min.js" />
+    <Content Include="example\css\bootstrap-theme.min.css" />
+    <Content Include="example\css\bootstrap.min.css" />
+    <Content Include="build\css\bootstrap-calendar.css" />
+    <Content Include="example\css\img\ajax-loader.gif" />
     <Content Include="Gruntfile.js" />
-    <Content Include="index.html" />
-    <Content Include="js\bootstrap.min.js" />
-    <Content Include="js\bs-calendar.js" />
-    <Content Include="js\hb-tmp-compiled.js" />
-    <Content Include="js\handlebars-v1.3.0.js" />
-    <Content Include="js\jquery-1.11.1.min.js" />
+    <Content Include="example\index.html" />
+    <Content Include="example\js\bootstrap.min.js" />
+    <Content Include="src\description.txt" />
+    <Content Include="src\js\bootstrap-calendar-templates.js" />
+    <Content Include="src\js\bootstrap-calendar.js" />
+    <Content Include="example\js\handlebars-v1.3.0.js" />
+    <Content Include="example\js\jquery-1.11.1.min.js" />
     <None Include="package.json" />
-    <None Include="templates\addModal.hbs" />
-    <None Include="templates\calendar.hbs" />
-    <None Include="templates\events.hbs" />
-    <None Include="templates\panel.hbs" />
+    <None Include="src\templates\eventModal.hbs" />
+    <None Include="src\templates\calendar.hbs" />
+    <None Include="src\templates\events.hbs" />
+    <None Include="src\templates\panel.hbs" />
+    <None Include="src\templates\selectPartial.hbs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="less\bs-calendar.less" />
+    <None Include="src\less\bootstrap-calendar.less" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

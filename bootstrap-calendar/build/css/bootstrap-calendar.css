@@ -40,6 +40,9 @@ table.calendar span.event.selected {
 table.calendar .bold {
   font-weight: bold;
 }
+.row-mar {
+  margin: 5px 0;
+}
 .calendar-loader {
   background: url('img/ajax-loader.gif') no-repeat;
   position: fixed;

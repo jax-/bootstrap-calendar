@@ -16,7 +16,7 @@
             options: {
                 namespace: 'CalendarTemplates',
                 processName: function(filePath) {
-                    return filePath.replace(/^templates\//, '').replace(/\.hbs$/, '');
+                    return filePath.replace(/^src\/templates\//, '').replace(/\.hbs$/, '');
                 }
             },
             compile: {

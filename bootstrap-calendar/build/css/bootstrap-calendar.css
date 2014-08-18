@@ -28,14 +28,14 @@ table.calendar tbody td.week-day > div:hover {
   color: black;
 }
 table.calendar tbody td.week-day > div.selected {
-  border: 3px solid #35cdff;
+  border: 3px solid #cecece;
 }
 table.calendar span.event {
   width: 100%;
   display: block;
 }
 table.calendar span.event.selected {
-  border: 3px solid #35cdff;
+  border: 3px solid #cecece;
 }
 table.calendar .bold {
   font-weight: bold;

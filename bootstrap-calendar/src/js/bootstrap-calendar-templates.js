@@ -1,6 +1,6 @@
 this["CalendarTemplates"] = this["CalendarTemplates"] || {};
 
-this["CalendarTemplates"]["calendar"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["src/templates/calendar"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -87,7 +87,7 @@ function program9(depth0,data,depth1) {
   return buffer;
   });
 
-this["CalendarTemplates"]["eventModal"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["src/templates/eventModal"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
   var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
@@ -132,7 +132,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-this["CalendarTemplates"]["events"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["src/templates/events"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -167,7 +167,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["CalendarTemplates"]["panel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["src/templates/panel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -181,7 +181,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["CalendarTemplates"]["selectPartial"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["src/templates/selectPartial"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;

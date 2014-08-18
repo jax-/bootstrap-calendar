@@ -8,7 +8,7 @@
                     paths: ["less"]
                 },
                 files: {
-                    "css/bootstrap-calendar.css": "less/bootstrap-calendar.less"
+                    "build/css/bootstrap-calendar.css": "src/less/bootstrap-calendar.less"
                 }
             }
         },
@@ -21,31 +21,45 @@
             },
             compile: {
                 files: {
-                    'js/bootstrap-calendar-templates.js': ['templates/*.hbs']
+                    'src/js/bootstrap-calendar-templates.js': ['src/templates/*.hbs']
                 }
             },
             
         },
+        concat: {
+            dist: {
+                src: ['src/description.txt', 'src/js/bootstrap-calendar-templates.js', 'src/js/bootstrap-calendar.js'],
+                dest: 'build/js/bootstrap-calendar.js'
+            }
+        },
+        uglify: {
+            build: {
+                files: {
+                    'build/js/bootstrap-calendar.min.js': ['build/js/bootstrap-calendar.js']
+                },
+            }
+        },
         watch: {
             less: {
-                files: ['less/*.less'],
+                files: ['src/less/*.less'],
                 tasks: ['less'],
             },
             handlebars: {
-                files: ['templates/*.hbs'],
+                files: ['src/templates/*.hbs'],
                 tasks: ['handlebars'],
             },
-            //javascript: {
-            //    files: ['js/bs-calendar.js'],
-            //    tasks: [],
-            //}
+            javascript: {
+                files: ['src/js/*.js'],
+                tasks: ['concat', 'uglify'],
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    // A very basic default task.
-    grunt.registerTask('default', ['less', 'handlebars', 'watch']);
+    grunt.registerTask('default', ['less', 'handlebars', 'watch', 'concat', 'uglify']);
 };

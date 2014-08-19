@@ -171,30 +171,41 @@ function program7(depth0,data) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <span>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</span>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time from:\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeFrom form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time to:\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeTo form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <input type=\"hidden\" class=\"eventId\" />\r\n                <input type=\"hidden\" class=\"eventDay\" />\r\n\r\n                <div style=\"clear:both\"></div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary add-event\">"
+    + ":</span>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time from:\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeFrom\" name=\"timeFrom\" step=\"1\" min=\"0\" max=\"24\" value=\"10\">\r\n                        <div class=\"timeFrom-output\"></div>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time to:\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeTo\" name=\"timeTo\" step=\"1\" min=\"0\" max=\"24\" value=\"11\">\r\n                        <div class=\"timeTo-output\"></div>\r\n                    </div>\r\n                </div>\r\n\r\n                <input type=\"hidden\" class=\"eventId\" />\r\n                <input type=\"hidden\" class=\"eventDay\" />\r\n\r\n                <div style=\"clear:both\"></div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary add-event\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ADD)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\r\n                <button type=\"button\" class=\"btn btn-primary edit-event\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\r\n                <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.CLOSE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</button>\r\n            </div>\r\n        </div><!-- /.modal-content -->\r\n    </div><!-- /.modal-dialog -->\r\n</div><!-- /.modal -->";
+    + "</button>\r\n            </div>\r\n        </div><!-- /.modal-content -->\r\n    </div><!-- /.modal-dialog -->\r\n</div><!-- /.modal -->\r\n\r\n<script>\r\n    $('.timeFrom').change(function () {\r\n        var out = $('.timeFrom-output');\r\n        var value = $(this).val();\r\n        out.html(format(value));\r\n    });\r\n\r\n    $('.timeTo').change(function () {\r\n        var out = $('.timeTo-output');\r\n        var value = $(this).val();\r\n        out.html(format(value));\r\n    });\r\n\r\n    $(function (){\r\n        $('.timeFrom').trigger('change');\r\n        $('.timeTo').trigger('change');\r\n    });\r\n\r\n    $('.timeTo,.timeFrom').keydown(function () {\r\n        $(this).trigger('change');\r\n    });\r\n\r\n    var format = function (val) {\r\n\r\n        var hour = val;\r\n        if (hour < 10)\r\n            hour = '0' + hour;\r\n\r\n        return hour + ':00';\r\n        \r\n\r\n        //var hour = Math.floor(val / 4);\r\n        //if (hour < 10)\r\n        //    hour = '0' + hour;\r\n\r\n        //var minute = Math.floor((val % 4) * 15);\r\n        //if (minute < 10)\r\n        //    minute = '0' + minute;\r\n\r\n        //return hour + ':' + minute;\r\n    };\r\n\r\n    var validate = function () {\r\n        var timeTo = $('.timeTo');\r\n        var timeFrom = $('.timeFrom');\r\n\r\n        if (timeFrom.val() > timeTo.val()) {\r\n            timeFrom.val(timeTo.val());\r\n            timefrom.trigger('change');\r\n        }\r\n        else if (timeTo.val() < timeFrom.val())\r\n        {\r\n            timeTo.val(timeFrom.val());\r\n            timeTo.trigger('change');\r\n        }\r\n    };\r\n\r\n</script>";
   return buffer;
   });
 
 this["CalendarTemplates"]["events"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
+  
+  return "\r\n                <th>\r\n                    Id\r\n                </th>\r\n                ";
+  }
+
+function program3(depth0,data) {
+  
   var buffer = "", stack1, helper, options;
   buffer += "\r\n            <tr class=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\" >\r\n                <td>\r\n                    "
-    + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n                </td>\r\n                <td>\r\n                    "
+  buffer += "\" >\r\n                <td>\r\n                    <div style=\"background-color: ";
+  if (helper = helpers.color) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.color); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "; width:18px; height:18px;\"></div>\r\n                </td>\r\n                ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.show_id), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                <td>\r\n                    "
     + escapeExpression((helper = helpers.formatDate || (depth0 && depth0.formatDate),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options) : helperMissing.call(depth0, "formatDate", (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options)))
     + "\r\n                </td>\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.timeFrom)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -211,14 +222,26 @@ function program1(depth0,data) {
     + "\">Remove</a>\r\n              </td>\r\n            </tr>\r\n            ";
   return buffer;
   }
-function program2(depth0,data) {
+function program4(depth0,data) {
   
   
   return "warning";
   }
 
-  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>Event list</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Time\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n                <th></th>\r\n                <th></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
-  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+function program6(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                <td>\r\n                    "
+    + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </td>\r\n                ";
+  return buffer;
+  }
+
+  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>Event list</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>#</th>\r\n                ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.show_id), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Time\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n                <th></th>\r\n                <th></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
+  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n        </tbody>\r\n    </table>\r\n</div>";
   return buffer;
@@ -311,6 +334,7 @@ function program1(depth0,data) {
         var _panelPosition = 'top';
         var _calendarContainer = '';
         var _showEventList = true;
+        var _modalSelector = '#calendarEventModal';
 
         // Filters
         var _filterByMonth = true;
@@ -453,14 +477,7 @@ function program1(depth0,data) {
                     type: 'GET',
                     url: this.urls.getPeople,
                     success: function (data) {
-                        var selectorToReplace = $('#calendarEventModal .person');
-
-                        var dataForTemplate = {
-                            people: data,
-                        };
-
-                        var template = _templates.selectPartial(dataForTemplate);
-                        selectorToReplace.replaceWith(template);
+                        _setPeople(data);
                     },
                     complete: function () {
                         changeState('idle');
@@ -822,10 +839,8 @@ function program1(depth0,data) {
                 changeYear(1);
             });
 
-            var modalSelector = '#calendarEventModal';
-
             var addNewEvent = function (day) {
-                var modal = $(modalSelector);
+                var modal = $(_modalSelector);
 
                 var personInput = modal.find('.person');
                 var eventInput = modal.find('.eventName');
@@ -869,7 +884,7 @@ function program1(depth0,data) {
 
             // Bind event add
             $(_selector).on('click', '.panel-add-event', function () {
-                var modal = $(modalSelector);
+                var modal = $(_modalSelector);
                 var selectedDay = $(_selector).find('.week-day-div.selected');
                 if (selectedDay.length > 0) {
                     var day = $(selectedDay).parent().data('day');
@@ -887,7 +902,7 @@ function program1(depth0,data) {
 
             // Bind event edit
             $(_selector).on('click', '.panel-edit-event', function () {
-                var modal = $(modalSelector);
+                var modal = $(_modalSelector);
                 var selectedEvent = $(_selector).find('.event.selected');
                 if (selectedEvent.length > 0) {
                     var day = $(selectedEvent).data('day');
@@ -943,20 +958,20 @@ function program1(depth0,data) {
                 }
             });
 
-            $(modalSelector + ' .add-event').click(function () {
-                var day = $(modalSelector + ' .eventDay').val();
+            $(_modalSelector + ' .add-event').click(function () {
+                var day = $(_modalSelector + ' .eventDay').val();
 
                 var result = addNewEvent(day);
 
                 if (result) {
-                    var modal = $(modalSelector);
+                    var modal = $(_modalSelector);
                     modal.modal('hide');
                     _setEventAddEditState('none');
                 }
             });
 
-            $(modalSelector + ' .edit-event').click(function () {
-                var modal = $(modalSelector);
+            $(_modalSelector + ' .edit-event').click(function () {
+                var modal = $(_modalSelector);
                 var eventId = modal.find('.eventId').val();
                 var event = _getEventById(eventId);
 
@@ -1420,6 +1435,16 @@ function program1(depth0,data) {
             }
         };
 
+        var _setPeople = function (people) {
+            _people = people;
+            var data = {
+                people: _people,
+            };
+            var template = _templates.selectPartial(data);
+
+            $(_modalSelector + ' .person').replaceWith(template);
+        }
+
         // Initialization
         _init();
 
@@ -1437,6 +1462,7 @@ function program1(depth0,data) {
             clearEvents: _clearEvents,
             loadWeekStrings: _loadWeekDays,
             loadMonthStrings: _loadMonthStrings,
+            setPeople: _setPeople,
         };
     };
     

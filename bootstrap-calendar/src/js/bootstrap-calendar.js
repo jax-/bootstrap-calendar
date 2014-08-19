@@ -36,6 +36,7 @@
         var _panelPosition = 'top';
         var _calendarContainer = '';
         var _showEventList = true;
+        var _modalSelector = '#calendarEventModal';
 
         // Filters
         var _filterByMonth = true;
@@ -178,14 +179,7 @@
                     type: 'GET',
                     url: this.urls.getPeople,
                     success: function (data) {
-                        var selectorToReplace = $('#calendarEventModal .person');
-
-                        var dataForTemplate = {
-                            people: data,
-                        };
-
-                        var template = _templates.selectPartial(dataForTemplate);
-                        selectorToReplace.replaceWith(template);
+                        _setPeople(data);
                     },
                     complete: function () {
                         changeState('idle');
@@ -547,10 +541,8 @@
                 changeYear(1);
             });
 
-            var modalSelector = '#calendarEventModal';
-
             var addNewEvent = function (day) {
-                var modal = $(modalSelector);
+                var modal = $(_modalSelector);
 
                 var personInput = modal.find('.person');
                 var eventInput = modal.find('.eventName');
@@ -594,7 +586,7 @@
 
             // Bind event add
             $(_selector).on('click', '.panel-add-event', function () {
-                var modal = $(modalSelector);
+                var modal = $(_modalSelector);
                 var selectedDay = $(_selector).find('.week-day-div.selected');
                 if (selectedDay.length > 0) {
                     var day = $(selectedDay).parent().data('day');
@@ -612,7 +604,7 @@
 
             // Bind event edit
             $(_selector).on('click', '.panel-edit-event', function () {
-                var modal = $(modalSelector);
+                var modal = $(_modalSelector);
                 var selectedEvent = $(_selector).find('.event.selected');
                 if (selectedEvent.length > 0) {
                     var day = $(selectedEvent).data('day');
@@ -668,20 +660,20 @@
                 }
             });
 
-            $(modalSelector + ' .add-event').click(function () {
-                var day = $(modalSelector + ' .eventDay').val();
+            $(_modalSelector + ' .add-event').click(function () {
+                var day = $(_modalSelector + ' .eventDay').val();
 
                 var result = addNewEvent(day);
 
                 if (result) {
-                    var modal = $(modalSelector);
+                    var modal = $(_modalSelector);
                     modal.modal('hide');
                     _setEventAddEditState('none');
                 }
             });
 
-            $(modalSelector + ' .edit-event').click(function () {
-                var modal = $(modalSelector);
+            $(_modalSelector + ' .edit-event').click(function () {
+                var modal = $(_modalSelector);
                 var eventId = modal.find('.eventId').val();
                 var event = _getEventById(eventId);
 
@@ -1145,6 +1137,16 @@
             }
         };
 
+        var _setPeople = function (people) {
+            _people = people;
+            var data = {
+                people: _people,
+            };
+            var template = _templates.selectPartial(data);
+
+            $(_modalSelector + ' .person').replaceWith(template);
+        }
+
         // Initialization
         _init();
 
@@ -1162,6 +1164,7 @@
             clearEvents: _clearEvents,
             loadWeekStrings: _loadWeekDays,
             loadMonthStrings: _loadMonthStrings,
+            setPeople: _setPeople,
         };
     };
     

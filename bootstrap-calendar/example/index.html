@@ -28,12 +28,18 @@
         selector: '#calendar',
         debug: false,
         sync: 'localStorage',
-        render: true,
+        render: false,
         year: year,
         month: month,
         panel: 'bottom',
         showEventList: true,
     });
 
-    var events = calendar.getEvents();
+    calendar.setPeople([
+        { personId: 1, personName: 'John' },
+        { personId: 2, personName: 'Matt' },
+        { personId: 3, personName: 'Frank' },
+    ]);
+
+    calendar.render();
 </script>

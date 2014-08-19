@@ -19,7 +19,7 @@
                     {{#each this.events}}
                     <li>
                         <span class="event" data-day="{{../dayValue}}" data-eventid="{{eventId}}" style="background-color:{{this.color}}">
-                            <span>{{this.personName}} - {{this.eventName}}</span>
+                            <span>{{this.personName}} - {{formatEventName this.eventName}}</span>
                         </span>
                     </li>
                     {{/each}}

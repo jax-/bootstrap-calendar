@@ -11,6 +11,9 @@
                     Date
                 </th>
                 <th>
+                    Time
+                </th>
+                <th>
                     Person name
                 </th>
                 <th>
@@ -27,7 +30,10 @@
                     {{this.eventId}}
                 </td>
                 <td>
-                    {{this.year}}-{{this.month}}-{{this.day}}
+                    {{formatDate this.year this.month this.day}}
+                </td>
+                <td>
+                    {{this.timeFrom}} - {{this.timeTo}}
                 </td>
                 <td>
                     {{this.personName}}

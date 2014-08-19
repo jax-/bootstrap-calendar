@@ -37,6 +37,9 @@
         var _calendarContainer = '';
         var _showEventList = true;
 
+        // Filters
+        var _filterByMonth = true;
+
         // Internal types
         var LocalStorageSync = function () {
             if (localStorage == undefined) {
@@ -117,10 +120,18 @@
                 return this.urls;
             };
 
+            var setUnsaved = function (collection) {
+                for (var i = 0; i < collection.length; i++) {
+                    var el = collection[i];
+                    el.unsaved = false;
+                }
+            }
+
             this.saveData = function () {
                 var data = {
                     eventsToAdd: _eventsToSave,
                     eventsToRemove: _eventsToRemove,
+                    eventsToEdit: _eventsToEdit,
                 };
 
                 var dataToSend = JSON.stringify(data);
@@ -135,15 +146,10 @@
                         console.log('saved');
                         _showAlert("Events have been saved", 'success');
 
-                        // todo
-                        for (var i = 0; i < _eventsToSave.length; i++) {
-                            var ev = _eventsToSave[i];
-                            ev.unsaved = false;
-                        }
+                        setUnsaved(_eventsToEdit);
+                        setUnsaved(_eventsToSave);
 
-                        _eventsToSave = [];
-                        _eventsToRemove = [];
-
+                        _clearEvents(false);
                         _renderEventList();
                     },
                     error: function (err) {
@@ -239,6 +245,9 @@
         // Events to-be-removed
         var _eventsToRemove = [];
 
+        // Events to-be-edited
+        var _eventsToEdit = [];
+
         // Contains references to all events
         var _allEvents = [];
 
@@ -247,20 +256,35 @@
 
         var _formatDate2 = function (year, month, day) {
             var tempMonth = month + 1;
+            if (tempMonth < 10) {
+                tempMonth = "0" + tempMonth;
+            }
+
             if (day == undefined) {
                 if (year != undefined && month != undefined) {
-                    if (tempMonth < 10) {
-                        tempMonth = "0" + tempMonth;
-                    }
-
                     return year + ' - ' + tempMonth;
                 }
             } else {
+                if (day < 10) {
+                    day = "0" + day;
+                }
                 return year + '-' + tempMonth + '-' + day;
             }
 
             return '';
         };
+
+        var _formatMonthYearFriendly = function (year, month) {
+            return _monthToString(month, true) + ' ' + year;
+        }
+
+        var _formatEventName = function (eventName) {
+            if (eventName.length > 20) {
+                return eventName.substring(0, 18) + '...';
+            } else {
+                return eventName;
+            }
+        }
 
         var _initializeTemplating = function () {
             _templates = CalendarTemplates;
@@ -268,6 +292,7 @@
             Handlebars.registerPartial('selectPartial', _templates.selectPartial);
 
             Handlebars.registerHelper('formatDate', _formatDate2);
+            Handlebars.registerHelper('formatEventName', _formatEventName);
         };
 
         /**
@@ -440,6 +465,11 @@
             } else {
                 $(_calendarContainer).before(html);
             }
+
+            // nav panel
+            var navPanelHtml = _templates.navpanel();
+
+            $(_selector + ' .calendar-nav-panel').replaceWith(navPanelHtml);
         };
 
         var _isAutosave = function () {
@@ -451,6 +481,36 @@
 
             return false;
         };
+
+        var _loadEventToModal = function (modal, event) {
+            var dateStr = _formatDate(event.year, event.month, event.day);
+            modal.find('.modalTitleDate').html(dateStr);
+            modal.find('.eventDay').val(event.day);
+            modal.find('.eventId').val(event.eventId);
+
+            modal.find('.person').val(event.personId);
+
+            modal.find('.timeFrom').val(event.timeFrom);
+            modal.find('.timeTo').val(event.timeTo);
+
+            var inputName = modal.find('.eventName');
+            inputName.attr('value', event.eventName);
+
+        };
+
+        var _setModalState = function (modal, type) {
+            var addBtn = modal.find('.add-event');
+            var editBtn = modal.find('.edit-event');
+
+            addBtn.hide();
+            editBtn.hide();
+
+            if (type == 'edit') {
+                editBtn.show();
+            } else {
+                addBtn.show();
+            }
+        }
 
         var _addPanelEvents = function () {
             var panelSelector = '.calendar-panel ';
@@ -487,16 +547,23 @@
                 changeYear(1);
             });
 
+            var modalSelector = '#calendarEventModal';
+
             var addNewEvent = function (day) {
-                var modal = $('#calendarEventModal');
+                var modal = $(modalSelector);
 
                 var personInput = modal.find('.person');
                 var eventInput = modal.find('.eventName');
-                var person = personInput.val();
+                var personId = personInput.val();
+                var personName = modal.find('.person option:selected').text();
+
+                var timeFrom = modal.find('.timeFrom');
+                var timeTo = modal.find('.timeTo');
+
                 var event = eventInput.val();
 
                 if (event != undefined && event != '') {
-                    _addEvent(_year, _month, day, person, 'none', event);
+                    _addEvent(_year, _month, day, personId, personName, event, undefined, timeFrom.val(), timeTo.val());
                     _render();
 
                     // clear
@@ -509,9 +576,25 @@
                 return false;
             };
 
+            var editEvent = function (modal, event) {
+                event.eventId = modal.find('.eventId').val();
+                event.personId = modal.find('.person').val();
+                event.personName = modal.find('.person option:selected').text();
+                event.timeFrom = modal.find('.timeFrom').val();
+                event.timeTo = modal.find('.timeTo').val();
+                event.eventName = modal.find('.eventName').val();
+                event.unsaved = true;
+                _eventsToEdit.push(event);
+
+                if (_isAutosave()) {
+                    _saveEvents();
+                }
+                return true;
+            };
+
             // Bind event add
             $(_selector).on('click', '.panel-add-event', function () {
-                var modal = $('#calendarEventModal');
+                var modal = $(modalSelector);
                 var selectedDay = $(_selector).find('.week-day-div.selected');
                 if (selectedDay.length > 0) {
                     var day = $(selectedDay).parent().data('day');
@@ -522,25 +605,27 @@
                     var dd2 = modal.find('.eventDay');
                     dd2.val(day);
 
+                    _setModalState(modal, 'add');
                     modal.modal('show');
                 }
             });
 
             // Bind event edit
             $(_selector).on('click', '.panel-edit-event', function () {
-                var modal = $('#calendarEventModal');
-
+                var modal = $(modalSelector);
                 var selectedEvent = $(_selector).find('.event.selected');
                 if (selectedEvent.length > 0) {
                     var day = $(selectedEvent).data('day');
                     var eventId = $(selectedEvent).data('eventid');
 
-                    var dateStr = _year + '-' + _month + '-' + day;
+                    var event = _getEventById(eventId);
 
-                    modal.find('.modalTitleDate').html(dateStr);
-                    modal.find('.eventDay').val(day);
-                    modal.find('.eventId').val(eventId);
-                    modal.modal('show');
+                    if (event != null) {
+                        _loadEventToModal(modal, event);
+
+                        _setModalState(modal, 'edit');
+                        modal.modal('show');
+                    }
                 }
             });
 
@@ -560,16 +645,12 @@
             // On day select
             $(_selector).on('click', '.week-day-div', function (e) {
                 var isSelected = $(this).hasClass('selected');
-                var addEventButton = $(_selector + ' ' + '.btn.panel-add-event');
 
                 if (isSelected) {
-                    $(this).removeClass('selected');
-                    addEventButton.hide();
+                    _setEventAddEditState('none');
                 } else {
-                    // Deselect all
-                    $(_selector + ' ' + '.week-day-div').removeClass('selected');
+                    _setEventAddEditState('add');
                     $(this).addClass('selected');
-                    addEventButton.show();
                 }
             });
 
@@ -578,30 +659,40 @@
                 e.stopPropagation();
 
                 var isSelected = $(this).hasClass('selected');
-                var editEventButton = $(_selector + ' ' + '.btn.panel-edit-event');
-                var removeEventButton = $(_selector + ' .btn.panel-remove-event')
 
                 if (isSelected) {
-                    $(this).removeClass('selected');
-                    editEventButton.hide();
-                    removeEventButton.hide();
+                    _setEventAddEditState('none');
                 } else {
-                    // Deselect all
-                    $(_selector + ' ' + '.event').removeClass('selected');
+                    _setEventAddEditState('edit');
                     $(this).addClass('selected');
-                    editEventButton.show();
-                    removeEventButton.show();
                 }
             });
 
-            $('#calendarEventModal .add-event').click(function () {
-                var day = $('#calendarEventModal .eventDay').val();
+            $(modalSelector + ' .add-event').click(function () {
+                var day = $(modalSelector + ' .eventDay').val();
 
                 var result = addNewEvent(day);
 
                 if (result) {
-                    var modal = $('#calendarEventModal');
+                    var modal = $(modalSelector);
                     modal.modal('hide');
+                    _setEventAddEditState('none');
+                }
+            });
+
+            $(modalSelector + ' .edit-event').click(function () {
+                var modal = $(modalSelector);
+                var eventId = modal.find('.eventId').val();
+                var event = _getEventById(eventId);
+
+                if (event != null) {
+                    var result = editEvent(modal, event);
+
+                    if (result) {
+                        modal.modal('hide');
+                        _setEventAddEditState('none');
+                        _render();
+                    }
                 }
             });
             
@@ -610,33 +701,56 @@
             });
 
             $(panelSelector + '.clear-events').click(function () {
-                _clearEvents();
+                _clearEvents(true);
                 _render();
             });
 
             $(panelSelector + '.reload-events').click(function () {
-                _clearEvents();
+                _clearEvents(true);
                 _syncModule.readAll(true, function () {
                     _render();
                 });
             });
 
             $(panelSelector + '.load-people').click(function () {
-                debugger
                 if (_syncModule.readAllPeople != undefined) {
                     _syncModule.readAllPeople(true);
                 }
             });
         };
 
+        var _setEventAddEditState = function (type) { // type: 'add' or 'edit' or none (deselect)
+            var addEventButton = $(_selector + ' ' + '.btn.panel-add-event');
+            var editEventButton = $(_selector + ' ' + '.btn.panel-edit-event');
+            var removeEventButton = $(_selector + ' .btn.panel-remove-event')
+
+            addEventButton.hide();
+            editEventButton.hide();
+            removeEventButton.hide();
+
+            // Deselect all events & days
+            $(_selector + ' ' + '.event').removeClass('selected');
+            $(_selector + ' ' + '.week-day-div').removeClass('selected');
+
+            if (type == 'add') {
+                addEventButton.show();
+            }
+            else if (type == 'edit') {
+                editEventButton.show();
+                removeEventButton.show();
+            }
+        }
+
         var _bindEventListEvents = function () {
             $('.event-container').on('click', '.edit-event2', function () {
                 var eventId = $(this).data('eventid');
 
-                if (eventId != undefined) {
-                    var modal = $('#calendarEventModal');
+                var event = _getEventById(eventId);
+                var modal = $('#calendarEventModal');
+                if (event != null) {
+                    _loadEventToModal(modal, event);
 
-                    modal.find('.eventId').val(eventId);
+                    _setModalState(modal, 'edit');
                     modal.modal('show');
                 }
 
@@ -658,12 +772,12 @@
         /**
           * Adds new event for specific date with specific values as argument
           */
-        var _addEvent = function (year, month, day, personId, personName, eventName, color, eventId) {
+        var _addEvent = function (year, month, day, personId, personName, eventName, color, timeFrom, timeTo, eventId) {
             if (color == undefined) {
                 color = _getRandomColor();
             }
             if (eventId == undefined) {
-                eventId = new Date().getTime();
+                eventId = 't_' + new Date().getTime();
             }
 
             var event = {
@@ -676,6 +790,8 @@
                 year: year,
                 month: month,
                 day: day,
+                timeFrom: timeFrom,
+                timeTo: timeTo,
             };
 
             _pushEvent(event, true);
@@ -700,6 +816,19 @@
 
                 _allEvents.push(event);
             }
+        }
+
+
+        var _getEventById = function(id) {
+            for (var i = 0; i < _allEvents.length; i++) {
+                var ev = _allEvents[i];
+
+                if (ev.eventId == id) {
+                    return ev;
+                }
+            }
+
+            return null;
         }
 
         var _removeEvent = function (eventId) {
@@ -731,11 +860,31 @@
             }
         }
 
-        /**
-         * Returns text values for week days
-         */
-        var _getWeekDays = function () {
-            return [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        var _weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        var _monthStrings = {
+            1: 'January',
+            2: 'February',
+            3: 'March',
+            4: 'April',
+            5: 'May',
+            6: 'June',
+            7: 'July',
+            8: 'August',
+            9: 'September',
+            10: 'October',
+            11: 'November',
+            12: 'December',
+        };
+
+        var _monthToString = function (number, inc) {
+            if (inc) {
+                number++;
+            }
+
+            var numberString = String(number);
+
+            return _monthStrings[numberString];
         };
 
         /**
@@ -871,7 +1020,7 @@
             _renderEventList();
 
             // Update label
-            var currentYearMonth = _formatDate2(_year, _month);
+            var currentYearMonth = _formatMonthYearFriendly(_year, _month);
             $('.calendar-panel .currentYearMonth').html(currentYearMonth);
 
             if (elementsArr.indexOf('calendar') != -1) {
@@ -895,7 +1044,7 @@
             var eventData = _getDataForMonthAndYear(_year, _month);
 
             var data = {
-                weekdays: _getWeekDays(),
+                weekdays: _weekDays,
                 weeks: eventData,
             };
             var calendarHtml = _templates.calendar(data);
@@ -904,7 +1053,13 @@
 
         var _renderEventList = function () {
             if (_showEventList) {
-                var evData = _getEventsForMonth(_year, _month);
+
+                var evData = null;
+                if (_filterByMonth) {
+                    evData = _getEventsForMonth(_year, _month);
+                } else {
+                    evData = _allEvents;
+                }
 
                 var eventListHtml = _templates.events(evData);
 
@@ -963,15 +1118,35 @@
             }
         };
 
-        var _clearEvents = function () {
-            _allEvents = new CalendarEvents();
+        var _clearEvents = function (all) {
+            if (all == undefined) all = true;
+
+            if (all) {
+                _allEvents = new CalendarEvents();
+            }
             _eventsToSave = new CalendarEvents();
             _eventsToRemove = new CalendarEvents();
+            _eventsToEdit = new CalendarEvents();
+        };
+
+        var _loadWeekDays = function (weekDays) {
+            if (weekDays.length != 7) {
+                throw new Error('Array should have 7 elements')
+            } else {
+                _weekDays = weekDays;
+            }
+        };
+
+        var _loadMonthStrings = function (monthStrings) {
+            if (Object.keys(monthStrings).length != 12) {
+                throw new Error('Object should have 12 elements');
+            } else {
+                _monthStrings = monthStrings;
+            }
         };
 
         // Initialization
         _init();
-
 
         /**
          * Public interface
@@ -985,6 +1160,8 @@
             },
             saveEvents: _saveEvents,
             clearEvents: _clearEvents,
+            loadWeekStrings: _loadWeekDays,
+            loadMonthStrings: _loadMonthStrings,
         };
     };
     

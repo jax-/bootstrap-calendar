@@ -28,7 +28,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["CalendarTemplates"]["calendar"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
 function program1(depth0,data) {
   
@@ -85,7 +85,7 @@ function program7(depth0,data) {
 
 function program9(depth0,data,depth1) {
   
-  var buffer = "", stack1, helper;
+  var buffer = "", stack1, helper, options;
   buffer += "\r\n                    <li>\r\n                        <span class=\"event\" data-day=\""
     + escapeExpression(((stack1 = (depth1 && depth1.dayValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-eventid=\"";
@@ -97,7 +97,7 @@ function program9(depth0,data,depth1) {
     + "\">\r\n                            <span>"
     + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " - "
-    + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression((helper = helpers.formatEventName || (depth0 && depth0.formatEventName),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.eventName), options) : helperMissing.call(depth0, "formatEventName", (depth0 && depth0.eventName), options)))
     + "</span>\r\n                        </span>\r\n                    </li>\r\n                    ";
   return buffer;
   }
@@ -118,7 +118,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "\r\n<div class=\"calendar-alertarea\"></div>\r\n<div class=\"calendar-container\"></div>\r\n<div class=\"event-container\"></div>\r\n\r\n<div class=\"calendar-loader\"></div> ";
+  return "\r\n<div class=\"calendar-alertarea\"></div>\r\n<div class=\"calendar-nav-panel\">\r\n\r\n</div>\r\n<div class=\"calendar-container\"></div>\r\n<div class=\"event-container\"></div>\r\n\r\n<div class=\"calendar-loader\"></div> ";
   });
 
 this["CalendarTemplates"]["eventModal"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -171,7 +171,7 @@ function program7(depth0,data) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <span>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</span>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time from:\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeFrom form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time to:\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeTo form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <input type=\"hidden\" class=\"eventId\" />\r\n                <input type=\"hidden\" class=\"eventDay\" />\r\n\r\n                <div style=\"clear:both\"></div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary add-event\">"
+    + ":</span>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time from:\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeFrom form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time to:\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeTo form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <input type=\"hidden\" class=\"eventId\" />\r\n                <input type=\"hidden\" class=\"eventDay\" />\r\n\r\n                <div style=\"clear:both\"></div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary add-event\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ADD)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\r\n                <button type=\"button\" class=\"btn btn-primary edit-event\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -184,22 +184,22 @@ function program7(depth0,data) {
 this["CalendarTemplates"]["events"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1;
+  var buffer = "", stack1, helper, options;
   buffer += "\r\n            <tr class=\"";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\" >\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
-    + escapeExpression(((stack1 = (depth0 && depth0.year)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "-"
-    + escapeExpression(((stack1 = (depth0 && depth0.month)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "-"
-    + escapeExpression(((stack1 = (depth0 && depth0.day)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression((helper = helpers.formatDate || (depth0 && depth0.formatDate),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options) : helperMissing.call(depth0, "formatDate", (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options)))
+    + "\r\n                </td>\r\n                <td>\r\n                    "
+    + escapeExpression(((stack1 = (depth0 && depth0.timeFrom)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " - "
+    + escapeExpression(((stack1 = (depth0 && depth0.timeTo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
@@ -217,25 +217,34 @@ function program2(depth0,data) {
   return "warning";
   }
 
-  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>Event list</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n                <th></th>\r\n                <th></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
+  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>Event list</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Time\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n                <th></th>\r\n                <th></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n        </tbody>\r\n    </table>\r\n</div>";
   return buffer;
   });
 
-this["CalendarTemplates"]["panel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["navpanel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"calendar-panel text-center\">\r\n\r\n    <button class=\"btn btn-default panel-add-event\" style=\"display:none\">Add event</button>\r\n    <button class=\"btn btn-default panel-edit-event\" style=\"display:none\">Edit event</button>\r\n    <button class=\"btn btn-default panel-remove-event\" style=\"display:none\">Remove event</button>\r\n\r\n\r\n    <button class=\"btn btn-default save-events\">Save events</button>\r\n    <label for=\"event-autosave\">Autosave</label>\r\n    <input type=\"checkbox\" id=\"event-autosave\" class=\"event-autosave\" />\r\n\r\n    <br/>\r\n\r\n    <button class=\"btn btn-primary prev-year\">Previous year</button>\r\n    <button class=\"btn btn-primary prev-month\">Previous month</button>  \r\n\r\n    <h2 style=\"display:inline-block\">\r\n        <span class=\"label label-primary label-lg currentYearMonth\">";
+  buffer += "<div class=\"calendar-panel calendar-nav-panel text-right\">\r\n    <button class=\"btn btn-nav btn-default prev-year btn-lg\"><<</button>\r\n    <button class=\"btn btn-nav btn-default prev-month btn-lg\"><</button>\r\n\r\n    <h2 style=\"display:inline-block; padding: 0 0; margin: 0 0;\">\r\n        <span class=\"label label-primary label-lg currentYearMonth\">";
   if (helper = helpers.currentYearMonth) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.currentYearMonth); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\r\n    </h2>\r\n\r\n    <button class=\"btn btn-primary next-month\">Next month</button>\r\n    <button class=\"btn btn-primary next-year\">Next year</button>\r\n\r\n    <button class=\"btn btn-primary load-people\">Load people</button>\r\n</div>";
+    + "</span>\r\n    </h2>\r\n\r\n    <button class=\"btn btn-nav btn-default next-month btn-lg\">></button>\r\n    <button class=\"btn btn-nav btn-default next-year btn-lg\">>></button>\r\n</div>\r\n";
   return buffer;
+  });
+
+this["CalendarTemplates"]["panel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"calendar-panel text-center\">\r\n\r\n    <!--<button class=\"btn btn-primary load-people\">Load people</button>-->\r\n\r\n    <div class=\"pull-right\">\r\n        <button class=\"btn btn-default panel-add-event\" style=\"display:none\">Add event</button>\r\n        <button class=\"btn btn-default panel-edit-event\" style=\"display:none\">Edit event</button>\r\n        <button class=\"btn btn-default panel-remove-event\" style=\"display:none\">Remove event</button>\r\n\r\n\r\n        <button class=\"btn btn-default save-events\" style=\"margin-right:10px;\">Save events</button>\r\n        <label for=\"event-autosave\">Autosave</label>\r\n        <input type=\"checkbox\" id=\"event-autosave\" class=\"event-autosave\" />\r\n    </div>\r\n    <div style=\"clear:both\">\r\n\r\n</div>  ";
   });
 
 this["CalendarTemplates"]["selectPartial"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -302,6 +311,9 @@ function program1(depth0,data) {
         var _panelPosition = 'top';
         var _calendarContainer = '';
         var _showEventList = true;
+
+        // Filters
+        var _filterByMonth = true;
 
         // Internal types
         var LocalStorageSync = function () {
@@ -383,10 +395,18 @@ function program1(depth0,data) {
                 return this.urls;
             };
 
+            var setUnsaved = function (collection) {
+                for (var i = 0; i < collection.length; i++) {
+                    var el = collection[i];
+                    el.unsaved = false;
+                }
+            }
+
             this.saveData = function () {
                 var data = {
                     eventsToAdd: _eventsToSave,
                     eventsToRemove: _eventsToRemove,
+                    eventsToEdit: _eventsToEdit,
                 };
 
                 var dataToSend = JSON.stringify(data);
@@ -401,15 +421,10 @@ function program1(depth0,data) {
                         console.log('saved');
                         _showAlert("Events have been saved", 'success');
 
-                        // todo
-                        for (var i = 0; i < _eventsToSave.length; i++) {
-                            var ev = _eventsToSave[i];
-                            ev.unsaved = false;
-                        }
+                        setUnsaved(_eventsToEdit);
+                        setUnsaved(_eventsToSave);
 
-                        _eventsToSave = [];
-                        _eventsToRemove = [];
-
+                        _clearEvents(false);
                         _renderEventList();
                     },
                     error: function (err) {
@@ -505,6 +520,9 @@ function program1(depth0,data) {
         // Events to-be-removed
         var _eventsToRemove = [];
 
+        // Events to-be-edited
+        var _eventsToEdit = [];
+
         // Contains references to all events
         var _allEvents = [];
 
@@ -513,20 +531,35 @@ function program1(depth0,data) {
 
         var _formatDate2 = function (year, month, day) {
             var tempMonth = month + 1;
+            if (tempMonth < 10) {
+                tempMonth = "0" + tempMonth;
+            }
+
             if (day == undefined) {
                 if (year != undefined && month != undefined) {
-                    if (tempMonth < 10) {
-                        tempMonth = "0" + tempMonth;
-                    }
-
                     return year + ' - ' + tempMonth;
                 }
             } else {
+                if (day < 10) {
+                    day = "0" + day;
+                }
                 return year + '-' + tempMonth + '-' + day;
             }
 
             return '';
         };
+
+        var _formatMonthYearFriendly = function (year, month) {
+            return _monthToString(month, true) + ' ' + year;
+        }
+
+        var _formatEventName = function (eventName) {
+            if (eventName.length > 20) {
+                return eventName.substring(0, 18) + '...';
+            } else {
+                return eventName;
+            }
+        }
 
         var _initializeTemplating = function () {
             _templates = CalendarTemplates;
@@ -534,6 +567,7 @@ function program1(depth0,data) {
             Handlebars.registerPartial('selectPartial', _templates.selectPartial);
 
             Handlebars.registerHelper('formatDate', _formatDate2);
+            Handlebars.registerHelper('formatEventName', _formatEventName);
         };
 
         /**
@@ -706,6 +740,11 @@ function program1(depth0,data) {
             } else {
                 $(_calendarContainer).before(html);
             }
+
+            // nav panel
+            var navPanelHtml = _templates.navpanel();
+
+            $(_selector + ' .calendar-nav-panel').replaceWith(navPanelHtml);
         };
 
         var _isAutosave = function () {
@@ -717,6 +756,36 @@ function program1(depth0,data) {
 
             return false;
         };
+
+        var _loadEventToModal = function (modal, event) {
+            var dateStr = _formatDate(event.year, event.month, event.day);
+            modal.find('.modalTitleDate').html(dateStr);
+            modal.find('.eventDay').val(event.day);
+            modal.find('.eventId').val(event.eventId);
+
+            modal.find('.person').val(event.personId);
+
+            modal.find('.timeFrom').val(event.timeFrom);
+            modal.find('.timeTo').val(event.timeTo);
+
+            var inputName = modal.find('.eventName');
+            inputName.attr('value', event.eventName);
+
+        };
+
+        var _setModalState = function (modal, type) {
+            var addBtn = modal.find('.add-event');
+            var editBtn = modal.find('.edit-event');
+
+            addBtn.hide();
+            editBtn.hide();
+
+            if (type == 'edit') {
+                editBtn.show();
+            } else {
+                addBtn.show();
+            }
+        }
 
         var _addPanelEvents = function () {
             var panelSelector = '.calendar-panel ';
@@ -753,16 +822,23 @@ function program1(depth0,data) {
                 changeYear(1);
             });
 
+            var modalSelector = '#calendarEventModal';
+
             var addNewEvent = function (day) {
-                var modal = $('#calendarEventModal');
+                var modal = $(modalSelector);
 
                 var personInput = modal.find('.person');
                 var eventInput = modal.find('.eventName');
-                var person = personInput.val();
+                var personId = personInput.val();
+                var personName = modal.find('.person option:selected').text();
+
+                var timeFrom = modal.find('.timeFrom');
+                var timeTo = modal.find('.timeTo');
+
                 var event = eventInput.val();
 
                 if (event != undefined && event != '') {
-                    _addEvent(_year, _month, day, person, 'none', event);
+                    _addEvent(_year, _month, day, personId, personName, event, undefined, timeFrom.val(), timeTo.val());
                     _render();
 
                     // clear
@@ -775,9 +851,25 @@ function program1(depth0,data) {
                 return false;
             };
 
+            var editEvent = function (modal, event) {
+                event.eventId = modal.find('.eventId').val();
+                event.personId = modal.find('.person').val();
+                event.personName = modal.find('.person option:selected').text();
+                event.timeFrom = modal.find('.timeFrom').val();
+                event.timeTo = modal.find('.timeTo').val();
+                event.eventName = modal.find('.eventName').val();
+                event.unsaved = true;
+                _eventsToEdit.push(event);
+
+                if (_isAutosave()) {
+                    _saveEvents();
+                }
+                return true;
+            };
+
             // Bind event add
             $(_selector).on('click', '.panel-add-event', function () {
-                var modal = $('#calendarEventModal');
+                var modal = $(modalSelector);
                 var selectedDay = $(_selector).find('.week-day-div.selected');
                 if (selectedDay.length > 0) {
                     var day = $(selectedDay).parent().data('day');
@@ -788,25 +880,27 @@ function program1(depth0,data) {
                     var dd2 = modal.find('.eventDay');
                     dd2.val(day);
 
+                    _setModalState(modal, 'add');
                     modal.modal('show');
                 }
             });
 
             // Bind event edit
             $(_selector).on('click', '.panel-edit-event', function () {
-                var modal = $('#calendarEventModal');
-
+                var modal = $(modalSelector);
                 var selectedEvent = $(_selector).find('.event.selected');
                 if (selectedEvent.length > 0) {
                     var day = $(selectedEvent).data('day');
                     var eventId = $(selectedEvent).data('eventid');
 
-                    var dateStr = _year + '-' + _month + '-' + day;
+                    var event = _getEventById(eventId);
 
-                    modal.find('.modalTitleDate').html(dateStr);
-                    modal.find('.eventDay').val(day);
-                    modal.find('.eventId').val(eventId);
-                    modal.modal('show');
+                    if (event != null) {
+                        _loadEventToModal(modal, event);
+
+                        _setModalState(modal, 'edit');
+                        modal.modal('show');
+                    }
                 }
             });
 
@@ -826,16 +920,12 @@ function program1(depth0,data) {
             // On day select
             $(_selector).on('click', '.week-day-div', function (e) {
                 var isSelected = $(this).hasClass('selected');
-                var addEventButton = $(_selector + ' ' + '.btn.panel-add-event');
 
                 if (isSelected) {
-                    $(this).removeClass('selected');
-                    addEventButton.hide();
+                    _setEventAddEditState('none');
                 } else {
-                    // Deselect all
-                    $(_selector + ' ' + '.week-day-div').removeClass('selected');
+                    _setEventAddEditState('add');
                     $(this).addClass('selected');
-                    addEventButton.show();
                 }
             });
 
@@ -844,30 +934,40 @@ function program1(depth0,data) {
                 e.stopPropagation();
 
                 var isSelected = $(this).hasClass('selected');
-                var editEventButton = $(_selector + ' ' + '.btn.panel-edit-event');
-                var removeEventButton = $(_selector + ' .btn.panel-remove-event')
 
                 if (isSelected) {
-                    $(this).removeClass('selected');
-                    editEventButton.hide();
-                    removeEventButton.hide();
+                    _setEventAddEditState('none');
                 } else {
-                    // Deselect all
-                    $(_selector + ' ' + '.event').removeClass('selected');
+                    _setEventAddEditState('edit');
                     $(this).addClass('selected');
-                    editEventButton.show();
-                    removeEventButton.show();
                 }
             });
 
-            $('#calendarEventModal .add-event').click(function () {
-                var day = $('#calendarEventModal .eventDay').val();
+            $(modalSelector + ' .add-event').click(function () {
+                var day = $(modalSelector + ' .eventDay').val();
 
                 var result = addNewEvent(day);
 
                 if (result) {
-                    var modal = $('#calendarEventModal');
+                    var modal = $(modalSelector);
                     modal.modal('hide');
+                    _setEventAddEditState('none');
+                }
+            });
+
+            $(modalSelector + ' .edit-event').click(function () {
+                var modal = $(modalSelector);
+                var eventId = modal.find('.eventId').val();
+                var event = _getEventById(eventId);
+
+                if (event != null) {
+                    var result = editEvent(modal, event);
+
+                    if (result) {
+                        modal.modal('hide');
+                        _setEventAddEditState('none');
+                        _render();
+                    }
                 }
             });
             
@@ -876,33 +976,56 @@ function program1(depth0,data) {
             });
 
             $(panelSelector + '.clear-events').click(function () {
-                _clearEvents();
+                _clearEvents(true);
                 _render();
             });
 
             $(panelSelector + '.reload-events').click(function () {
-                _clearEvents();
+                _clearEvents(true);
                 _syncModule.readAll(true, function () {
                     _render();
                 });
             });
 
             $(panelSelector + '.load-people').click(function () {
-                debugger
                 if (_syncModule.readAllPeople != undefined) {
                     _syncModule.readAllPeople(true);
                 }
             });
         };
 
+        var _setEventAddEditState = function (type) { // type: 'add' or 'edit' or none (deselect)
+            var addEventButton = $(_selector + ' ' + '.btn.panel-add-event');
+            var editEventButton = $(_selector + ' ' + '.btn.panel-edit-event');
+            var removeEventButton = $(_selector + ' .btn.panel-remove-event')
+
+            addEventButton.hide();
+            editEventButton.hide();
+            removeEventButton.hide();
+
+            // Deselect all events & days
+            $(_selector + ' ' + '.event').removeClass('selected');
+            $(_selector + ' ' + '.week-day-div').removeClass('selected');
+
+            if (type == 'add') {
+                addEventButton.show();
+            }
+            else if (type == 'edit') {
+                editEventButton.show();
+                removeEventButton.show();
+            }
+        }
+
         var _bindEventListEvents = function () {
             $('.event-container').on('click', '.edit-event2', function () {
                 var eventId = $(this).data('eventid');
 
-                if (eventId != undefined) {
-                    var modal = $('#calendarEventModal');
+                var event = _getEventById(eventId);
+                var modal = $('#calendarEventModal');
+                if (event != null) {
+                    _loadEventToModal(modal, event);
 
-                    modal.find('.eventId').val(eventId);
+                    _setModalState(modal, 'edit');
                     modal.modal('show');
                 }
 
@@ -924,12 +1047,12 @@ function program1(depth0,data) {
         /**
           * Adds new event for specific date with specific values as argument
           */
-        var _addEvent = function (year, month, day, personId, personName, eventName, color, eventId) {
+        var _addEvent = function (year, month, day, personId, personName, eventName, color, timeFrom, timeTo, eventId) {
             if (color == undefined) {
                 color = _getRandomColor();
             }
             if (eventId == undefined) {
-                eventId = new Date().getTime();
+                eventId = 't_' + new Date().getTime();
             }
 
             var event = {
@@ -942,6 +1065,8 @@ function program1(depth0,data) {
                 year: year,
                 month: month,
                 day: day,
+                timeFrom: timeFrom,
+                timeTo: timeTo,
             };
 
             _pushEvent(event, true);
@@ -966,6 +1091,19 @@ function program1(depth0,data) {
 
                 _allEvents.push(event);
             }
+        }
+
+
+        var _getEventById = function(id) {
+            for (var i = 0; i < _allEvents.length; i++) {
+                var ev = _allEvents[i];
+
+                if (ev.eventId == id) {
+                    return ev;
+                }
+            }
+
+            return null;
         }
 
         var _removeEvent = function (eventId) {
@@ -997,11 +1135,31 @@ function program1(depth0,data) {
             }
         }
 
-        /**
-         * Returns text values for week days
-         */
-        var _getWeekDays = function () {
-            return [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        var _weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        var _monthStrings = {
+            1: 'January',
+            2: 'February',
+            3: 'March',
+            4: 'April',
+            5: 'May',
+            6: 'June',
+            7: 'July',
+            8: 'August',
+            9: 'September',
+            10: 'October',
+            11: 'November',
+            12: 'December',
+        };
+
+        var _monthToString = function (number, inc) {
+            if (inc) {
+                number++;
+            }
+
+            var numberString = String(number);
+
+            return _monthStrings[numberString];
         };
 
         /**
@@ -1137,7 +1295,7 @@ function program1(depth0,data) {
             _renderEventList();
 
             // Update label
-            var currentYearMonth = _formatDate2(_year, _month);
+            var currentYearMonth = _formatMonthYearFriendly(_year, _month);
             $('.calendar-panel .currentYearMonth').html(currentYearMonth);
 
             if (elementsArr.indexOf('calendar') != -1) {
@@ -1161,7 +1319,7 @@ function program1(depth0,data) {
             var eventData = _getDataForMonthAndYear(_year, _month);
 
             var data = {
-                weekdays: _getWeekDays(),
+                weekdays: _weekDays,
                 weeks: eventData,
             };
             var calendarHtml = _templates.calendar(data);
@@ -1170,7 +1328,13 @@ function program1(depth0,data) {
 
         var _renderEventList = function () {
             if (_showEventList) {
-                var evData = _getEventsForMonth(_year, _month);
+
+                var evData = null;
+                if (_filterByMonth) {
+                    evData = _getEventsForMonth(_year, _month);
+                } else {
+                    evData = _allEvents;
+                }
 
                 var eventListHtml = _templates.events(evData);
 
@@ -1229,15 +1393,35 @@ function program1(depth0,data) {
             }
         };
 
-        var _clearEvents = function () {
-            _allEvents = new CalendarEvents();
+        var _clearEvents = function (all) {
+            if (all == undefined) all = true;
+
+            if (all) {
+                _allEvents = new CalendarEvents();
+            }
             _eventsToSave = new CalendarEvents();
             _eventsToRemove = new CalendarEvents();
+            _eventsToEdit = new CalendarEvents();
+        };
+
+        var _loadWeekDays = function (weekDays) {
+            if (weekDays.length != 7) {
+                throw new Error('Array should have 7 elements')
+            } else {
+                _weekDays = weekDays;
+            }
+        };
+
+        var _loadMonthStrings = function (monthStrings) {
+            if (Object.keys(monthStrings).length != 12) {
+                throw new Error('Object should have 12 elements');
+            } else {
+                _monthStrings = monthStrings;
+            }
         };
 
         // Initialization
         _init();
-
 
         /**
          * Public interface
@@ -1251,6 +1435,8 @@ function program1(depth0,data) {
             },
             saveEvents: _saveEvents,
             clearEvents: _clearEvents,
+            loadWeekStrings: _loadWeekDays,
+            loadMonthStrings: _loadMonthStrings,
         };
     };
     

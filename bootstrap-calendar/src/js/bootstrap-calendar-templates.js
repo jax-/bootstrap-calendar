@@ -21,7 +21,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["CalendarTemplates"]["calendar"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
 function program1(depth0,data) {
   
@@ -78,7 +78,7 @@ function program7(depth0,data) {
 
 function program9(depth0,data,depth1) {
   
-  var buffer = "", stack1, helper;
+  var buffer = "", stack1, helper, options;
   buffer += "\r\n                    <li>\r\n                        <span class=\"event\" data-day=\""
     + escapeExpression(((stack1 = (depth1 && depth1.dayValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-eventid=\"";
@@ -90,7 +90,7 @@ function program9(depth0,data,depth1) {
     + "\">\r\n                            <span>"
     + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " - "
-    + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression((helper = helpers.formatEventName || (depth0 && depth0.formatEventName),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.eventName), options) : helperMissing.call(depth0, "formatEventName", (depth0 && depth0.eventName), options)))
     + "</span>\r\n                        </span>\r\n                    </li>\r\n                    ";
   return buffer;
   }
@@ -111,7 +111,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "\r\n<div class=\"calendar-alertarea\"></div>\r\n<div class=\"calendar-container\"></div>\r\n<div class=\"event-container\"></div>\r\n\r\n<div class=\"calendar-loader\"></div> ";
+  return "\r\n<div class=\"calendar-alertarea\"></div>\r\n<div class=\"calendar-nav-panel\">\r\n\r\n</div>\r\n<div class=\"calendar-container\"></div>\r\n<div class=\"event-container\"></div>\r\n\r\n<div class=\"calendar-loader\"></div> ";
   });
 
 this["CalendarTemplates"]["eventModal"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -164,7 +164,7 @@ function program7(depth0,data) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <span>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</span>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time from:\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeFrom form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time to:\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeTo form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <input type=\"hidden\" class=\"eventId\" />\r\n                <input type=\"hidden\" class=\"eventDay\" />\r\n\r\n                <div style=\"clear:both\"></div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary add-event\">"
+    + ":</span>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time from:\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeFrom form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        Time to:\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input class=\"timeTo form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <input type=\"hidden\" class=\"eventId\" />\r\n                <input type=\"hidden\" class=\"eventDay\" />\r\n\r\n                <div style=\"clear:both\"></div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-primary add-event\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ADD)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\r\n                <button type=\"button\" class=\"btn btn-primary edit-event\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -177,22 +177,22 @@ function program7(depth0,data) {
 this["CalendarTemplates"]["events"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1;
+  var buffer = "", stack1, helper, options;
   buffer += "\r\n            <tr class=\"";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\" >\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
-    + escapeExpression(((stack1 = (depth0 && depth0.year)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "-"
-    + escapeExpression(((stack1 = (depth0 && depth0.month)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "-"
-    + escapeExpression(((stack1 = (depth0 && depth0.day)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression((helper = helpers.formatDate || (depth0 && depth0.formatDate),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options) : helperMissing.call(depth0, "formatDate", (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options)))
+    + "\r\n                </td>\r\n                <td>\r\n                    "
+    + escapeExpression(((stack1 = (depth0 && depth0.timeFrom)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " - "
+    + escapeExpression(((stack1 = (depth0 && depth0.timeTo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                <td>\r\n                    "
@@ -210,25 +210,34 @@ function program2(depth0,data) {
   return "warning";
   }
 
-  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>Event list</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n                <th></th>\r\n                <th></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
+  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>Event list</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>\r\n                    Id\r\n                </th>\r\n                <th>\r\n                    Date\r\n                </th>\r\n                <th>\r\n                    Time\r\n                </th>\r\n                <th>\r\n                    Person name\r\n                </th>\r\n                <th>\r\n                    Event name\r\n                </th>\r\n                <th></th>\r\n                <th></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n        </tbody>\r\n    </table>\r\n</div>";
   return buffer;
   });
 
-this["CalendarTemplates"]["panel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["CalendarTemplates"]["navpanel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"calendar-panel text-center\">\r\n\r\n    <button class=\"btn btn-default panel-add-event\" style=\"display:none\">Add event</button>\r\n    <button class=\"btn btn-default panel-edit-event\" style=\"display:none\">Edit event</button>\r\n    <button class=\"btn btn-default panel-remove-event\" style=\"display:none\">Remove event</button>\r\n\r\n\r\n    <button class=\"btn btn-default save-events\">Save events</button>\r\n    <label for=\"event-autosave\">Autosave</label>\r\n    <input type=\"checkbox\" id=\"event-autosave\" class=\"event-autosave\" />\r\n\r\n    <br/>\r\n\r\n    <button class=\"btn btn-primary prev-year\">Previous year</button>\r\n    <button class=\"btn btn-primary prev-month\">Previous month</button>  \r\n\r\n    <h2 style=\"display:inline-block\">\r\n        <span class=\"label label-primary label-lg currentYearMonth\">";
+  buffer += "<div class=\"calendar-panel calendar-nav-panel text-right\">\r\n    <button class=\"btn btn-nav btn-default prev-year btn-lg\"><<</button>\r\n    <button class=\"btn btn-nav btn-default prev-month btn-lg\"><</button>\r\n\r\n    <h2 style=\"display:inline-block; padding: 0 0; margin: 0 0;\">\r\n        <span class=\"label label-primary label-lg currentYearMonth\">";
   if (helper = helpers.currentYearMonth) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.currentYearMonth); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\r\n    </h2>\r\n\r\n    <button class=\"btn btn-primary next-month\">Next month</button>\r\n    <button class=\"btn btn-primary next-year\">Next year</button>\r\n\r\n    <button class=\"btn btn-primary load-people\">Load people</button>\r\n</div>";
+    + "</span>\r\n    </h2>\r\n\r\n    <button class=\"btn btn-nav btn-default next-month btn-lg\">></button>\r\n    <button class=\"btn btn-nav btn-default next-year btn-lg\">>></button>\r\n</div>\r\n";
   return buffer;
+  });
+
+this["CalendarTemplates"]["panel"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"calendar-panel text-center\">\r\n\r\n    <!--<button class=\"btn btn-primary load-people\">Load people</button>-->\r\n\r\n    <div class=\"pull-right\">\r\n        <button class=\"btn btn-default panel-add-event\" style=\"display:none\">Add event</button>\r\n        <button class=\"btn btn-default panel-edit-event\" style=\"display:none\">Edit event</button>\r\n        <button class=\"btn btn-default panel-remove-event\" style=\"display:none\">Remove event</button>\r\n\r\n\r\n        <button class=\"btn btn-default save-events\" style=\"margin-right:10px;\">Save events</button>\r\n        <label for=\"event-autosave\">Autosave</label>\r\n        <input type=\"checkbox\" id=\"event-autosave\" class=\"event-autosave\" />\r\n    </div>\r\n    <div style=\"clear:both\">\r\n\r\n</div>  ";
   });
 
 this["CalendarTemplates"]["selectPartial"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

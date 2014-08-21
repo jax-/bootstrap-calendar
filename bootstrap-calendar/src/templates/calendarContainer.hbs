@@ -1,9 +1,24 @@
-﻿
-<div class="calendar-alertarea"></div>
-<div class="calendar-nav-panel">
+﻿<div class="calendar-alertarea"></div>
+<div class="calendar-panel-top"></div>
+{{#if tabbedEventList}}
 
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#calendar-tab" data-toggle="tab">{{RESOURCES.CALENDAR}}</a></li>
+    <li><a href="#events-tab" data-toggle="tab">{{RESOURCES.EVENT_LIST}}</a></li>
+</ul>
+
+<div id="calendar-tab">
+    <div class="calendar-container"></div>
 </div>
+<div id="events-tab" style="display:none;">
+    <div class="event-container"></div>
+</div>
+
+{{else}}
 <div class="calendar-container"></div>
 <div class="event-container"></div>
+{{/if}}
+
+<div class="calendar-panel-bottom"></div>
 
 <div class="calendar-loader"></div> 

@@ -1,11 +1,35 @@
-﻿<div class="calendar-panel calendar-nav-panel text-right">
-    <button class="btn btn-nav btn-default prev-year btn-lg"><<</button>
-    <button class="btn btn-nav btn-default prev-month btn-lg"><</button>
+﻿<div class="calendar-panel calendar-nav-panel ">
+    <div class="pull-left">
+        <button class="btn btn-primary panel-add-event" style="display:none">{{#if useIcons}}<span class="glyphicon glyphicon-plus"></span>{{/if}}{{RESOURCES.ADD_EVENT}}</button>
+        <button class="btn btn-primary panel-edit-event" style="display:none">{{#if useIcons}}<span class="glyphicon glyphicon-pencil"></span>{{/if}}{{RESOURCES.EDIT_EVENT}}</button>
+        <button class="btn btn-primary panel-remove-event" style="display:none">{{#if useIcons}}<span class="glyphicon glyphicon-remove"></span>{{/if}}{{RESOURCES.REMOVE_EVENT}}</button>
 
-    <h2 style="display:inline-block; padding: 0 0; margin: 0 0;">
-        <span class="label label-primary label-lg currentYearMonth">{{currentYearMonth}}</span>
-    </h2>
+        {{#if autosave}}
+        <button class="btn btn-primary save-events" style="margin-right:10px;">{{RESOURCES.SAVE_EVENTS}}</button>
+        <label for="event-autosave">{{RESOURCES.AUTOSAVE}}</label>
+        <input type="checkbox" id="event-autosave" class="event-autosave" />
+        {{/if}}
+    </div>
+    <div class="pull-right">
+        {{#if navAltVersion}}
+        <ul class="pagination">
+            <li><button class="btn btn-nav btn-default prev-year"><span class="glyphicon glyphicon-fast-backward"></span></button></li>
+            <li><button class="btn btn-nav btn-default prev-year"><span class="glyphicon glyphicon-backward"></span></button></li>
+            <li><button class="btn btn-nav btn-default prev-year"><span class="glyphicon glyphicon-forward"></span></button></li>
+            <li><button class="btn btn-nav btn-default prev-year"><span class="glyphicon glyphicon-fast-forward"></span></button></li>
+        </ul>
+        {{else}}
+        <button class="btn btn-nav btn-default prev-year btn-lg"><<</button>
+        <button class="btn btn-nav btn-default prev-month btn-lg"><</button>
 
-    <button class="btn btn-nav btn-default next-month btn-lg">></button>
-    <button class="btn btn-nav btn-default next-year btn-lg">>></button>
+        <h2 style="display:inline-block; padding: 0 0; margin: 0 0;">
+            <span class="label label-primary label-lg currentYearMonth">{{currentYearMonth}}</span>
+        </h2>
+
+        <button class="btn btn-nav btn-default next-month btn-lg">></button>
+        <button class="btn btn-nav btn-default next-year btn-lg">>></button>
+        {{/if}}
+    </div>
+
+    <div style="clear:both;"></div>
 </div>

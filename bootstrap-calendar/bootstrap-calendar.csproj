@@ -47,10 +47,12 @@
     <Content Include="example\js\handlebars-v1.3.0.js" />
     <Content Include="example\js\jquery-1.11.1.min.js" />
     <None Include="package.json" />
+    <None Include="src\templates\alert.hbs" />
+    <None Include="src\templates\calendarContainer.hbs" />
     <None Include="src\templates\eventModal.hbs" />
     <None Include="src\templates\calendar.hbs" />
     <None Include="src\templates\events.hbs" />
-    <None Include="src\templates\panel.hbs" />
+    <None Include="src\templates\navpanel.hbs" />
     <None Include="src\templates\selectPartial.hbs" />
   </ItemGroup>
   <ItemGroup>

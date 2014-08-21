@@ -20,7 +20,7 @@
                         {{#if enable_dropdown}}
                             {{> selectPartial}}
                         {{else}}
-                            <input class="person form-control">
+                            <input class="person form-control"> 
                         {{/if}}
                     </div>
                 </div>
@@ -36,7 +36,7 @@
 
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
-                        Time from:
+                        {{RESOURCES.TIME_FROM}}:
                     </div>
                     <div class="col-md-7 col-lg-7">
                         <input type="range" class="timeFrom" name="timeFrom" step="1" min="0" max="24" value="10">
@@ -46,7 +46,7 @@
 
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
-                        Time to:
+                        {{RESOURCES.TIME_TO}}:
                     </div>
 
                     <div class="col-md-7 col-lg-7">

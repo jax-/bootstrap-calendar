@@ -1,38 +1,44 @@
 ﻿<div class="event-list ">
   <hr />
-    <h3>Event list</h3>
+    <h3>{{RESOURCES.EVENT_LIST}}</h3>
     <table class="table  table-hover table-striped table-responsive">
         <thead>
             <tr>
                 <th>#</th>
-                {{#if show_id}}
+                {{#if showId}}
                 <th>
-                    Id
+                    {{RESOURCES.ID}}
                 </th>
                 {{/if}}
                 <th>
-                    Date
+                    {{RESOURCES.DATE}}
                 </th>
                 <th>
-                    Time
+                    {{RESOURCES.TIME}}
                 </th>
                 <th>
-                    Person name
+                    {{{RESOURCES.HEADER_PERSON_NAME}}}
                 </th>
                 <th>
-                    Event name
+                    {{{RESOURCES.HEADER_EVENT_NAME}}}
                 </th>
+                {{#if useIcons}}
+                <th>
+                    {{RESOURCES.ACTIONS}}
+                </th>
+                {{else}}
                 <th></th>
                 <th></th>
+                {{/if}}
             </tr>
         </thead>
         <tbody>
-            {{#each this}}
+            {{#each events}}
             <tr class="{{#if unsaved}}warning{{/if}}" >
                 <td>
                     <div style="background-color: {{color}}; width:18px; height:18px;"></div>
                 </td>
-                {{#if show_id}}
+                {{#if showId}}
                 <td>
                     {{this.eventId}}
                 </td>
@@ -49,12 +55,19 @@
                 <td>
                     {{this.eventName}}
                 </td>
-               <td>
-                   <a href="#" class="edit-event2" data-eventid="{{this.eventId}}">Edit</a>
-               </td>
-              <td>
-                  <a href="#" class="remove-event2" data-eventid="{{this.eventId}}">Remove</a>
-              </td>
+                {{#if ../useIcons}}
+                <td>
+                    <a href="#" class="edit-event2" data-eventid="{{this.eventId}}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#" class="remove-event2" data-eventid="{{this.eventId}}"><span class="glyphicon glyphicon-remove"></span></a>
+                </td>
+                {{else}}
+                <td>
+                    <a href="#" class="edit-event2" data-eventid="{{this.eventId}}">{{RESOURCES.EDIT}}</a>
+                </td>
+                <td>
+                    <a href="#" class="remove-event2" data-eventid="{{this.eventId}}">{{RESOURCES.REMOVE}}</a>
+                </td>
+                {{/if}}
             </tr>
             {{/each}}
         </tbody>

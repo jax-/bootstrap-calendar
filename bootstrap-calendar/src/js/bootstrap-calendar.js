@@ -1,30 +1,62 @@
 
 (function (env) {
     var calendar = function (options) {
-        Array.prototype.insert = function (index, item) {
-            this.splice(index, 0, item);
-        };
-
-        var _defaultResources = {
-            MODAL_TITLE: 'Event modal',
-            MODAL_BODY: 'Please insert attendee and event names',
-            PERSON_NAME: "Attendee's name",
-            EVENT_NAME: "Event's name",
-            ADD_EVENT_TITLE: 'Add event',
-            EDIT_EVENT_TITLE: 'Edit event',
+        /**********************
+         * Resources
+         */
+        var _resources = {
+            CALENDAR: 'Calendar',
+            MODAL_TITLE_ADD: 'Adding event for date',
+            MODAL_TITLE_EDIT: 'Editing event for date',
+            MODAL_BODY: 'Please enter attendee\'s and event\'s name:',
+            PERSON_NAME: "Attendee",
+            EVENT_NAME: "Event",
+            ADD_EVENT: 'Add event',
+            EDIT_EVENT: 'Edit event',
+            REMOVE_EVENT: 'Remove event',
             CLOSE: 'Close',
             ADD: 'Add',
             EDIT: 'Edit',
             PREVIOUS_YEAR: 'Previous year',
+            AUTOSAVE: 'Autosave',
             NEXT_YEAR: 'Next year',
             PREVIOUS_MONTH: 'Previous month',
             NEXT_MONTH: 'Next month',
-            AUTOSAVE: 'Autosave',
             SAVE_EVENTS: 'Save events',
             CLEAR_EVENTS: 'Clear events',
             REMOVE: 'Remove',
+            TIME_FROM: 'Time from',
+            TIME_TO: 'Time to',
+            DATE: 'Date',
+            TIME: 'Time',
+            ACTIONS: 'Actions',
+            HEADER_EVENT_NAME: 'Event name',
+            HEADER_PERSON_NAME: 'Person name',
+            ID: 'Id',
+            EVENT_LIST: 'Event list',
         };
 
+
+        var _weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        var _monthStrings = {
+            1: 'January',
+            2: 'February',
+            3: 'March',
+            4: 'April',
+            5: 'May',
+            6: 'June',
+            7: 'July',
+            8: 'August',
+            9: 'September',
+            10: 'October',
+            11: 'November',
+            12: 'December',
+        };
+        /* ~ Resources
+         *****************/
+
+        // Configuration
         var _selector = null;
         var _debug = false;
         var _syncType = 'localStorage';
@@ -37,11 +69,17 @@
         var _calendarContainer = '';
         var _showEventList = true;
         var _modalSelector = '#calendarEventModal';
+        var _autosave = false;
+        var _useIcons = true;
+        var _navAltVersion = false;
+        var _tabbedEventList = false;
 
         // Filters
         var _filterByMonth = true;
 
-        // Internal types
+        /**********************************************
+         * LocalStorage synchronization module
+         */
         var LocalStorageSync = function () {
             if (localStorage == undefined) {
                 return;
@@ -91,9 +129,13 @@
 
             return this;
         };
+        /* ~ LocalStorage synchronization module
+         *********************************************/
 
+        /******************************************
+         * Remote (AJAX) synchronization module
+         */
         var RemoteSync = function () {
-
             var state = 'ready';
             $('.calendar-loader').hide();
 
@@ -228,7 +270,12 @@
 
             return this;
         }
+        /* ~ Remote (AJAX) synchronization module
+         **********************************************/
 
+        /********************************
+         * Event and people containers
+         */
         var CalendarEvents = function () {
             return new Array();
         };
@@ -248,6 +295,12 @@
         // People to be accessed in modal select
         var _people = [];
 
+        /* ~ Event and people containers
+        *******************************/
+
+        /*******************************
+         * Helper functions 
+         */
         var _formatDate2 = function (year, month, day) {
             var tempMonth = month + 1;
             if (tempMonth < 10) {
@@ -280,6 +333,44 @@
             }
         }
 
+        var _monthToString = function (number, inc) {
+            if (inc) {
+                number++;
+            }
+
+            var numberString = String(number);
+
+            return _monthStrings[numberString];
+        };
+
+        /**
+          * Returns string with random hexadecimal color value
+          * e.g. #A3BC90
+          */
+        var hexValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+        var _getRandomColor = function () {
+            var str = '#';
+
+            for (var i = 0; i < 6; i++) {
+                var ran = Math.round(Math.random() * (hexValues.length - 1));
+                str += hexValues[ran];
+            };
+
+            return str;
+        };
+
+        var _formatDate = function (year, month, day) {
+            month += 1;
+
+            if (month < 10) month = "0" + month;
+            if (day < 10) day = "0" + day;
+
+            return year + '-' + month + '-' + day;
+        };
+
+        /* ~ Helper functions
+        **************************************/
+
         var _initializeTemplating = function () {
             _templates = CalendarTemplates;
 
@@ -310,7 +401,9 @@
 
             var async = false;
 
-            // Options check
+            /****************************************************
+             * Configuration check and initialization
+             */
             if (typeof o == 'string') {
                 _selector = o;
             }
@@ -373,6 +466,17 @@
                         _showEventList = o.showEventList;
                     }
                 }
+
+                var _booleanOrFalse = function (source) {
+                    if (source == undefined || typeof (o.autosave != 'Boolean'))
+                        source = false;
+
+                    return source;
+                }
+
+                _autosave = _booleanOrFalse(o.autosave);
+                _navAltVersion = _booleanOrFalse(o.navAltVersion);
+                _tabbedEventsList = _booleanOrFalse(o.tabbedEventList);
             }
             else {
                 throw new Error('Invalid options');
@@ -427,8 +531,16 @@
             }
         };
 
+        /****************************************
+         * Functions used to prepare DOM containers and event listeners
+         */
         var _createContainer = function() {
-            var html = _templates.calendarContainer();
+            var data = {
+                RESOURCES: _resources,
+                tabbedEventList: _tabbedEventList,
+            }
+            var html = _templates.calendarContainer(data);
+
 
             $(_selector).append(html);
             _calendarContainer = '.calendar-container';
@@ -437,7 +549,7 @@
         var _createModal = function () {
             var data = {
                 add: true,
-                RESOURCES: _defaultResources,
+                RESOURCES: _resources,
                 enable_dropdown: true,
                 people: _people,
             };
@@ -450,30 +562,32 @@
             var currentString = _year + ' - ' + (_month + 1);
             var data = {
                 currentYearMonth: currentString,
+                useIcons: _useIcons,
+                autosave: _autosave,
+                RESOURCES: _resources,
             };
-
-            var html = _templates.panel(data);
+            var html = _templates.navpanel(data);
 
             if (position == 'bottom') {
-                $(_calendarContainer).after(html);
+                $(_selector + ' .calendar-panel-bottom').html(html);
             } else {
-                $(_calendarContainer).before(html);
+                $(_selector + ' .calendar-panel-top').html(html);
             }
-
-            // nav panel
-            var navPanelHtml = _templates.navpanel();
-
-            $(_selector + ' .calendar-nav-panel').replaceWith(navPanelHtml);
         };
 
         var _isAutosave = function () {
-            var checkBox = $('.calendar-panel .event-autosave');
-
-            if (checkBox != undefined && checkBox.length > 0) {
-                return checkBox[0].checked;
+            if (_autosave) {
+                return true;
             }
+            else {
+                var checkBox = $('.calendar-panel .event-autosave');
 
-            return false;
+                if (checkBox != undefined && checkBox.length > 0) {
+                    return checkBox[0].checked;
+                }
+
+                return false;
+            }
         };
 
         var _loadEventToModal = function (modal, event) {
@@ -760,10 +874,15 @@
                 return false;
             });
         };
+        /* ~ Functions used to prepare DOM containers and event listeners
+        /**************************************************/
 
-        /**
-          * Adds new event for specific date with specific values as argument
-          */
+
+        /***********************************************
+         * Event manipulation functions (push, get, remove, save, clear)
+         */
+
+        //  Adds new event for specific date with specific values as argument
         var _addEvent = function (year, month, day, personId, personName, eventName, color, timeFrom, timeTo, eventId) {
             if (color == undefined) {
                 color = _getRandomColor();
@@ -824,7 +943,6 @@
         }
 
         var _removeEvent = function (eventId) {
-
             // Find event
             var event = null;
             for (var i = 0; i < _allEvents.length; i++) {
@@ -852,31 +970,21 @@
             }
         }
 
-        var _weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-        var _monthStrings = {
-            1: 'January',
-            2: 'February',
-            3: 'March',
-            4: 'April',
-            5: 'May',
-            6: 'June',
-            7: 'July',
-            8: 'August',
-            9: 'September',
-            10: 'October',
-            11: 'November',
-            12: 'December',
+        var _saveEvents = function () {
+            if (_syncModule != undefined) {
+                _syncModule.saveAllEvents();
+            }
         };
 
-        var _monthToString = function (number, inc) {
-            if (inc) {
-                number++;
+        var _clearEvents = function (all) {
+            if (all == undefined) all = true;
+
+            if (all) {
+                _allEvents = new CalendarEvents();
             }
-
-            var numberString = String(number);
-
-            return _monthStrings[numberString];
+            _eventsToSave = new CalendarEvents();
+            _eventsToRemove = new CalendarEvents();
+            _eventsToEdit = new CalendarEvents();
         };
 
         /**
@@ -913,6 +1021,9 @@
 
             return events;
         };
+
+        /* ~ Event manipulation functions (push, get, remove, save, clear)
+         **********************************************/
 
         /**
          * Generates data for specific year and month and attaches events to days
@@ -965,7 +1076,7 @@
                     dayValue: dayValue,
                 };
 
-                // Check if is current date (can be optimized)
+                // Check if is current date
                 if (year == currentYear &&
                     month == currentMonth &&
                     dayValue == currentDay) {
@@ -996,8 +1107,8 @@
             _month = month;
         }
 
-        /**
-         * Renders calendar
+        /*****************************************
+         * Element rendering functions
          */
         var _render = function (year, month, elementsArr) {
             if (year != undefined && month != undefined) {
@@ -1053,7 +1164,14 @@
                     evData = _allEvents;
                 }
 
-                var eventListHtml = _templates.events(evData);
+                var data = {
+                    events: evData,
+                    useIcons: _useIcons,
+                    showId: false,
+                    RESOURCES: _resources,
+                };
+
+                var eventListHtml = _templates.events(data);
 
                 if (evData.length > 0) {
                     $(_selector + ' .event-container').html(eventListHtml);
@@ -1062,7 +1180,10 @@
                 }
             }
         };
+        /* ~ Element rendering functions
+         ***********************************/
 
+        // Creates and shows alert element with message
         var _showAlert = function (message, type) {
             if (type == undefined) {
                 type = 'success';
@@ -1078,49 +1199,9 @@
             $(_selector + ' .calendar-alertarea').html(html);
         };
 
-        var hexValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
-
-        /**
-          * Returns string with random hexadecimal color value
-          * e.g. #A3BC90
-          */
-        var _getRandomColor = function () {
-            var str = '#';
-
-            for (var i = 0; i < 6; i++) {
-                var ran = Math.round(Math.random() * (hexValues.length - 1));
-                str += hexValues[ran];
-            };
-
-            return str;
-        };
-
-        var _formatDate = function (year, month, day) {
-            month += 1;
-
-            if (month < 10) month = "0" + month;
-            if (day < 10) day = "0" + day;
-
-            return year + '-' + month + '-' + day;
-        };
-
-        var _saveEvents = function () {
-            if (_syncModule != undefined) {
-                _syncModule.saveAllEvents();
-            }
-        };
-
-        var _clearEvents = function (all) {
-            if (all == undefined) all = true;
-
-            if (all) {
-                _allEvents = new CalendarEvents();
-            }
-            _eventsToSave = new CalendarEvents();
-            _eventsToRemove = new CalendarEvents();
-            _eventsToEdit = new CalendarEvents();
-        };
-
+        /****************************************
+         * Functions used to load external data
+         */
         var _loadWeekDays = function (weekDays) {
             if (weekDays.length != 7) {
                 throw new Error('Array should have 7 elements')
@@ -1147,6 +1228,22 @@
             $(_modalSelector + ' .person').replaceWith(template);
         }
 
+        var _loadResources = function (resourceList, withRender) {
+            if (resourceList != undefined && resourceList != null && typeof resourceList == 'Object') {
+                for (var prop in resourceList) {
+                    //if (typeof prop == 'String') {
+                        _resources[prop] = resourceList[prop];
+                    //}
+                }
+            }
+
+            if (withRender) {
+                _render();
+            }
+        };
+        /* ~ Functions used to load external data
+         ****************************************/
+
         // Initialization
         _init();
 
@@ -1165,6 +1262,7 @@
             loadWeekStrings: _loadWeekDays,
             loadMonthStrings: _loadMonthStrings,
             setPeople: _setPeople,
+            loadResources: _loadResources,
         };
     };
     

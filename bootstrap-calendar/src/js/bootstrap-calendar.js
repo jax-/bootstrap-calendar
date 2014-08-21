@@ -34,8 +34,9 @@
             HEADER_PERSON_NAME: 'Person name',
             ID: 'Id',
             EVENT_LIST: 'Event list',
+            EVENTS_SAVED: 'Events saved',
+            EVENT_SAVE_ERROR: 'There was an error while trying to save events',
         };
-
 
         var _weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -187,7 +188,7 @@
                     data: dataToSend,
                     success: function (dt) {
                         console.log('saved');
-                        _showAlert("Events have been saved", 'success');
+                        _showAlert(_resources.EVENTS_SAVED, 'success');
 
                         setUnsaved(_eventsToEdit);
                         setUnsaved(_eventsToSave);
@@ -196,7 +197,7 @@
                         _renderEventList();
                     },
                     error: function (err) {
-                        _showAlert("There was an error while trying to save events", 'danger');
+                        _showAlert(_resources.EVENT_SAVE_ERROR, 'danger');
                         console.log(err);
                     },
                     complete: function () {
@@ -436,7 +437,6 @@
                         throw new Error('Invalid sync type');
                     }
 
-
                     switch (_syncType) {
                         case 'localStorage':
                             _syncModule = new LocalStorageSync();
@@ -468,7 +468,7 @@
                 }
 
                 var _booleanOrFalse = function (source) {
-                    if (source == undefined || typeof (o.autosave != 'Boolean'))
+                    if (source == undefined || typeof source != 'boolean')
                         source = false;
 
                     return source;
@@ -476,7 +476,7 @@
 
                 _autosave = _booleanOrFalse(o.autosave);
                 _navAltVersion = _booleanOrFalse(o.navAltVersion);
-                _tabbedEventsList = _booleanOrFalse(o.tabbedEventList);
+                _tabbedEventList = _booleanOrFalse(o.tabbedEventList);
             }
             else {
                 throw new Error('Invalid options');
@@ -484,16 +484,6 @@
 
             if (_selector == undefined || _selector == null) {
                 throw new Error('Invalid selector');
-            }
-
-            if (_debug) {
-                for (var i = 0; i < 12; i++) {
-                    for (var j = 1; j <= 31; j++) {
-                        for (var k = 0; k < 1; k++) {
-                            _addEvent(2014, i, j, 1, 'Jan Kowalski', 'Swimming', undefined, i * j * k);
-                        }
-                    }
-                }
             }
 
             // Validate and set year/month
@@ -541,7 +531,6 @@
             }
             var html = _templates.calendarContainer(data);
 
-
             $(_selector).append(html);
             _calendarContainer = '.calendar-container';
         };
@@ -576,6 +565,7 @@
         };
 
         var _isAutosave = function () {
+            // If autosave was explicitly set to true then don't take autosave checkbox value
             if (_autosave) {
                 return true;
             }
@@ -877,7 +867,6 @@
         /* ~ Functions used to prepare DOM containers and event listeners
         /**************************************************/
 
-
         /***********************************************
          * Event manipulation functions (push, get, remove, save, clear)
          */
@@ -928,7 +917,6 @@
                 _allEvents.push(event);
             }
         }
-
 
         var _getEventById = function(id) {
             for (var i = 0; i < _allEvents.length; i++) {

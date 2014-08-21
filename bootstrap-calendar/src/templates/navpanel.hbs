@@ -4,11 +4,11 @@
         <button class="btn btn-primary panel-edit-event" style="display:none">{{#if useIcons}}<span class="glyphicon glyphicon-pencil"></span>{{/if}}{{RESOURCES.EDIT_EVENT}}</button>
         <button class="btn btn-primary panel-remove-event" style="display:none">{{#if useIcons}}<span class="glyphicon glyphicon-remove"></span>{{/if}}{{RESOURCES.REMOVE_EVENT}}</button>
 
-        {{#if autosave}}
+        {{#unless autosave}}
         <button class="btn btn-primary save-events" style="margin-right:10px;">{{RESOURCES.SAVE_EVENTS}}</button>
         <label for="event-autosave">{{RESOURCES.AUTOSAVE}}</label>
         <input type="checkbox" id="event-autosave" class="event-autosave" />
-        {{/if}}
+        {{/unless}}
     </div>
     <div class="pull-right">
         {{#if navAltVersion}}

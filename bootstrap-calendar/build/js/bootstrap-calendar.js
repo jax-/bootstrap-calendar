@@ -124,14 +124,14 @@ function program1(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.CALENDAR)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</a></li>\r\n    <li><a href=\"#events-tab\" data-toggle=\"tab\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</a></li>\r\n</ul>\r\n\r\n<div id=\"calendar-tab\">\r\n    <div class=\"calendar-container\"></div>\r\n</div>\r\n<div id=\"events-tab\" style=\"display:none;\">\r\n    <div class=\"event-container\"></div>\r\n</div>\r\n\r\n";
+    + "</a></li>\r\n</ul>\r\n\r\n<div class=\"tab-content\">\r\n    <div class=\"tab-pane active\" id=\"calendar-tab\">\r\n        <div class=\"calendar-container\"></div>\r\n    </div>\r\n    <div class=\"tab-pane\" id=\"events-tab\">\r\n        <div class=\"event-container\"></div>\r\n    </div>\r\n</div>\r\n\r\n";
   return buffer;
   }
 
 function program3(depth0,data) {
   
   
-  return "\r\n<div class=\"calendar-container\"></div>\r\n<div class=\"event-container\"></div>\r\n";
+  return "\r\n<div class=\"calendar-container\"></div>\r\n<hr />\r\n<div class=\"event-container\"></div>\r\n";
   }
 
   buffer += "<div class=\"calendar-alertarea\"></div>\r\n<div class=\"calendar-panel-top\"></div>\r\n";
@@ -304,7 +304,7 @@ function program14(depth0,data) {
   return buffer;
   }
 
-  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>"
+  buffer += "<div class=\"event-list\">\r\n    <h3>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>#</th>\r\n                ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.showId), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
@@ -393,7 +393,7 @@ function program11(depth0,data) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.REMOVE_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\r\n\r\n        ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.autosave), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  stack1 = helpers.unless.call(depth0, (depth0 && depth0.autosave), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    </div>\r\n    <div class=\"pull-right\">\r\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.navAltVersion), {hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data});
@@ -464,8 +464,9 @@ function program1(depth0,data) {
             HEADER_PERSON_NAME: 'Person name',
             ID: 'Id',
             EVENT_LIST: 'Event list',
+            EVENTS_SAVED: 'Events saved',
+            EVENT_SAVE_ERROR: 'There was an error while trying to save events',
         };
-
 
         var _weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -617,7 +618,7 @@ function program1(depth0,data) {
                     data: dataToSend,
                     success: function (dt) {
                         console.log('saved');
-                        _showAlert("Events have been saved", 'success');
+                        _showAlert(_resources.EVENTS_SAVED, 'success');
 
                         setUnsaved(_eventsToEdit);
                         setUnsaved(_eventsToSave);
@@ -626,7 +627,7 @@ function program1(depth0,data) {
                         _renderEventList();
                     },
                     error: function (err) {
-                        _showAlert("There was an error while trying to save events", 'danger');
+                        _showAlert(_resources.EVENT_SAVE_ERROR, 'danger');
                         console.log(err);
                     },
                     complete: function () {
@@ -866,7 +867,6 @@ function program1(depth0,data) {
                         throw new Error('Invalid sync type');
                     }
 
-
                     switch (_syncType) {
                         case 'localStorage':
                             _syncModule = new LocalStorageSync();
@@ -898,7 +898,7 @@ function program1(depth0,data) {
                 }
 
                 var _booleanOrFalse = function (source) {
-                    if (source == undefined || typeof (o.autosave != 'Boolean'))
+                    if (source == undefined || typeof source != 'boolean')
                         source = false;
 
                     return source;
@@ -906,7 +906,7 @@ function program1(depth0,data) {
 
                 _autosave = _booleanOrFalse(o.autosave);
                 _navAltVersion = _booleanOrFalse(o.navAltVersion);
-                _tabbedEventsList = _booleanOrFalse(o.tabbedEventList);
+                _tabbedEventList = _booleanOrFalse(o.tabbedEventList);
             }
             else {
                 throw new Error('Invalid options');
@@ -914,16 +914,6 @@ function program1(depth0,data) {
 
             if (_selector == undefined || _selector == null) {
                 throw new Error('Invalid selector');
-            }
-
-            if (_debug) {
-                for (var i = 0; i < 12; i++) {
-                    for (var j = 1; j <= 31; j++) {
-                        for (var k = 0; k < 1; k++) {
-                            _addEvent(2014, i, j, 1, 'Jan Kowalski', 'Swimming', undefined, i * j * k);
-                        }
-                    }
-                }
             }
 
             // Validate and set year/month
@@ -971,7 +961,6 @@ function program1(depth0,data) {
             }
             var html = _templates.calendarContainer(data);
 
-
             $(_selector).append(html);
             _calendarContainer = '.calendar-container';
         };
@@ -1006,6 +995,7 @@ function program1(depth0,data) {
         };
 
         var _isAutosave = function () {
+            // If autosave was explicitly set to true then don't take autosave checkbox value
             if (_autosave) {
                 return true;
             }
@@ -1307,7 +1297,6 @@ function program1(depth0,data) {
         /* ~ Functions used to prepare DOM containers and event listeners
         /**************************************************/
 
-
         /***********************************************
          * Event manipulation functions (push, get, remove, save, clear)
          */
@@ -1358,7 +1347,6 @@ function program1(depth0,data) {
                 _allEvents.push(event);
             }
         }
-
 
         var _getEventById = function(id) {
             for (var i = 0; i < _allEvents.length; i++) {

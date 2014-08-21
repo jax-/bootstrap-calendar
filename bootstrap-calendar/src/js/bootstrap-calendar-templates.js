@@ -117,14 +117,14 @@ function program1(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.CALENDAR)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</a></li>\r\n    <li><a href=\"#events-tab\" data-toggle=\"tab\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</a></li>\r\n</ul>\r\n\r\n<div id=\"calendar-tab\">\r\n    <div class=\"calendar-container\"></div>\r\n</div>\r\n<div id=\"events-tab\" style=\"display:none;\">\r\n    <div class=\"event-container\"></div>\r\n</div>\r\n\r\n";
+    + "</a></li>\r\n</ul>\r\n\r\n<div class=\"tab-content\">\r\n    <div class=\"tab-pane active\" id=\"calendar-tab\">\r\n        <div class=\"calendar-container\"></div>\r\n    </div>\r\n    <div class=\"tab-pane\" id=\"events-tab\">\r\n        <div class=\"event-container\"></div>\r\n    </div>\r\n</div>\r\n\r\n";
   return buffer;
   }
 
 function program3(depth0,data) {
   
   
-  return "\r\n<div class=\"calendar-container\"></div>\r\n<div class=\"event-container\"></div>\r\n";
+  return "\r\n<div class=\"calendar-container\"></div>\r\n<hr />\r\n<div class=\"event-container\"></div>\r\n";
   }
 
   buffer += "<div class=\"calendar-alertarea\"></div>\r\n<div class=\"calendar-panel-top\"></div>\r\n";
@@ -297,7 +297,7 @@ function program14(depth0,data) {
   return buffer;
   }
 
-  buffer += "<div class=\"event-list \">\r\n  <hr />\r\n    <h3>"
+  buffer += "<div class=\"event-list\">\r\n    <h3>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>#</th>\r\n                ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.showId), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
@@ -386,7 +386,7 @@ function program11(depth0,data) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.REMOVE_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\r\n\r\n        ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.autosave), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  stack1 = helpers.unless.call(depth0, (depth0 && depth0.autosave), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    </div>\r\n    <div class=\"pull-right\">\r\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.navAltVersion), {hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data});

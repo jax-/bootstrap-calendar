@@ -20,7 +20,7 @@
                         {{#if enable_dropdown}}
                             {{> selectPartial}}
                         {{else}}
-                            <input class="person form-control"> 
+                            <input class="personId form-control"> 
                         {{/if}}
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
                         <span>{{RESOURCES.EVENT_NAME}}:</span>
-                    </div>
+                    </div>  
                     <div class="col-md-7 col-lg-7">
                         <textarea maxlength="500" rows="4" class="eventName form-control" />
                     </div>
@@ -39,7 +39,7 @@
                         {{RESOURCES.TIME_FROM}}:
                     </div>
                     <div class="col-md-7 col-lg-7">
-                        <input type="range" class="timeFrom" name="timeFrom" step="1" min="0" max="24" value="10">
+                        <input type="range" class="timeFrom" name="timeFrom"  min="0" max="{{timeMaxValue}}" value="{{timeFromDefault}}">
                         <div class="timeFrom-output"></div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="col-md-7 col-lg-7">
-                        <input type="range" class="timeTo" name="timeTo" step="1" min="0" max="24" value="11">
+                        <input type="range" class="timeTo" name="timeTo" min="0" max="{{timeMaxValue}}" value="{{timeToDefault}}">
                         <div class="timeTo-output"></div>
                     </div>
                 </div>
@@ -68,62 +68,3 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-<script>
-    $('.timeFrom').change(function () {
-        var out = $('.timeFrom-output');
-        var value = $(this).val();
-        out.html(format(value));
-    });
-
-    $('.timeTo').change(function () {
-        var out = $('.timeTo-output');
-        var value = $(this).val();
-        out.html(format(value));
-    });
-
-    $(function (){
-        $('.timeFrom').trigger('change');
-        $('.timeTo').trigger('change');
-    });
-
-    $('.timeTo,.timeFrom').keydown(function () {
-        $(this).trigger('change');
-    });
-
-    var format = function (val) {
-
-        var hour = val;
-        if (hour < 10)
-            hour = '0' + hour;
-
-        return hour + ':00';
-        
-
-        //var hour = Math.floor(val / 4);
-        //if (hour < 10)
-        //    hour = '0' + hour;
-
-        //var minute = Math.floor((val % 4) * 15);
-        //if (minute < 10)
-        //    minute = '0' + minute;
-
-        //return hour + ':' + minute;
-    };
-
-    var validate = function () {
-        var timeTo = $('.timeTo');
-        var timeFrom = $('.timeFrom');
-
-        if (timeFrom.val() > timeTo.val()) {
-            timeFrom.val(timeTo.val());
-            timefrom.trigger('change');
-        }
-        else if (timeTo.val() < timeFrom.val())
-        {
-            timeTo.val(timeFrom.val());
-            timeTo.trigger('change');
-        }
-    };
-
-</script>

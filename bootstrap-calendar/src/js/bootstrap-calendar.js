@@ -74,9 +74,10 @@
         var _useIcons = true;
         var _navAltVersion = false;
         var _tabbedEventList = false;
+        var _useNameInSelect = false;
 
         // Filters
-        var _filterByMonth = true;
+        var _filterByMonth = false;
 
         /**********************************************
          * LocalStorage synchronization module
@@ -187,8 +188,9 @@
                     contentType: 'application/json',
                     data: dataToSend,
                     success: function (dt) {
-                        console.log('saved');
-                        _showAlert(_resources.EVENTS_SAVED, 'success');
+                        if (!_autosave) {
+                            _showAlert(_resources.EVENTS_SAVED, 'success');
+                        }
 
                         setUnsaved(_eventsToEdit);
                         setUnsaved(_eventsToSave);
@@ -198,7 +200,6 @@
                     },
                     error: function (err) {
                         _showAlert(_resources.EVENT_SAVE_ERROR, 'danger');
-                        console.log(err);
                     },
                     complete: function () {
                         changeState('idle');
@@ -302,6 +303,14 @@
         /*******************************
          * Helper functions 
          */
+        Array.prototype.contains = function(el) {
+            if (this.indexOf(el) != -1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         var _formatDate2 = function (year, month, day) {
             var tempMonth = month + 1;
             if (tempMonth < 10) {
@@ -379,6 +388,7 @@
 
             Handlebars.registerHelper('formatDate', _formatDate2);
             Handlebars.registerHelper('formatEventName', _formatEventName);
+            Handlebars.registerHelper('formatTime', _formatTime);
         };
 
         /**
@@ -477,6 +487,7 @@
                 _autosave = _booleanOrFalse(o.autosave);
                 _navAltVersion = _booleanOrFalse(o.navAltVersion);
                 _tabbedEventList = _booleanOrFalse(o.tabbedEventList);
+                _useNameInSelect = _booleanOrFalse(o.useNameInSelect);
             }
             else {
                 throw new Error('Invalid options');
@@ -505,6 +516,7 @@
             // Create elements
             _createContainer();
             _createModal();
+            _bindEventModalRange();
 
             _createPanel(_panelPosition);
             _addPanelEvents();
@@ -537,23 +549,30 @@
 
         var _createModal = function () {
             var data = {
-                add: true,
                 RESOURCES: _resources,
                 enable_dropdown: true,
                 people: _people,
             };
+
+            data.add = true;
+            data.timeFromDefault = _timeScale * 10;
+            data.timeToDefault = _timeScale * 11;
+            data.timeMaxValue = _timeScale * 24;
+
             var html = _templates.eventModal(data);
 
             $('body').append(html);
         };
 
         var _createPanel = function (position) {
-            var currentString = _year + ' - ' + (_month + 1);
+            //var currentString = _year + ' - ' + (_month + 1);
+            var currentYearMonth = _formatMonthYearFriendly(_year, _month);
             var data = {
-                currentYearMonth: currentString,
+                currentYearMonth: currentYearMonth,
                 useIcons: _useIcons,
                 autosave: _autosave,
                 RESOURCES: _resources,
+                navAltVersion: _navAltVersion,
             };
             var html = _templates.navpanel(data);
 
@@ -561,6 +580,15 @@
                 $(_selector + ' .calendar-panel-bottom').html(html);
             } else {
                 $(_selector + ' .calendar-panel-top').html(html);
+            }
+
+            // Initialize tooltips
+            if ($.fn.tooltip != undefined) {
+                if (_navAltVersion) {
+                    $(_selector + ' .calendar-navigation button.btn-nav').tooltip();
+                } else {
+                    $(_selector + ' .calendar-navigation .pagination a').tooltip();
+                }
             }
         };
 
@@ -586,10 +614,20 @@
             modal.find('.eventDay').val(event.day);
             modal.find('.eventId').val(event.eventId);
 
-            modal.find('.person').val(event.personId);
+            var personInput = modal.find('.personId');
+            if (_useNameInSelect) {
+                personInput.val(event.personName);
+            } else {
+                personInput.val(event.personId);
+            }
 
-            modal.find('.timeFrom').val(event.timeFrom);
-            modal.find('.timeTo').val(event.timeTo);
+            var timeFrom = modal.find('.timeFrom');
+            timeFrom.val(event.timeFrom);
+            timeFrom.trigger('change');
+
+            var timeTo = modal.find('.timeTo');
+            timeTo.val(event.timeTo);
+            timeTo.trigger('change');
 
             var inputName = modal.find('.eventName');
             inputName.attr('value', event.eventName);
@@ -613,6 +651,14 @@
         var _addPanelEvents = function () {
             var panelSelector = '.calendar-panel ';
 
+            var renderOnChange = function () {
+                if (_filterByMonth) {
+                    _render();
+                } else {
+                    _render('calendar', 'label');
+                }
+            };
+
             $(panelSelector + '.prev-month').click(function () {
                 _month--;
                 if (_month < 0) {
@@ -620,7 +666,7 @@
                     _year--;
                 }
 
-                _render();
+                renderOnChange();
             });
 
             $(panelSelector + '.next-month').click(function () {
@@ -629,13 +675,13 @@
                     _month = 0;
                     _year++;
                 }
-
-                _render();
+                renderOnChange();
             });
 
             var changeYear = function (value) {
                 _year += value;
-                _render();
+
+                renderOnChange();
             };
 
             $(panelSelector + '.prev-year').click(function () {
@@ -648,38 +694,54 @@
             var addNewEvent = function (day) {
                 var modal = $(_modalSelector);
 
-                var personInput = modal.find('.person');
+                var personInput = modal.find('.personId');
                 var eventInput = modal.find('.eventName');
                 var personId = personInput.val();
-                var personName = modal.find('.person option:selected').text();
+                var personName = modal.find('.personId option:selected').text();
 
                 var timeFrom = modal.find('.timeFrom');
                 var timeTo = modal.find('.timeTo');
 
                 var event = eventInput.val();
 
-                if (event != undefined && event != '') {
-                    _addEvent(_year, _month, day, personId, personName, event, undefined, timeFrom.val(), timeTo.val());
-                    _render();
-
-                    // clear
-                    personInput.val('');
-                    eventInput.val('');
-
-                    return true;
+                // Validate
+                if (personId == undefined || personId == '') {
+                    return false;
                 }
+                if (event == undefined || event == '') {
+                    return false;
+                }
+                
+                _addEvent(_year, _month, day, personId, personName, event, undefined, timeFrom.val(), timeTo.val());
+                _render();
 
-                return false;
+                // clear
+                personInput.val('');
+                eventInput.val('');
+
+                return true;
             };
 
             var editEvent = function (modal, event) {
+                var personId = modal.find('.personId').val();
+                var eventName = modal.find('.eventName').val();
+
+                // Validate
+                if (personId == undefined || personId == '') {
+                    return false;
+                }
+                if (event == undefined || event == '') {
+                    return false;
+                }
+
                 event.eventId = modal.find('.eventId').val();
-                event.personId = modal.find('.person').val();
-                event.personName = modal.find('.person option:selected').text();
+                event.personId = personId;
+                event.personName = modal.find('.personId option:selected').text();
                 event.timeFrom = modal.find('.timeFrom').val();
                 event.timeTo = modal.find('.timeTo').val();
-                event.eventName = modal.find('.eventName').val();
+                event.eventName = eventName;
                 event.unsaved = true;
+
                 _eventsToEdit.push(event);
 
                 if (_isAutosave()) {
@@ -706,10 +768,15 @@
                 }
             });
 
-            // Bind event edit
-            $(_selector).on('click', '.panel-edit-event', function () {
+            var _openEditModal = function (selectedEvent) {
                 var modal = $(_modalSelector);
-                var selectedEvent = $(_selector).find('.event.selected');
+
+                if (selectedEvent == undefined) {
+                    selectedEvent = $(_selector).find('.event.selected');
+                } else {
+                    selectedEvent.addClass('selected');
+                }
+
                 if (selectedEvent.length > 0) {
                     var day = $(selectedEvent).data('day');
                     var eventId = $(selectedEvent).data('eventid');
@@ -723,6 +790,11 @@
                         modal.modal('show');
                     }
                 }
+            };
+
+            // Bind event edit
+            $(_selector).on('click', '.panel-edit-event', function () {
+                _openEditModal();
             });
 
             // Bind event remove
@@ -734,6 +806,7 @@
                     if (eventId != undefined) {
                         _removeEvent(eventId);
                         _render();
+                        _setEventAddEditState('none');
                     }
                 }
             });
@@ -762,6 +835,11 @@
                     _setEventAddEditState('edit');
                     $(this).addClass('selected');
                 }
+            });
+
+            // Edit on event double click
+            $(_selector).on('dblclick', '.event', function (e) {
+                _openEditModal($(this));
             });
 
             $(_modalSelector + ' .add-event').click(function () {
@@ -819,21 +897,24 @@
             var addEventButton = $(_selector + ' ' + '.btn.panel-add-event');
             var editEventButton = $(_selector + ' ' + '.btn.panel-edit-event');
             var removeEventButton = $(_selector + ' .btn.panel-remove-event')
+            var disabled = 'disabled';
 
-            addEventButton.hide();
-            editEventButton.hide();
-            removeEventButton.hide();
+            addEventButton.addClass(disabled);
+            editEventButton.addClass(disabled);
+            removeEventButton.addClass(disabled);
 
             // Deselect all events & days
             $(_selector + ' ' + '.event').removeClass('selected');
             $(_selector + ' ' + '.week-day-div').removeClass('selected');
 
+
             if (type == 'add') {
-                addEventButton.show();
+                //addEventButton.show();
+                addEventButton.removeClass(disabled);
             }
             else if (type == 'edit') {
-                editEventButton.show();
-                removeEventButton.show();
+                editEventButton.removeClass(disabled);
+                removeEventButton.removeClass(disabled);
             }
         }
 
@@ -859,11 +940,64 @@
                 if (eventId != undefined) {
                     _removeEvent(eventId);
                     _render();
+                    _setEventAddEditState('none');
                 }
 
                 return false;
             });
         };
+        
+        var _timeScale = 4;
+        var _formatTime = function (val) {
+            var hour = Math.floor(val / _timeScale);
+            if (hour < 10)
+                hour = '0' + hour;
+
+            var minute = Math.floor((val % _timeScale) * 15);
+            if (minute < 10)
+                minute = '0' + minute;
+
+            return hour + ':' + minute;
+        };
+
+        var _bindEventModalRange = function () {
+            var validate = function () {
+                if (timeFrom.val() > timeTo.val()) {
+                    timeFrom.val(timeTo.val());
+                    timefrom.trigger('change');
+                }
+                else if (timeTo.val() < timeFrom.val()) {
+                    timeTo.val(timeFrom.val());
+                    timeTo.trigger('change');
+                }
+            };
+
+            var timeFromSelector = _modalSelector + ' .timeFrom';
+            var timeToSelector = _modalSelector + ' .timeTo';
+
+            var timeFrom = $(timeFromSelector);
+            var timeTo = $(timeToSelector);
+
+            $(timeFrom).change(function () {
+                var out = $(_modalSelector + ' .timeFrom-output');
+                var value = $(this).val();
+                out.html(_formatTime(value));
+            });
+
+            $(timeTo).change(function () {
+                var out = $(_modalSelector + ' .timeTo-output');
+                var value = $(this).val();
+                out.html(_formatTime(value));
+            });
+
+            $(timeFrom, timeTo).keydown(function () {
+                $(this).trigger('change');
+            });
+
+            $(timeFrom).trigger('change');
+            $(timeTo).trigger('change');
+        }
+
         /* ~ Functions used to prepare DOM containers and event listeners
         /**************************************************/
 
@@ -901,20 +1035,32 @@
             }
         }
 
+        var maybeBoolean = function(defaultValue, value) {
+            if (value == undefined || value == null || typeof value != 'boolean') {
+                return defaultValue;
+            } else {
+                return value;
+            }
+        }
+
         /**
           * Adds new event with event object and date as arguments
           */
-        var _pushEvent = function (event, unsaved) {
-            if (unsaved == undefined) unsaved = false;
+        var _pushEvent = function (event, unsaved, insertAtStart) {
+            unsaved = maybeBoolean(false, unsaved);
+            insertAtStart = maybeBoolean(true, insertAtStart);
 
             if (typeof event == 'object') {
-
                 if (unsaved) {
                     event.unsaved = true;
                     _eventsToSave.push(event);
                 }   
 
-                _allEvents.push(event);
+                if (insertAtStart) {
+                    _allEvents.unshift(event);
+                } else {
+                    _allEvents.push(event);
+                }
             }
         }
 
@@ -1098,27 +1244,39 @@
         /*****************************************
          * Element rendering functions
          */
-        var _render = function (year, month, elementsArr) {
-            if (year != undefined && month != undefined) {
-                _setYearAndMonth(year, month);
+        var _render = function () {
+            var args = new Array();
+            if (arguments.length == 0) {
+                args = ['calendar', 'events', 'label']
+            } else {
+                for (var i = 0; i < arguments.length; i++) {
+                    args.push(arguments[i]);
+                }
             }
-
-            if (elementsArr == undefined) {
-                elementsArr = [ 'calendar', 'events']
-            }
-
-            _renderCalendar();
-            _renderEventList();
 
             // Update label
+            if (args.indexOf('label') != -1) {
+                _renderLabel();
+            }
+
+            // Render calendar
+            if (args.indexOf('calendar') - 1) {
+                _renderCalendar();
+            }
+
+            // Update event list
+            if (args.indexOf('events') != -1) {
+                _renderEventList();
+            }
+
+            if (_renderCallback != null) {
+                _renderCallback();
+            }
+        };
+
+        var _renderLabel = function () {
             var currentYearMonth = _formatMonthYearFriendly(_year, _month);
             $('.calendar-panel .currentYearMonth').html(currentYearMonth);
-
-            if (elementsArr.indexOf('calendar') != -1) {
-            }
-            if (elementsArr.indexOf('events') - 1) {
-            }
-
         };
 
         var _renderCalendar = function () {
@@ -1159,7 +1317,7 @@
                     RESOURCES: _resources,
                 };
 
-                var eventListHtml = _templates.events(data);
+                var eventListHtml = _templates.eventList(data);
 
                 if (evData.length > 0) {
                     $(_selector + ' .event-container').html(eventListHtml);
@@ -1213,7 +1371,7 @@
             };
             var template = _templates.selectPartial(data);
 
-            $(_modalSelector + ' .person').replaceWith(template);
+            $(_modalSelector + ' .personId').replaceWith(template);
         }
 
         var _loadResources = function (resourceList, withRender) {
@@ -1231,6 +1389,8 @@
         };
         /* ~ Functions used to load external data
          ****************************************/
+
+        var _renderCallback = null;
 
         // Initialization
         _init();

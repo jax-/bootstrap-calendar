@@ -19,7 +19,7 @@ table.calendar {
             > div {
                 overflow-y: auto;
                 padding: 0px;
-                height: 110px;
+                height: 120px;
                 background-color: white;
                 
                 > ul {
@@ -33,6 +33,10 @@ table.calendar {
                 &.current {
                     background-color: #428bca;
                     color: white;
+
+                    &:hover {
+                        background-color: #80c4ff;
+                    }
                 }
 
                 &:hover {
@@ -49,14 +53,26 @@ table.calendar {
 
     span.event {
         width: 100%;
-        display: block;
+        display: block; 
         padding: 1px;
         font-size: 12px;
 
         &.selected {
             border: 3px solid @selected;
         }
+
+        &:hover {
+           // color: #dedede;
+        }
+
+       -moz-user-select: none;
+       -khtml-user-select: none;
+       -webkit-user-select: none;
+       -ms-user-select: none;
+       user-select: none;
     }
+
+   
 
     .bold {
         font-weight: bold;
@@ -81,7 +97,19 @@ table.calendar {
 }
 
 .calendar-nav-panel {
+    a {
+        cursor: pointer;
+    }
+
     .btn-nav {
         width: 54px;
     }
+
+    .label-date {
+        width: 120px;
+    }
+}
+
+.calendar-buttons {
+    margin-left: 3px;
 }

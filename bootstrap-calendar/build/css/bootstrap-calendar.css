@@ -20,6 +20,8 @@ table.calendar tbody td.week-day > div > ul {
 }
 table.calendar tbody td.week-day > div > ul .date {
   margin: 4px;
+  color: #808080;
+  font-size: smaller;
 }
 table.calendar tbody td.week-day > div.current {
   background-color: #428bca;
@@ -76,6 +78,8 @@ table.calendar .bold {
 }
 .calendar-nav-panel .label-date {
   width: 120px;
+  height: 20px;
+  box-sizing: content-box;
 }
 .calendar-buttons {
   margin-left: 3px;

@@ -11,9 +11,9 @@
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
                         {{#if enable_dropdown}}
-                            <span>Select person:</span>
+                            <b>{{RESOURCES.PERSON_NAME}}:</b>
                         {{else}}
-                            <span>{{RESOURCES.PERSON_NAME}}</span>
+                            <span>{{RESOURCES.PERSON_NAME}}:</span>
                         {{/if}}
                     </div>
                     <div class="col-md-7 col-lg-7">
@@ -27,7 +27,7 @@
 
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
-                        <span>{{RESOURCES.EVENT_NAME}}:</span>
+                        <b>{{RESOURCES.EVENT_NAME}}:</b>
                     </div>  
                     <div class="col-md-7 col-lg-7">
                         <textarea maxlength="500" rows="4" class="eventName form-control" />
@@ -36,7 +36,9 @@
 
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
-                        {{RESOURCES.TIME_FROM}}:
+                        <b>
+                            {{RESOURCES.TIME_FROM}}:
+                        </b>
                     </div>
                     <div class="col-md-7 col-lg-7">
                         <input type="range" class="timeFrom" name="timeFrom"  min="0" max="{{timeMaxValue}}" value="{{timeFromDefault}}">
@@ -46,7 +48,9 @@
 
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
-                        {{RESOURCES.TIME_TO}}:
+                        <b>
+                            {{RESOURCES.TIME_TO}}:
+                        </b>
                     </div>
 
                     <div class="col-md-7 col-lg-7">

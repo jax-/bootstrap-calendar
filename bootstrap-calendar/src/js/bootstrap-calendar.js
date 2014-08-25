@@ -108,7 +108,7 @@
             this.readAllEvents = function () {
                 var temp = localStorage.getItem('events');
                 try {
-                    if (temp == undefined || temp == undefined) {
+                    if (temp == undefined || temp == null) {
                         throw new Error('temp is undefined');
                     }
 
@@ -609,7 +609,7 @@
         };
 
         var _loadEventToModal = function (modal, event) {
-            var dateStr = _formatDate(event.year, event.month, event.day);
+            var dateStr = _formatDate2(event.year, event.month, event.day);
             modal.find('.modalTitleDate').html(dateStr);
             modal.find('.eventDay').val(event.day);
             modal.find('.eventId').val(event.eventId);
@@ -649,6 +649,17 @@
         }
 
         var _addPanelEvents = function () {
+            if (_tabbedEventList) {
+                $(_selector + ' #event-tab-btn').click(function () {
+                    var calendarNavigation = $(_selector + ' .calendar-navigation');
+                    calendarNavigation.css('visibility', 'hidden');
+                });
+                $(_selector + ' #calendar-tab-btn').click(function () {
+                    var calendarNavigation = $(_selector + ' .calendar-navigation');
+                    calendarNavigation.css('visibility', 'visible');
+                });
+            }
+
             var panelSelector = '.calendar-panel ';
 
             var renderOnChange = function () {
@@ -752,11 +763,21 @@
 
             // Bind event add
             $(_selector).on('click', '.panel-add-event', function () {
+                _openAddModal();
+            });
+
+            var _openAddModal = function (selectedDay) {
                 var modal = $(_modalSelector);
-                var selectedDay = $(_selector).find('.week-day-div.selected');
+
+                if (selectedDay == undefined) {
+                    selectedDay = $(_selector).find('.week-day-div.selected');
+                } else {
+                    selectedDay.addClass('selected');
+                }
+
                 if (selectedDay.length > 0) {
                     var day = $(selectedDay).parent().data('day');
-                    var dateStr = _year + '-' + _month + '-' + day;
+                    var dateStr = _formatDate2(_year, _month, day);
 
                     var dd1 = modal.find('.modalTitleDate');
                     dd1.html(dateStr);
@@ -766,7 +787,7 @@
                     _setModalState(modal, 'add');
                     modal.modal('show');
                 }
-            });
+            };
 
             var _openEditModal = function (selectedEvent) {
                 var modal = $(_modalSelector);
@@ -822,6 +843,10 @@
                     $(this).addClass('selected');
                 }
             });
+            
+            //$(_selector).on('dblclick', '.week-day-div', function (e) {
+            //    _openAddModal($(this));
+            //});
 
             // On event select
             $(_selector).on('click', '.event', function (e) {
@@ -1375,7 +1400,9 @@
         }
 
         var _loadResources = function (resourceList, withRender) {
-            if (resourceList != undefined && resourceList != null && typeof resourceList == 'Object') {
+            if (resourceList != undefined && resourceList != null && typeof resourceList == 'object') {
+                
+                // TODO: replace all?
                 for (var prop in resourceList) {
                     //if (typeof prop == 'String') {
                         _resources[prop] = resourceList[prop];

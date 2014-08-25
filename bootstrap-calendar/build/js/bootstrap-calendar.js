@@ -124,9 +124,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n\r\n<ul class=\"nav nav-tabs\">\r\n    <li class=\"active\"><a href=\"#calendar-tab\" data-toggle=\"tab\">"
+  buffer += "\r\n\r\n<ul class=\"nav nav-tabs nav-calendar\">\r\n    <li class=\"active\"><a id=\"calendar-tab-btn\" href=\"#calendar-tab\" data-toggle=\"tab\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.CALENDAR)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</a></li>\r\n    <li><a href=\"#events-tab\" data-toggle=\"tab\">"
+    + "</a></li>\r\n    <li><a id=\"event-tab-btn\" href=\"#events-tab\" data-toggle=\"tab\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</a></li>\r\n</ul>\r\n\r\n<div class=\"tab-content\">\r\n    <div class=\"tab-pane active\" id=\"calendar-tab\">\r\n        <div class=\"calendar-container\"></div>\r\n    </div>\r\n    <div class=\"tab-pane\" id=\"events-tab\">\r\n        <div class=\"event-container\"></div>\r\n    </div>\r\n</div>\r\n\r\n";
   return buffer;
@@ -276,8 +276,11 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
 
 function program1(depth0,data) {
   
-  
-  return "\r\n                            <span>Select person:</span>\r\n                        ";
+  var buffer = "", stack1;
+  buffer += "\r\n                            <b>"
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + ":</b>\r\n                        ";
+  return buffer;
   }
 
 function program3(depth0,data) {
@@ -285,7 +288,7 @@ function program3(depth0,data) {
   var buffer = "", stack1;
   buffer += "\r\n                            <span>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span>\r\n                        ";
+    + ":</span>\r\n                        ";
   return buffer;
   }
 
@@ -317,11 +320,11 @@ function program7(depth0,data) {
   buffer += "\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.enable_dropdown), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <span>"
+  buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</span>\r\n                    </div>  \r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        "
+    + ":</b>\r\n                    </div>  \r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>\r\n                            "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.TIME_FROM)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeFrom\" name=\"timeFrom\"  min=\"0\" max=\"";
+    + ":\r\n                        </b>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeFrom\" name=\"timeFrom\"  min=\"0\" max=\"";
   if (helper = helpers.timeMaxValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.timeMaxValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -329,9 +332,9 @@ function program7(depth0,data) {
   if (helper = helpers.timeFromDefault) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.timeFromDefault); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">\r\n                        <div class=\"timeFrom-output\"></div>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        "
+    + "\">\r\n                        <div class=\"timeFrom-output\"></div>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>\r\n                            "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.TIME_TO)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeTo\" name=\"timeTo\" min=\"0\" max=\"";
+    + ":\r\n                        </b>\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeTo\" name=\"timeTo\" min=\"0\" max=\"";
   if (helper = helpers.timeMaxValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.timeMaxValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -405,7 +408,7 @@ function program9(depth0,data) {
 function program11(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\r\n        <ul class=\"pagination pagination-sm\">\r\n            <li><a class=\"prev-year\" title=\""
+  buffer += "\r\n        <ul class=\"pagination pagination\">\r\n            <li><a class=\"prev-year\" title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PREVIOUS_YEAR)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"glyphicon glyphicon-fast-backward\"></span></a></li>\r\n            <li><a class=\"prev-month\" title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PREVIOUS_MONTH)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -579,7 +582,7 @@ function program1(depth0,data) {
             this.readAllEvents = function () {
                 var temp = localStorage.getItem('events');
                 try {
-                    if (temp == undefined || temp == undefined) {
+                    if (temp == undefined || temp == null) {
                         throw new Error('temp is undefined');
                     }
 
@@ -1080,7 +1083,7 @@ function program1(depth0,data) {
         };
 
         var _loadEventToModal = function (modal, event) {
-            var dateStr = _formatDate(event.year, event.month, event.day);
+            var dateStr = _formatDate2(event.year, event.month, event.day);
             modal.find('.modalTitleDate').html(dateStr);
             modal.find('.eventDay').val(event.day);
             modal.find('.eventId').val(event.eventId);
@@ -1120,6 +1123,17 @@ function program1(depth0,data) {
         }
 
         var _addPanelEvents = function () {
+            if (_tabbedEventList) {
+                $(_selector + ' #event-tab-btn').click(function () {
+                    var calendarNavigation = $(_selector + ' .calendar-navigation');
+                    calendarNavigation.css('visibility', 'hidden');
+                });
+                $(_selector + ' #calendar-tab-btn').click(function () {
+                    var calendarNavigation = $(_selector + ' .calendar-navigation');
+                    calendarNavigation.css('visibility', 'visible');
+                });
+            }
+
             var panelSelector = '.calendar-panel ';
 
             var renderOnChange = function () {
@@ -1223,11 +1237,21 @@ function program1(depth0,data) {
 
             // Bind event add
             $(_selector).on('click', '.panel-add-event', function () {
+                _openAddModal();
+            });
+
+            var _openAddModal = function (selectedDay) {
                 var modal = $(_modalSelector);
-                var selectedDay = $(_selector).find('.week-day-div.selected');
+
+                if (selectedDay == undefined) {
+                    selectedDay = $(_selector).find('.week-day-div.selected');
+                } else {
+                    selectedDay.addClass('selected');
+                }
+
                 if (selectedDay.length > 0) {
                     var day = $(selectedDay).parent().data('day');
-                    var dateStr = _year + '-' + _month + '-' + day;
+                    var dateStr = _formatDate2(_year, _month, day);
 
                     var dd1 = modal.find('.modalTitleDate');
                     dd1.html(dateStr);
@@ -1237,7 +1261,7 @@ function program1(depth0,data) {
                     _setModalState(modal, 'add');
                     modal.modal('show');
                 }
-            });
+            };
 
             var _openEditModal = function (selectedEvent) {
                 var modal = $(_modalSelector);
@@ -1293,6 +1317,10 @@ function program1(depth0,data) {
                     $(this).addClass('selected');
                 }
             });
+            
+            //$(_selector).on('dblclick', '.week-day-div', function (e) {
+            //    _openAddModal($(this));
+            //});
 
             // On event select
             $(_selector).on('click', '.event', function (e) {
@@ -1846,7 +1874,9 @@ function program1(depth0,data) {
         }
 
         var _loadResources = function (resourceList, withRender) {
-            if (resourceList != undefined && resourceList != null && typeof resourceList == 'Object') {
+            if (resourceList != undefined && resourceList != null && typeof resourceList == 'object') {
+                
+                // TODO: replace all?
                 for (var prop in resourceList) {
                     //if (typeof prop == 'String') {
                         _resources[prop] = resourceList[prop];

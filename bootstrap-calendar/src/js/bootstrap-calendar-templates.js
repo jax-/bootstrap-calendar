@@ -117,9 +117,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n\r\n<ul class=\"nav nav-tabs\">\r\n    <li class=\"active\"><a href=\"#calendar-tab\" data-toggle=\"tab\">"
+  buffer += "\r\n\r\n<ul class=\"nav nav-tabs nav-calendar\">\r\n    <li class=\"active\"><a id=\"calendar-tab-btn\" href=\"#calendar-tab\" data-toggle=\"tab\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.CALENDAR)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</a></li>\r\n    <li><a href=\"#events-tab\" data-toggle=\"tab\">"
+    + "</a></li>\r\n    <li><a id=\"event-tab-btn\" href=\"#events-tab\" data-toggle=\"tab\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</a></li>\r\n</ul>\r\n\r\n<div class=\"tab-content\">\r\n    <div class=\"tab-pane active\" id=\"calendar-tab\">\r\n        <div class=\"calendar-container\"></div>\r\n    </div>\r\n    <div class=\"tab-pane\" id=\"events-tab\">\r\n        <div class=\"event-container\"></div>\r\n    </div>\r\n</div>\r\n\r\n";
   return buffer;
@@ -269,8 +269,11 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
 
 function program1(depth0,data) {
   
-  
-  return "\r\n                            <span>Select person:</span>\r\n                        ";
+  var buffer = "", stack1;
+  buffer += "\r\n                            <b>"
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + ":</b>\r\n                        ";
+  return buffer;
   }
 
 function program3(depth0,data) {
@@ -278,7 +281,7 @@ function program3(depth0,data) {
   var buffer = "", stack1;
   buffer += "\r\n                            <span>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span>\r\n                        ";
+    + ":</span>\r\n                        ";
   return buffer;
   }
 
@@ -310,11 +313,11 @@ function program7(depth0,data) {
   buffer += "\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.enable_dropdown), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <span>"
+  buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</span>\r\n                    </div>  \r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        "
+    + ":</b>\r\n                    </div>  \r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>\r\n                            "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.TIME_FROM)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeFrom\" name=\"timeFrom\"  min=\"0\" max=\"";
+    + ":\r\n                        </b>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeFrom\" name=\"timeFrom\"  min=\"0\" max=\"";
   if (helper = helpers.timeMaxValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.timeMaxValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -322,9 +325,9 @@ function program7(depth0,data) {
   if (helper = helpers.timeFromDefault) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.timeFromDefault); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">\r\n                        <div class=\"timeFrom-output\"></div>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        "
+    + "\">\r\n                        <div class=\"timeFrom-output\"></div>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>\r\n                            "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.TIME_TO)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeTo\" name=\"timeTo\" min=\"0\" max=\"";
+    + ":\r\n                        </b>\r\n                    </div>\r\n\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeTo\" name=\"timeTo\" min=\"0\" max=\"";
   if (helper = helpers.timeMaxValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.timeMaxValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -398,7 +401,7 @@ function program9(depth0,data) {
 function program11(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\r\n        <ul class=\"pagination pagination-sm\">\r\n            <li><a class=\"prev-year\" title=\""
+  buffer += "\r\n        <ul class=\"pagination pagination\">\r\n            <li><a class=\"prev-year\" title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PREVIOUS_YEAR)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"glyphicon glyphicon-fast-backward\"></span></a></li>\r\n            <li><a class=\"prev-month\" title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PREVIOUS_MONTH)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))

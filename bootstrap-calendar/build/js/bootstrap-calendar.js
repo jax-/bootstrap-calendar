@@ -39,16 +39,16 @@ function program1(depth0,data) {
   return buffer;
   }
 
-function program3(depth0,data) {
+function program3(depth0,data,depth1) {
   
   var buffer = "", stack1;
   buffer += "\r\n    <tr class=\"week\">\r\n        ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.days), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.days), {hash:{},inverse:self.noop,fn:self.programWithDepth(4, program4, data, depth1),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    </tr>\r\n    ";
   return buffer;
   }
-function program4(depth0,data) {
+function program4(depth0,data,depth2) {
   
   var buffer = "", stack1, helper;
   buffer += "\r\n        <td class=\"";
@@ -66,7 +66,7 @@ function program4(depth0,data) {
   else { helper = (depth0 && depth0.date_string); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "</span></li>\r\n                    ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.events), {hash:{},inverse:self.noop,fn:self.programWithDepth(9, program9, data, depth0),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.events), {hash:{},inverse:self.noop,fn:self.programWithDepth(9, program9, data, depth0, depth2),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                </ul>\r\n            </div>\r\n        </td>\r\n        ";
   return buffer;
@@ -83,7 +83,7 @@ function program7(depth0,data) {
   return " current ";
   }
 
-function program9(depth0,data,depth1) {
+function program9(depth0,data,depth1,depth3) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\r\n                    <li>\r\n                        <span class=\"event\" data-day=\""
@@ -94,15 +94,25 @@ function program9(depth0,data,depth1) {
   buffer += escapeExpression(stack1)
     + "\" style=\"background-color:"
     + escapeExpression(((stack1 = (depth0 && depth0.color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n                            <span> ("
+    + "; color:"
+    + escapeExpression((helper = helpers.computeTextColor || (depth0 && depth0.computeTextColor),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.color), options) : helperMissing.call(depth0, "computeTextColor", (depth0 && depth0.color), options)))
+    + ";\">\r\n                            <span> ("
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeFrom), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeFrom), options)))
     + " - "
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeTo), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeTo), options)))
-    + ") <br/> "
-    + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " - "
-    + escapeExpression((helper = helpers.formatEventName || (depth0 && depth0.formatEventName),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.eventName), options) : helperMissing.call(depth0, "formatEventName", (depth0 && depth0.eventName), options)))
+    + ") <br/> ";
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth3 && depth3.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += escapeExpression((helper = helpers.formatEventName || (depth0 && depth0.formatEventName),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.eventName), options) : helperMissing.call(depth0, "formatEventName", (depth0 && depth0.eventName), options)))
     + "</span>\r\n                        </span>\r\n                    </li>\r\n                    ";
+  return buffer;
+  }
+function program10(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += " "
+    + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " - ";
   return buffer;
   }
 
@@ -110,7 +120,7 @@ function program9(depth0,data,depth1) {
   stack1 = helpers.each.call(depth0, (depth0 && depth0.weekdays), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n        </tr>\r\n    </thead>\r\n    ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.weeks), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.weeks), {hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n\r\n</table>";
   return buffer;
@@ -139,7 +149,7 @@ function program3(depth0,data) {
   }
 
   buffer += "<div class=\"calendar-alertarea\"></div>\r\n<div class=\"calendar-panel calendar-panel-top\"></div>\r\n";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.tabbedEventList), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.tabbedEventList), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n\r\n<div class=\"calendar-panel calendar-panel-bottom\"></div>\r\n\r\n<div class=\"calendar-loader\"></div> ";
   return buffer;
@@ -162,30 +172,40 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1;
+  buffer += "\r\n                <th>\r\n                    ";
+  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.HEADER_PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                </th>\r\n                ";
+  return buffer;
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = "", stack1;
   buffer += "\r\n                <th>\r\n                    "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ACTIONS)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </th>\r\n                ";
   return buffer;
   }
 
-function program5(depth0,data) {
+function program7(depth0,data) {
   
   
   return "\r\n                <th></th>\r\n                <th></th>\r\n                ";
   }
 
-function program7(depth0,data,depth1) {
+function program9(depth0,data,depth1) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\r\n            <tr class=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\" >\r\n                <td>\r\n                    <div style=\"background-color: ";
   if (helper = helpers.color) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.color); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "; width:18px; height:18px;\"></div>\r\n                </td>\r\n                ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.showId), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.showId), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                <td>\r\n                    "
     + escapeExpression((helper = helpers.formatDate || (depth0 && depth0.formatDate),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options) : helperMissing.call(depth0, "formatDate", (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options)))
@@ -193,23 +213,24 @@ function program7(depth0,data,depth1) {
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeFrom), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeFrom), options)))
     + " - "
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeTo), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeTo), options)))
-    + "\r\n                </td>\r\n                <td>\r\n                    "
-    + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n                </td>\r\n                <td>\r\n                    "
+    + "\r\n                </td>                \r\n                ";
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                <td>\r\n                    "
     + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </td>\r\n                ";
-  stack1 = helpers['if'].call(depth0, (depth1 && depth1.useIcons), {hash:{},inverse:self.program(14, program14, data),fn:self.program(12, program12, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.program(18, program18, data),fn:self.program(16, program16, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n            </tr>\r\n            ";
   return buffer;
   }
-function program8(depth0,data) {
+function program10(depth0,data) {
   
   
   return "warning";
   }
 
-function program10(depth0,data) {
+function program12(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <td>\r\n                    "
@@ -218,7 +239,16 @@ function program10(depth0,data) {
   return buffer;
   }
 
-function program12(depth0,data) {
+function program14(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                <td>\r\n                    "
+    + escapeExpression(((stack1 = (depth0 && depth0.personName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </td>            \r\n                ";
+  return buffer;
+  }
+
+function program16(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <td>\r\n                    <a href=\"#\" class=\"edit-event2\" data-eventid=\""
@@ -229,7 +259,7 @@ function program12(depth0,data) {
   return buffer;
   }
 
-function program14(depth0,data) {
+function program18(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <td>\r\n                    <a href=\"#\" class=\"edit-event2\" data-eventid=\""
@@ -247,23 +277,23 @@ function program14(depth0,data) {
   buffer += "<div class=\"event-list\">\r\n    <h3>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>#</th>\r\n                ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.showId), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.showId), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                <th>\r\n                    "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.DATE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </th>\r\n                <th>\r\n                    "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.TIME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n                </th>\r\n                <th>\r\n                    ";
-  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.HEADER_PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+    + "\r\n                </th>\r\n                ";
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                </th>\r\n                <th>\r\n                    ";
+  buffer += "\r\n                <th>\r\n                    ";
   stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.HEADER_EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                </th>\r\n                ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.useIcons), {hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.events), {hash:{},inverse:self.noop,fn:self.programWithDepth(7, program7, data, depth0),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.events), {hash:{},inverse:self.noop,fn:self.programWithDepth(9, program9, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n        </tbody>\r\n    </table>\r\n</div>";
   return buffer;
@@ -272,27 +302,20 @@ function program14(depth0,data) {
 this["CalendarTemplates"]["eventModal"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, helper, self=this, functionType="function", escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n                            <b>"
+  buffer += "\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</b>\r\n                        ";
+    + ":</b>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.enable_dropdown), {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                    </div>\r\n                </div>\r\n                ";
   return buffer;
   }
-
-function program3(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n                            <span>"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":</span>\r\n                        ";
-  return buffer;
-  }
-
-function program5(depth0,data) {
+function program2(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                            ";
@@ -302,7 +325,7 @@ function program5(depth0,data) {
   return buffer;
   }
 
-function program7(depth0,data) {
+function program4(depth0,data) {
   
   
   return "\r\n                            <input class=\"personId form-control\"> \r\n                        ";
@@ -314,17 +337,14 @@ function program7(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.MODAL_TITLE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " <span class=\"modalTitleDate\"></span></h4>\r\n            </div>\r\n            <div class=\"modal-body\">\r\n                <p>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.MODAL_BODY)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</p>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.enable_dropdown), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+    + "</p>\r\n\r\n                ";
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.enable_dropdown), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>"
+  buffer += "\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + ":</b>\r\n                    </div>  \r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <textarea maxlength=\"500\" rows=\"4\" class=\"eventName form-control\" />\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>\r\n                            "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.TIME_FROM)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ":\r\n                        </b>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeFrom\" name=\"timeFrom\"  min=\"0\" max=\"";
+    + ":\r\n                        </b>    \r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        <input type=\"range\" class=\"timeFrom\" name=\"timeFrom\"  min=\"0\" max=\"";
   if (helper = helpers.timeMaxValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.timeMaxValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -389,17 +409,17 @@ function program7(depth0,data) {
 function program9(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\r\n        <button class=\"btn btn-nav btn-default prev-year btn-lg\" title=\""
+  buffer += "\r\n        <button type=\"button\" class=\"btn btn-nav btn-default prev-year btn-lg\" title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PREVIOUS_YEAR)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\"><<</button>\r\n        <button class=\"btn btn-nav btn-default prev-month btn-lg\" title=\""
+    + "\"><<</button>\r\n        <button type=\"button\" class=\"btn btn-nav btn-default prev-month btn-lg\" title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PREVIOUS_MONTH)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><</button>\r\n\r\n        <h2 style=\"display:inline-block; padding: 0 0; margin: 0 0;\">\r\n            <span class=\"label label-primary label-lg currentYearMonth\">";
   if (helper = helpers.currentYearMonth) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.currentYearMonth); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\r\n        </h2>\r\n\r\n        <button class=\"btn btn-nav btn-default next-month btn-lg\" title=\""
+    + "</span>\r\n        </h2>\r\n\r\n        <button type=\"button\" class=\"btn btn-nav btn-default next-month btn-lg\" title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.NEXT_MONTH)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">></button>\r\n        <button class=\"btn btn-nav btn-default next-year btn-lg\" title=\""
+    + "\">></button>\r\n        <button type=\"button\" class=\"btn btn-nav btn-default next-year btn-lg\" title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.NEXT_YEAR)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">>></button>\r\n        ";
   return buffer;
@@ -424,23 +444,23 @@ function program11(depth0,data) {
   return buffer;
   }
 
-  buffer += "<div class=\"calendar-panel calendar-nav-panel \">\r\n    <div class=\"pull-left calendar-buttons\">\r\n        <button class=\"btn btn-primary disabled panel-add-event\">";
+  buffer += "<div class=\"calendar-panel calendar-nav-panel \">\r\n    <div class=\"pull-left calendar-buttons\">\r\n        <button type=\"button\" class=\"btn btn-primary disabled panel-add-event\">";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.useIcons), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ADD_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</button>\r\n        <button class=\"btn btn-primary disabled panel-edit-event\">";
+    + "</button>\r\n        <button type=\"button\" class=\"btn btn-primary disabled panel-edit-event\">";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.useIcons), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</button>\r\n        <button class=\"btn btn-primary disabled panel-remove-event\">";
+    + "</button>\r\n        <button type=\"button\" class=\"btn btn-primary disabled panel-remove-event\">";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.useIcons), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.REMOVE_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\r\n\r\n        ";
-  stack1 = helpers.unless.call(depth0, (depth0 && depth0.autosave), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.autosave), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    </div>\r\n    <div class=\"pull-right calendar-navigation\">\r\n        ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.navAltVersion), {hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.navAltVersion), {hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    </div>\r\n\r\n    <div style=\"clear:both;\"></div>\r\n</div>\r\n";
   return buffer;
@@ -542,13 +562,20 @@ function program1(depth0,data) {
         var _templates = undefined;
         var _panelPosition = 'top';
         var _calendarContainer = '';
-        var _showEventList = true;
         var _modalSelector = '#calendarEventModal';
-        var _autosave = false;
-        var _useIcons = true;
-        var _navAltVersion = false;
-        var _tabbedEventList = false;
-        var _useNameInSelect = false;
+        var _usePerson = undefined;
+
+        var CONFIG = {
+            hideAttendee: false,
+            useIcons: true,
+            showId: false,
+            autosave: false,
+            navAltVersion: false,
+            enable_dropdown: true,
+            tabbedEventList: false,
+            useNameInSelect: false,
+            showEventList: true,
+        };
 
         // Filters
         var _filterByMonth = false;
@@ -662,7 +689,7 @@ function program1(depth0,data) {
                     contentType: 'application/json',
                     data: dataToSend,
                     success: function (dt) {
-                        if (!_autosave) {
+                        if (!CONFIG.autosave) {
                             _showAlert(_resources.EVENTS_SAVED, 'success');
                         }
 
@@ -863,7 +890,46 @@ function program1(depth0,data) {
             Handlebars.registerHelper('formatDate', _formatDate2);
             Handlebars.registerHelper('formatEventName', _formatEventName);
             Handlebars.registerHelper('formatTime', _formatTime);
+            Handlebars.registerHelper('computeTextColor', _computeTextColor);
         };
+
+        var _computeTextColor = function (bg_color) {
+            var hexToDec = function(num) {
+                if (num.length == 1) {
+                    switch (num) {
+                        case 'A':
+                            return 10;
+                        case 'B':
+                            return 11;
+                        case 'C':
+                            return 12;
+                        case 'D':
+                            return 13;
+                        case 'E':
+                            return 14;
+                        case 'F':
+                            return 15;
+                        default:
+                            return parseInt(num);
+                    }
+                } else {
+                    return 0;
+                }
+            }
+
+            // todo: errors
+            var r = hexToDec(bg_color[1]) * 16 + hexToDec(bg_color[2]) * 1;
+            var g = hexToDec(bg_color[3]) * 16 + hexToDec(bg_color[4]) * 1;
+            var b = hexToDec(bg_color[5]) * 16 + hexToDec(bg_color[6]) * 1;
+
+            var sum = r + g + b;
+
+            if (sum < 450) {
+                return '#EFEFEF';
+            } else {
+                return '#020202';
+            }
+        }
 
         /**
          * Initializes calendar object
@@ -943,11 +1009,17 @@ function program1(depth0,data) {
                     }
                 }
 
+                // Use calendar for only one person
+                if (typeof o.usePerson == 'object') {
+                    _usePerson = o.usePerson;
+                    CONFIG.hideAttendee = true;
+                }
+
                 // Event list
                 if (o.showEventList != undefined) {
                     if (o.showEventList == true ||
                         o.showEventList == false) {
-                        _showEventList = o.showEventList;
+                        CONFIG.showEventList = o.showEventList;
                     }
                 }
 
@@ -958,10 +1030,10 @@ function program1(depth0,data) {
                     return source;
                 }
 
-                _autosave = _booleanOrFalse(o.autosave);
-                _navAltVersion = _booleanOrFalse(o.navAltVersion);
-                _tabbedEventList = _booleanOrFalse(o.tabbedEventList);
-                _useNameInSelect = _booleanOrFalse(o.useNameInSelect);
+                CONFIG.autosave = _booleanOrFalse(o.autosave);
+                CONFIG.navAltVersion = _booleanOrFalse(o.navAltVersion);
+                CONFIG.tabbedEventList = _booleanOrFalse(o.tabbedEventList);
+                CONFIG.useNameInSelect = _booleanOrFalse(o.useNameInSelect);
             }
             else {
                 throw new Error('Invalid options');
@@ -1013,7 +1085,7 @@ function program1(depth0,data) {
         var _createContainer = function() {
             var data = {
                 RESOURCES: _resources,
-                tabbedEventList: _tabbedEventList,
+                CONFIG: CONFIG,
             }
             var html = _templates.calendarContainer(data);
 
@@ -1024,8 +1096,8 @@ function program1(depth0,data) {
         var _createModal = function () {
             var data = {
                 RESOURCES: _resources,
-                enable_dropdown: true,
                 people: _people,
+                CONFIG: CONFIG,
             };
 
             data.add = true;
@@ -1043,10 +1115,8 @@ function program1(depth0,data) {
             var currentYearMonth = _formatMonthYearFriendly(_year, _month);
             var data = {
                 currentYearMonth: currentYearMonth,
-                useIcons: _useIcons,
-                autosave: _autosave,
+                CONFIG: CONFIG,
                 RESOURCES: _resources,
-                navAltVersion: _navAltVersion,
             };
             var html = _templates.navpanel(data);
 
@@ -1058,7 +1128,7 @@ function program1(depth0,data) {
 
             // Initialize tooltips
             if ($.fn.tooltip != undefined) {
-                if (_navAltVersion) {
+                if (CONFIG.navAltVersion) {
                     $(_selector + ' .calendar-navigation button.btn-nav').tooltip();
                 } else {
                     $(_selector + ' .calendar-navigation .pagination a').tooltip();
@@ -1068,7 +1138,7 @@ function program1(depth0,data) {
 
         var _isAutosave = function () {
             // If autosave was explicitly set to true then don't take autosave checkbox value
-            if (_autosave) {
+            if (CONFIG.autosave) {
                 return true;
             }
             else {
@@ -1088,11 +1158,11 @@ function program1(depth0,data) {
             modal.find('.eventDay').val(event.day);
             modal.find('.eventId').val(event.eventId);
 
-            var personInput = modal.find('.personId');
-            if (_useNameInSelect) {
-                personInput.val(event.personName);
-            } else {
-                personInput.val(event.personId);
+            var personInput = modal.find('select.personId');
+            personInput.val(event.personId);
+            var inp = modal.find('input.personId');
+            if (inp != undefined) {
+                inp.val(event.personName);
             }
 
             var timeFrom = modal.find('.timeFrom');
@@ -1123,7 +1193,7 @@ function program1(depth0,data) {
         }
 
         var _addPanelEvents = function () {
-            if (_tabbedEventList) {
+            if (CONFIG.tabbedEventList) {
                 $(_selector + ' #event-tab-btn').click(function () {
                     var calendarNavigation = $(_selector + ' .calendar-navigation');
                     calendarNavigation.css('visibility', 'hidden');
@@ -1175,14 +1245,42 @@ function program1(depth0,data) {
             $(panelSelector + '.next-year').click(function () {
                 changeYear(1);
             });
+            
+            var validateTime = function (timeFrom, timeTo) {
+                if (parseInt(timeFrom) > parseInt(timeTo))
+                    return false;
+
+                return true;
+            }
+
+            var cleanUpModal = function (modal) {
+                var personInput = modal.find('.personId');
+                var eventInput = modal.find('.eventName');
+
+                // clear
+                if (personInput != undefined) {
+                    personInput.val('');
+                }
+                eventInput.val('');
+
+                eventInput.removeClass('input-validation-error');
+            }
 
             var addNewEvent = function (day) {
                 var modal = $(_modalSelector);
 
-                var personInput = modal.find('.personId');
+                var personInput = modal.find('select.personId');
                 var eventInput = modal.find('.eventName');
-                var personId = personInput.val();
-                var personName = modal.find('.personId option:selected').text();
+                var personId;
+                var personName;
+                
+                if (CONFIG.hideAttendee) {
+                    personId = _usePerson.personId;
+                    personName = _usePerson.personName;
+                } else {
+                    personId = personInput.val();
+                    personName = modal.find('.personId option:selected').text();
+                }
 
                 var timeFrom = modal.find('.timeFrom');
                 var timeTo = modal.find('.timeTo');
@@ -1194,45 +1292,66 @@ function program1(depth0,data) {
                     return false;
                 }
                 if (event == undefined || event == '') {
+                    eventInput.addClass('input-validation-error');
                     return false;
                 }
-                
-                _addEvent(_year, _month, day, personId, personName, event, undefined, timeFrom.val(), timeTo.val());
-                _render();
 
-                // clear
-                personInput.val('');
-                eventInput.val('');
+                var timeFromVal = timeFrom.val();
+                var timeToVal = timeTo.val();
+                if (validateTime(timeFromVal, timeToVal)) {
+                    _addEvent(_year, _month, day, personId, personName, event, undefined, timeFromVal, timeToVal);
+                    _render();
 
+                    cleanUpModal(modal);
+                }
                 return true;
             };
 
             var editEvent = function (modal, event) {
-                var personId = modal.find('.personId').val();
+                var personId;
+                var personName;
+                if (CONFIG.hideAttendee) {
+                    personId = _usePerson.personId;
+                    personName = _usePerson.personName;
+                } else {
+                    personId = modal.find('select.personId').val();
+                    personName = modal.find('select.personId option:selected').text();
+                }
+                var eventId = modal.find('.eventId').val();
                 var eventName = modal.find('.eventName').val();
 
                 // Validate
                 if (personId == undefined || personId == '') {
                     return false;
                 }
-                if (event == undefined || event == '') {
+                if (event == undefined || String(event).trim() == '') {
+                    eventInput.addClass('input-validation-error');
                     return false;
                 }
 
-                event.eventId = modal.find('.eventId').val();
-                event.personId = personId;
-                event.personName = modal.find('.personId option:selected').text();
-                event.timeFrom = modal.find('.timeFrom').val();
-                event.timeTo = modal.find('.timeTo').val();
-                event.eventName = eventName;
-                event.unsaved = true;
+                var timeFromVal = modal.find('.timeFrom').val();
+                var timeToVal = modal.find('.timeTo').val();
 
-                _eventsToEdit.push(event);
+                if (validateTime(timeFromVal, timeToVal)) {
+                    event.eventId = eventId;
+                    event.personId = personId;
+                    event.personName = personName;
+                    event.timeFrom = timeFromVal;
+                    event.timeTo = timeToVal;
+                    event.eventName = eventName;
+                    event.unsaved = true;
+                        
+                    _eventsToEdit.push(event);
 
-                if (_isAutosave()) {
-                    _saveEvents();
+                    if (_isAutosave()) {
+                        _saveEvents();
+                    }
+
+                    cleanUpModal(modal);
+                    return true;
                 }
-                return true;
+
+                return false;
             };
 
             // Bind event add
@@ -1242,6 +1361,8 @@ function program1(depth0,data) {
 
             var _openAddModal = function (selectedDay) {
                 var modal = $(_modalSelector);
+
+                cleanUpModal(modal);
 
                 if (selectedDay == undefined) {
                     selectedDay = $(_selector).find('.week-day-div.selected');
@@ -1743,7 +1864,7 @@ function program1(depth0,data) {
         /*****************************************
          * Element rendering functions
          */
-        var _render = function () {
+        var _render = function (callback) {
             var args = new Array();
             if (arguments.length == 0) {
                 args = ['calendar', 'events', 'label']
@@ -1768,8 +1889,8 @@ function program1(depth0,data) {
                 _renderEventList();
             }
 
-            if (_renderCallback != null) {
-                _renderCallback();
+            if (callback != undefined && typeof callback == 'function') {
+                callback();
             }
         };
 
@@ -1794,14 +1915,14 @@ function program1(depth0,data) {
             var data = {
                 weekdays: _weekDays,
                 weeks: eventData,
+                CONFIG: CONFIG,
             };
             var calendarHtml = _templates.calendar(data);
             container.html(calendarHtml);
         };
 
         var _renderEventList = function () {
-            if (_showEventList) {
-
+            if (CONFIG.showEventList) {
                 var evData = null;
                 if (_filterByMonth) {
                     evData = _getEventsForMonth(_year, _month);
@@ -1811,9 +1932,8 @@ function program1(depth0,data) {
 
                 var data = {
                     events: evData,
-                    useIcons: _useIcons,
-                    showId: false,
                     RESOURCES: _resources,
+                    CONFIG: CONFIG,
                 };
 
                 var eventListHtml = _templates.eventList(data);

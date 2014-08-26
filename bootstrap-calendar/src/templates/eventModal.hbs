@@ -8,22 +8,20 @@
             <div class="modal-body">
                 <p>{{RESOURCES.MODAL_BODY}}</p>
 
+                {{#unless CONFIG.hideAttendee}}
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
-                        {{#if enable_dropdown}}
-                            <b>{{RESOURCES.PERSON_NAME}}:</b>
-                        {{else}}
-                            <span>{{RESOURCES.PERSON_NAME}}:</span>
-                        {{/if}}
+                        <b>{{RESOURCES.PERSON_NAME}}:</b>
                     </div>
                     <div class="col-md-7 col-lg-7">
-                        {{#if enable_dropdown}}
+                        {{#if CONFIG.enable_dropdown}}
                             {{> selectPartial}}
                         {{else}}
                             <input class="personId form-control"> 
                         {{/if}}
                     </div>
                 </div>
+                {{/unless}}
 
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
@@ -38,7 +36,7 @@
                     <div class="col-md-5 col-lg-5">
                         <b>
                             {{RESOURCES.TIME_FROM}}:
-                        </b>
+                        </b>    
                     </div>
                     <div class="col-md-7 col-lg-7">
                         <input type="range" class="timeFrom" name="timeFrom"  min="0" max="{{timeMaxValue}}" value="{{timeFromDefault}}">

@@ -30,6 +30,9 @@ table.calendar tbody td.week-day > div.current {
 table.calendar tbody td.week-day > div.current:hover {
   background-color: #80c4ff;
 }
+table.calendar tbody td.week-day > div.current .date {
+  color: black;
+}
 table.calendar tbody td.week-day > div:hover {
   background-color: #f3f3f3;
   cursor: pointer;

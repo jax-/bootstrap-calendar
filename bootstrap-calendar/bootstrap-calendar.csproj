@@ -52,9 +52,9 @@
     <None Include="package.json" />
     <None Include="src\templates\alert.hbs" />
     <None Include="src\templates\calendarContainer.hbs" />
+    <None Include="src\templates\eventList.hbs" />
     <None Include="src\templates\eventModal.hbs" />
     <None Include="src\templates\calendar.hbs" />
-    <None Include="src\templates\events.hbs" />
     <None Include="src\templates\navpanel.hbs" />
     <None Include="src\templates\selectPartial.hbs" />
   </ItemGroup>

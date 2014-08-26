@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 <th>#</th>
-                {{#if showId}}
+                {{#if CONFIG.showId }}
                 <th>
                     {{RESOURCES.ID}}
                 </th>
@@ -15,13 +15,15 @@
                 <th>
                     {{RESOURCES.TIME}}
                 </th>
+                {{#unless CONFIG.hideAttendee}}
                 <th>
                     {{{RESOURCES.HEADER_PERSON_NAME}}}
                 </th>
+                {{/unless}}
                 <th>
                     {{{RESOURCES.HEADER_EVENT_NAME}}}
                 </th>
-                {{#if useIcons}}
+                {{#if CONFIG.useIcons}}
                 <th>
                     {{RESOURCES.ACTIONS}}
                 </th>
@@ -37,7 +39,7 @@
                 <td>
                     <div style="background-color: {{color}}; width:18px; height:18px;"></div>
                 </td>
-                {{#if showId}}
+                {{#if CONFIG.showId}}
                 <td>
                     {{this.eventId}}
                 </td>
@@ -47,14 +49,16 @@
                 </td>
                 <td>
                     {{formatTime this.timeFrom}} - {{formatTime this.timeTo}}
-                </td>
+                </td>                
+                {{#unless ../CONFIG.hideAttendee}}
                 <td>
                     {{this.personName}}
-                </td>
+                </td>            
+                {{/unless}}
                 <td>
                     {{this.eventName}}
                 </td>
-                {{#if ../useIcons}}
+                {{#if ../CONFIG.useIcons}}
                 <td>
                     <a href="#" class="edit-event2" data-eventid="{{this.eventId}}"><span class="glyphicon glyphicon-pencil"></span></a>
                     <a href="#" class="remove-event2" data-eventid="{{this.eventId}}"><span class="glyphicon glyphicon-remove"></span></a>

@@ -68,13 +68,20 @@
         var _templates = undefined;
         var _panelPosition = 'top';
         var _calendarContainer = '';
-        var _showEventList = true;
         var _modalSelector = '#calendarEventModal';
-        var _autosave = false;
-        var _useIcons = true;
-        var _navAltVersion = false;
-        var _tabbedEventList = false;
-        var _useNameInSelect = false;
+        var _usePerson = undefined;
+
+        var CONFIG = {
+            hideAttendee: false,
+            useIcons: true,
+            showId: false,
+            autosave: false,
+            navAltVersion: false,
+            enable_dropdown: true,
+            tabbedEventList: false,
+            useNameInSelect: false,
+            showEventList: true,
+        };
 
         // Filters
         var _filterByMonth = false;
@@ -188,7 +195,7 @@
                     contentType: 'application/json',
                     data: dataToSend,
                     success: function (dt) {
-                        if (!_autosave) {
+                        if (!CONFIG.autosave) {
                             _showAlert(_resources.EVENTS_SAVED, 'success');
                         }
 
@@ -389,7 +396,46 @@
             Handlebars.registerHelper('formatDate', _formatDate2);
             Handlebars.registerHelper('formatEventName', _formatEventName);
             Handlebars.registerHelper('formatTime', _formatTime);
+            Handlebars.registerHelper('computeTextColor', _computeTextColor);
         };
+
+        var _computeTextColor = function (bg_color) {
+            var hexToDec = function(num) {
+                if (num.length == 1) {
+                    switch (num) {
+                        case 'A':
+                            return 10;
+                        case 'B':
+                            return 11;
+                        case 'C':
+                            return 12;
+                        case 'D':
+                            return 13;
+                        case 'E':
+                            return 14;
+                        case 'F':
+                            return 15;
+                        default:
+                            return parseInt(num);
+                    }
+                } else {
+                    return 0;
+                }
+            }
+
+            // todo: errors
+            var r = hexToDec(bg_color[1]) * 16 + hexToDec(bg_color[2]) * 1;
+            var g = hexToDec(bg_color[3]) * 16 + hexToDec(bg_color[4]) * 1;
+            var b = hexToDec(bg_color[5]) * 16 + hexToDec(bg_color[6]) * 1;
+
+            var sum = r + g + b;
+
+            if (sum < 450) {
+                return '#EFEFEF';
+            } else {
+                return '#020202';
+            }
+        }
 
         /**
          * Initializes calendar object
@@ -469,11 +515,17 @@
                     }
                 }
 
+                // Use calendar for only one person
+                if (typeof o.usePerson == 'object') {
+                    _usePerson = o.usePerson;
+                    CONFIG.hideAttendee = true;
+                }
+
                 // Event list
                 if (o.showEventList != undefined) {
                     if (o.showEventList == true ||
                         o.showEventList == false) {
-                        _showEventList = o.showEventList;
+                        CONFIG.showEventList = o.showEventList;
                     }
                 }
 
@@ -484,10 +536,10 @@
                     return source;
                 }
 
-                _autosave = _booleanOrFalse(o.autosave);
-                _navAltVersion = _booleanOrFalse(o.navAltVersion);
-                _tabbedEventList = _booleanOrFalse(o.tabbedEventList);
-                _useNameInSelect = _booleanOrFalse(o.useNameInSelect);
+                CONFIG.autosave = _booleanOrFalse(o.autosave);
+                CONFIG.navAltVersion = _booleanOrFalse(o.navAltVersion);
+                CONFIG.tabbedEventList = _booleanOrFalse(o.tabbedEventList);
+                CONFIG.useNameInSelect = _booleanOrFalse(o.useNameInSelect);
             }
             else {
                 throw new Error('Invalid options');
@@ -539,7 +591,7 @@
         var _createContainer = function() {
             var data = {
                 RESOURCES: _resources,
-                tabbedEventList: _tabbedEventList,
+                CONFIG: CONFIG,
             }
             var html = _templates.calendarContainer(data);
 
@@ -550,8 +602,8 @@
         var _createModal = function () {
             var data = {
                 RESOURCES: _resources,
-                enable_dropdown: true,
                 people: _people,
+                CONFIG: CONFIG,
             };
 
             data.add = true;
@@ -569,10 +621,8 @@
             var currentYearMonth = _formatMonthYearFriendly(_year, _month);
             var data = {
                 currentYearMonth: currentYearMonth,
-                useIcons: _useIcons,
-                autosave: _autosave,
+                CONFIG: CONFIG,
                 RESOURCES: _resources,
-                navAltVersion: _navAltVersion,
             };
             var html = _templates.navpanel(data);
 
@@ -584,7 +634,7 @@
 
             // Initialize tooltips
             if ($.fn.tooltip != undefined) {
-                if (_navAltVersion) {
+                if (CONFIG.navAltVersion) {
                     $(_selector + ' .calendar-navigation button.btn-nav').tooltip();
                 } else {
                     $(_selector + ' .calendar-navigation .pagination a').tooltip();
@@ -594,7 +644,7 @@
 
         var _isAutosave = function () {
             // If autosave was explicitly set to true then don't take autosave checkbox value
-            if (_autosave) {
+            if (CONFIG.autosave) {
                 return true;
             }
             else {
@@ -614,11 +664,11 @@
             modal.find('.eventDay').val(event.day);
             modal.find('.eventId').val(event.eventId);
 
-            var personInput = modal.find('.personId');
-            if (_useNameInSelect) {
-                personInput.val(event.personName);
-            } else {
-                personInput.val(event.personId);
+            var personInput = modal.find('select.personId');
+            personInput.val(event.personId);
+            var inp = modal.find('input.personId');
+            if (inp != undefined) {
+                inp.val(event.personName);
             }
 
             var timeFrom = modal.find('.timeFrom');
@@ -649,7 +699,7 @@
         }
 
         var _addPanelEvents = function () {
-            if (_tabbedEventList) {
+            if (CONFIG.tabbedEventList) {
                 $(_selector + ' #event-tab-btn').click(function () {
                     var calendarNavigation = $(_selector + ' .calendar-navigation');
                     calendarNavigation.css('visibility', 'hidden');
@@ -701,14 +751,42 @@
             $(panelSelector + '.next-year').click(function () {
                 changeYear(1);
             });
+            
+            var validateTime = function (timeFrom, timeTo) {
+                if (parseInt(timeFrom) > parseInt(timeTo))
+                    return false;
+
+                return true;
+            }
+
+            var cleanUpModal = function (modal) {
+                var personInput = modal.find('.personId');
+                var eventInput = modal.find('.eventName');
+
+                // clear
+                if (personInput != undefined) {
+                    personInput.val('');
+                }
+                eventInput.val('');
+
+                eventInput.removeClass('input-validation-error');
+            }
 
             var addNewEvent = function (day) {
                 var modal = $(_modalSelector);
 
-                var personInput = modal.find('.personId');
+                var personInput = modal.find('select.personId');
                 var eventInput = modal.find('.eventName');
-                var personId = personInput.val();
-                var personName = modal.find('.personId option:selected').text();
+                var personId;
+                var personName;
+                
+                if (CONFIG.hideAttendee) {
+                    personId = _usePerson.personId;
+                    personName = _usePerson.personName;
+                } else {
+                    personId = personInput.val();
+                    personName = modal.find('.personId option:selected').text();
+                }
 
                 var timeFrom = modal.find('.timeFrom');
                 var timeTo = modal.find('.timeTo');
@@ -720,45 +798,66 @@
                     return false;
                 }
                 if (event == undefined || event == '') {
+                    eventInput.addClass('input-validation-error');
                     return false;
                 }
-                
-                _addEvent(_year, _month, day, personId, personName, event, undefined, timeFrom.val(), timeTo.val());
-                _render();
 
-                // clear
-                personInput.val('');
-                eventInput.val('');
+                var timeFromVal = timeFrom.val();
+                var timeToVal = timeTo.val();
+                if (validateTime(timeFromVal, timeToVal)) {
+                    _addEvent(_year, _month, day, personId, personName, event, undefined, timeFromVal, timeToVal);
+                    _render();
 
+                    cleanUpModal(modal);
+                }
                 return true;
             };
 
             var editEvent = function (modal, event) {
-                var personId = modal.find('.personId').val();
+                var personId;
+                var personName;
+                if (CONFIG.hideAttendee) {
+                    personId = _usePerson.personId;
+                    personName = _usePerson.personName;
+                } else {
+                    personId = modal.find('select.personId').val();
+                    personName = modal.find('select.personId option:selected').text();
+                }
+                var eventId = modal.find('.eventId').val();
                 var eventName = modal.find('.eventName').val();
 
                 // Validate
                 if (personId == undefined || personId == '') {
                     return false;
                 }
-                if (event == undefined || event == '') {
+                if (event == undefined || String(event).trim() == '') {
+                    eventInput.addClass('input-validation-error');
                     return false;
                 }
 
-                event.eventId = modal.find('.eventId').val();
-                event.personId = personId;
-                event.personName = modal.find('.personId option:selected').text();
-                event.timeFrom = modal.find('.timeFrom').val();
-                event.timeTo = modal.find('.timeTo').val();
-                event.eventName = eventName;
-                event.unsaved = true;
+                var timeFromVal = modal.find('.timeFrom').val();
+                var timeToVal = modal.find('.timeTo').val();
 
-                _eventsToEdit.push(event);
+                if (validateTime(timeFromVal, timeToVal)) {
+                    event.eventId = eventId;
+                    event.personId = personId;
+                    event.personName = personName;
+                    event.timeFrom = timeFromVal;
+                    event.timeTo = timeToVal;
+                    event.eventName = eventName;
+                    event.unsaved = true;
+                        
+                    _eventsToEdit.push(event);
 
-                if (_isAutosave()) {
-                    _saveEvents();
+                    if (_isAutosave()) {
+                        _saveEvents();
+                    }
+
+                    cleanUpModal(modal);
+                    return true;
                 }
-                return true;
+
+                return false;
             };
 
             // Bind event add
@@ -768,6 +867,8 @@
 
             var _openAddModal = function (selectedDay) {
                 var modal = $(_modalSelector);
+
+                cleanUpModal(modal);
 
                 if (selectedDay == undefined) {
                     selectedDay = $(_selector).find('.week-day-div.selected');
@@ -1269,7 +1370,7 @@
         /*****************************************
          * Element rendering functions
          */
-        var _render = function () {
+        var _render = function (callback) {
             var args = new Array();
             if (arguments.length == 0) {
                 args = ['calendar', 'events', 'label']
@@ -1294,8 +1395,8 @@
                 _renderEventList();
             }
 
-            if (_renderCallback != null) {
-                _renderCallback();
+            if (callback != undefined && typeof callback == 'function') {
+                callback();
             }
         };
 
@@ -1320,14 +1421,14 @@
             var data = {
                 weekdays: _weekDays,
                 weeks: eventData,
+                CONFIG: CONFIG,
             };
             var calendarHtml = _templates.calendar(data);
             container.html(calendarHtml);
         };
 
         var _renderEventList = function () {
-            if (_showEventList) {
-
+            if (CONFIG.showEventList) {
                 var evData = null;
                 if (_filterByMonth) {
                     evData = _getEventsForMonth(_year, _month);
@@ -1337,9 +1438,8 @@
 
                 var data = {
                     events: evData,
-                    useIcons: _useIcons,
-                    showId: false,
                     RESOURCES: _resources,
+                    CONFIG: CONFIG,
                 };
 
                 var eventListHtml = _templates.eventList(data);

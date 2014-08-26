@@ -664,6 +664,8 @@
             modal.find('.eventDay').val(event.day);
             modal.find('.eventId').val(event.eventId);
 
+            modal.find('.eventName').val(event.eventName);
+
             var personInput = modal.find('select.personId');
             personInput.val(event.personId);
             var inp = modal.find('input.personId');

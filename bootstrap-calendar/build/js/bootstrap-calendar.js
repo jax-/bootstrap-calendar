@@ -86,7 +86,9 @@ function program7(depth0,data) {
 function program9(depth0,data,depth1,depth3) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\r\n                    <li>\r\n                        <span class=\"event\" data-day=\""
+  buffer += "\r\n                    <li>\r\n                        <span class=\"event "
+    + escapeExpression((helper = helpers.computeTextColorClass || (depth0 && depth0.computeTextColorClass),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.color), options) : helperMissing.call(depth0, "computeTextColorClass", (depth0 && depth0.color), options)))
+    + "\" data-day=\""
     + escapeExpression(((stack1 = (depth1 && depth1.dayValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-eventid=\"";
   if (helper = helpers.eventId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -94,13 +96,11 @@ function program9(depth0,data,depth1,depth3) {
   buffer += escapeExpression(stack1)
     + "\" style=\"background-color:"
     + escapeExpression(((stack1 = (depth0 && depth0.color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "; color:"
-    + escapeExpression((helper = helpers.computeTextColor || (depth0 && depth0.computeTextColor),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.color), options) : helperMissing.call(depth0, "computeTextColor", (depth0 && depth0.color), options)))
     + ";\">\r\n                            <span> ("
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeFrom), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeFrom), options)))
     + " - "
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeTo), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeTo), options)))
-    + ") <br/> ";
+    + ") <br /> ";
   stack1 = helpers.unless.call(depth0, ((stack1 = (depth3 && depth3.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += escapeExpression((helper = helpers.formatEventName || (depth0 && depth0.formatEventName),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.eventName), options) : helperMissing.call(depth0, "formatEventName", (depth0 && depth0.eventName), options)))
@@ -890,44 +890,49 @@ function program1(depth0,data) {
             Handlebars.registerHelper('formatDate', _formatDate2);
             Handlebars.registerHelper('formatEventName', _formatEventName);
             Handlebars.registerHelper('formatTime', _formatTime);
-            Handlebars.registerHelper('computeTextColor', _computeTextColor);
+            Handlebars.registerHelper('computeTextColorClass', _computeTextColorClass);
         };
 
-        var _computeTextColor = function (bg_color) {
-            var hexToDec = function(num) {
-                if (num.length == 1) {
-                    switch (num) {
-                        case 'A':
-                            return 10;
-                        case 'B':
-                            return 11;
-                        case 'C':
-                            return 12;
-                        case 'D':
-                            return 13;
-                        case 'E':
-                            return 14;
-                        case 'F':
-                            return 15;
-                        default:
-                            return parseInt(num);
+        var _computeTextColorClass = function (bg_color) {
+            try {
+                var hexToDec = function (num) {
+                    if (num.length == 1) {
+                        switch (num) {
+                            case 'A':
+                                return 10;
+                            case 'B':
+                                return 11;
+                            case 'C':
+                                return 12;
+                            case 'D':
+                                return 13;
+                            case 'E':
+                                return 14;
+                            case 'F':
+                                return 15;
+                            default:
+                                return parseInt(num);
+                        }
+                    } else {
+                        return 0;
                     }
+                }
+
+                // todo: errors
+                var r = hexToDec(bg_color[1]) * 16 + hexToDec(bg_color[2]) * 1;
+                var g = hexToDec(bg_color[3]) * 16 + hexToDec(bg_color[4]) * 1;
+                var b = hexToDec(bg_color[5]) * 16 + hexToDec(bg_color[6]) * 1;
+
+                var sum = r + g + b;
+
+                if (sum < 450) {
+                    return 'light';
                 } else {
-                    return 0;
+                    return 'dark';
                 }
             }
-
-            // todo: errors
-            var r = hexToDec(bg_color[1]) * 16 + hexToDec(bg_color[2]) * 1;
-            var g = hexToDec(bg_color[3]) * 16 + hexToDec(bg_color[4]) * 1;
-            var b = hexToDec(bg_color[5]) * 16 + hexToDec(bg_color[6]) * 1;
-
-            var sum = r + g + b;
-
-            if (sum < 450) {
-                return '#EFEFEF';
-            } else {
-                return '#020202';
+            catch (err) {
+                return 'dark';
             }
         }
 
@@ -1007,6 +1012,11 @@ function program1(depth0,data) {
                     if (_syncModule.readAllEvents != undefined) {
                         _syncModule.readAllEvents(async);
                     }
+                }
+
+                // Load resources if available
+                if (o.resources != undefined && typeof o.resourceList == 'object') {
+                    _loadResources(o.resources, false);
                 }
 
                 // Use calendar for only one person
@@ -2033,7 +2043,6 @@ function program1(depth0,data) {
             loadWeekStrings: _loadWeekDays,
             loadMonthStrings: _loadMonthStrings,
             setPeople: _setPeople,
-            loadResources: _loadResources,
         };
     };
     

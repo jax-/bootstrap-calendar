@@ -46,6 +46,7 @@ table.calendar span.event {
   display: block;
   padding: 1px;
   font-size: 12px;
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -54,6 +55,12 @@ table.calendar span.event {
 }
 table.calendar span.event.selected {
   border: 3px solid #ff4c4c;
+}
+table.calendar span.event.dark {
+  color: #010101;
+}
+table.calendar span.event.light {
+  color: #EFEFEF;
 }
 table.calendar .bold {
   font-weight: bold;
@@ -86,4 +93,7 @@ table.calendar .bold {
 }
 .calendar-buttons {
   margin-left: 3px;
+}
+.event-list {
+  padding: 10px 0;
 }

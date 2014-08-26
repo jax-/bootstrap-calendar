@@ -62,6 +62,7 @@ table.calendar {
         display: block; 
         padding: 1px;
         font-size: 12px;
+        text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
 
         &.selected {
             border: 3px solid @selected;
@@ -69,6 +70,13 @@ table.calendar {
 
         &:hover {
            // color: #dedede;
+        }
+
+        &.dark {
+            color: #010101;
+        }
+        &.light {
+            color: #EFEFEF;
         }
 
        -moz-user-select: none;
@@ -118,4 +126,8 @@ table.calendar {
 
 .calendar-buttons {
     margin-left: 3px;
+}
+
+.event-list {
+    padding: 10px 0;
 }

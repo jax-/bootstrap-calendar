@@ -18,8 +18,8 @@
                     <li><span class="date ">{{date_string}}</span></li>
                     {{#each this.events}}
                     <li>
-                        <span class="event" data-day="{{../dayValue}}" data-eventid="{{eventId}}" style="background-color:{{this.color}}; color:{{computeTextColor this.color }};">
-                            <span> ({{formatTime this.timeFrom}} - {{formatTime this.timeTo}}) <br/> {{#unless ../../../CONFIG.hideAttendee}} {{this.personName}} - {{/unless}}{{formatEventName this.eventName}}</span>
+                        <span class="event {{computeTextColorClass this.color}}" data-day="{{../dayValue}}" data-eventid="{{eventId}}" style="background-color:{{this.color}};">
+                            <span> ({{formatTime this.timeFrom}} - {{formatTime this.timeTo}}) <br /> {{#unless ../../../CONFIG.hideAttendee}} {{this.personName}} - {{/unless}}{{formatEventName this.eventName}}</span>
                         </span>
                     </li>
                     {{/each}}

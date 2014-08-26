@@ -396,44 +396,49 @@
             Handlebars.registerHelper('formatDate', _formatDate2);
             Handlebars.registerHelper('formatEventName', _formatEventName);
             Handlebars.registerHelper('formatTime', _formatTime);
-            Handlebars.registerHelper('computeTextColor', _computeTextColor);
+            Handlebars.registerHelper('computeTextColorClass', _computeTextColorClass);
         };
 
-        var _computeTextColor = function (bg_color) {
-            var hexToDec = function(num) {
-                if (num.length == 1) {
-                    switch (num) {
-                        case 'A':
-                            return 10;
-                        case 'B':
-                            return 11;
-                        case 'C':
-                            return 12;
-                        case 'D':
-                            return 13;
-                        case 'E':
-                            return 14;
-                        case 'F':
-                            return 15;
-                        default:
-                            return parseInt(num);
+        var _computeTextColorClass = function (bg_color) {
+            try {
+                var hexToDec = function (num) {
+                    if (num.length == 1) {
+                        switch (num) {
+                            case 'A':
+                                return 10;
+                            case 'B':
+                                return 11;
+                            case 'C':
+                                return 12;
+                            case 'D':
+                                return 13;
+                            case 'E':
+                                return 14;
+                            case 'F':
+                                return 15;
+                            default:
+                                return parseInt(num);
+                        }
+                    } else {
+                        return 0;
                     }
+                }
+
+                // todo: errors
+                var r = hexToDec(bg_color[1]) * 16 + hexToDec(bg_color[2]) * 1;
+                var g = hexToDec(bg_color[3]) * 16 + hexToDec(bg_color[4]) * 1;
+                var b = hexToDec(bg_color[5]) * 16 + hexToDec(bg_color[6]) * 1;
+
+                var sum = r + g + b;
+
+                if (sum < 450) {
+                    return 'light';
                 } else {
-                    return 0;
+                    return 'dark';
                 }
             }
-
-            // todo: errors
-            var r = hexToDec(bg_color[1]) * 16 + hexToDec(bg_color[2]) * 1;
-            var g = hexToDec(bg_color[3]) * 16 + hexToDec(bg_color[4]) * 1;
-            var b = hexToDec(bg_color[5]) * 16 + hexToDec(bg_color[6]) * 1;
-
-            var sum = r + g + b;
-
-            if (sum < 450) {
-                return '#EFEFEF';
-            } else {
-                return '#020202';
+            catch (err) {
+                return 'dark';
             }
         }
 
@@ -513,6 +518,11 @@
                     if (_syncModule.readAllEvents != undefined) {
                         _syncModule.readAllEvents(async);
                     }
+                }
+
+                // Load resources if available
+                if (o.resources != undefined && typeof o.resourceList == 'object') {
+                    _loadResources(o.resources, false);
                 }
 
                 // Use calendar for only one person
@@ -1539,7 +1549,6 @@
             loadWeekStrings: _loadWeekDays,
             loadMonthStrings: _loadMonthStrings,
             setPeople: _setPeople,
-            loadResources: _loadResources,
         };
     };
     

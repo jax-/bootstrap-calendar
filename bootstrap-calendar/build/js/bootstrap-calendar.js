@@ -1015,7 +1015,7 @@ function program1(depth0,data) {
                 }
 
                 // Load resources if available
-                if (o.resources != undefined && typeof o.resourceList == 'object') {
+                if (o.resources != undefined && typeof o.resources == 'object') {
                     _loadResources(o.resources, false);
                 }
 
@@ -1315,8 +1315,10 @@ function program1(depth0,data) {
                     _render();
 
                     cleanUpModal(modal);
+                    return true;
                 }
-                return true;
+
+                return false;
             };
 
             var editEvent = function (modal, event) {

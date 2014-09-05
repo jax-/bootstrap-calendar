@@ -385,7 +385,7 @@
             return year + '-' + month + '-' + day;
         };
 
-        /* ~ Helper functions
+        /* ~ Helper functions   
         **************************************/
 
         var _initializeTemplating = function () {

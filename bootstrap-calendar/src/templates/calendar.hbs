@@ -4,7 +4,7 @@
         <tr>
             {{#each weekdays}}
             <th>
-                {{this}}
+                {{{this}}}
             </th>
             {{/each}}
         </tr>
@@ -19,7 +19,7 @@
                     {{#each this.events}}
                     <li>
                         <span class="event {{computeTextColorClass this.color}}" data-day="{{../dayValue}}" data-eventid="{{eventId}}" style="background-color:{{this.color}};">
-                            <span> ({{formatTime this.timeFrom}} - {{formatTime this.timeTo}}) <br /> {{#unless ../../../CONFIG.hideAttendee}} {{this.personName}} - {{/unless}}{{formatEventName this.eventName}}</span>
+                            <span> ({{formatTime this.timeFrom}} - {{formatTime this.timeTo}}) <br /> {{#unless ../../../CONFIG.hideAttendee}} {{{this.personName}}} - {{/unless}}{{{formatEventName this.eventName}}}</span>
                         </span>
                     </li>
                     {{/each}}

@@ -2,16 +2,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{RESOURCES.CLOSE}}</span></button>
-                <h4 class="modal-title">{{RESOURCES.MODAL_TITLE}} <span class="modalTitleDate"></span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{{RESOURCES.CLOSE}}}</span></button>
+                <h4 class="modal-title">{{{RESOURCES.MODAL_TITLE}}} <span class="modalTitleDate"></span></h4>
             </div>
             <div class="modal-body">
-                <p>{{RESOURCES.MODAL_BODY}}</p>
+                <p>{{{RESOURCES.MODAL_BODY}}}</p>
 
                 {{#unless CONFIG.hideAttendee}}
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
-                        <b>{{RESOURCES.PERSON_NAME}}:</b>
+                        <b>{{{RESOURCES.PERSON_NAME}}}:</b>
                     </div>
                     <div class="col-md-7 col-lg-7">
                         {{#if CONFIG.enable_dropdown}}
@@ -25,7 +25,7 @@
 
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
-                        <b>{{RESOURCES.EVENT_NAME}}:</b>
+                        <b>{{{RESOURCES.EVENT_NAME}}}:</b>
                     </div>  
                     <div class="col-md-7 col-lg-7">
                         <textarea maxlength="500" rows="4" class="eventName form-control" />
@@ -35,7 +35,7 @@
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
                         <b>
-                            {{RESOURCES.TIME_FROM}}:
+                            {{{RESOURCES.TIME_FROM}}}:
                         </b>    
                     </div>
                     <div class="col-md-7 col-lg-7">
@@ -47,7 +47,7 @@
                 <div class="row row-mar">
                     <div class="col-md-5 col-lg-5">
                         <b>
-                            {{RESOURCES.TIME_TO}}:
+                            {{{RESOURCES.TIME_TO}}}:
                         </b>
                     </div>
 
@@ -63,9 +63,9 @@
                 <div style="clear:both"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary add-event">{{RESOURCES.ADD}}</button>
-                <button type="button" class="btn btn-primary edit-event">{{RESOURCES.EDIT}}</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{RESOURCES.CLOSE}}</button>
+                <button type="button" class="btn btn-primary add-event">{{{RESOURCES.ADD}}}</button>
+                <button type="button" class="btn btn-primary edit-event">{{{RESOURCES.EDIT}}}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{{RESOURCES.CLOSE}}}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

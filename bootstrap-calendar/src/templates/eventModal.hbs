@@ -15,9 +15,9 @@
                     </div>
                     <div class="col-md-7 col-lg-7">
                         {{#if CONFIG.enable_dropdown}}
-                            {{> selectPartial}}
+                        {{> selectPartial}}
                         {{else}}
-                            <input class="personId form-control"> 
+                        <input class="personId form-control">
                         {{/if}}
                     </div>
                 </div>
@@ -29,6 +29,15 @@
                     </div>  
                     <div class="col-md-7 col-lg-7">
                         <textarea maxlength="500" rows="4" class="eventName form-control" />
+                    </div>
+                </div>
+
+                <div class="row row-mar">
+                    <div class="col-md-5 col-lg-5">
+                        <b>{{{RESOURCES.DATE}}}:</b>
+                    </div>
+                    <div class="col-md-7 col-lg-7">
+                        <input type="text" data-date-format="YYYY-MM-DD" data-date="{{dateStr}}" class="eventDate form-control" />
                     </div>
                 </div>
 

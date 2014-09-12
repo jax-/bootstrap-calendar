@@ -673,6 +673,7 @@
             modal.find('.modalTitleDate').html(dateStr);
             modal.find('.eventDay').val(event.day);
             modal.find('.eventId').val(event.eventId);
+            modal.find('.eventDate').val(dateStr);
 
             modal.find('.eventName').val(event.eventName);
 
@@ -817,7 +818,14 @@
                 var timeFromVal = timeFrom.val();
                 var timeToVal = timeTo.val();
                 if (validateTime(timeFromVal, timeToVal)) {
-                    _addEvent(_year, _month, day, personId, personName, event, undefined, timeFromVal, timeToVal);
+
+                    var eventDate = modal.find('.eventDate').val();
+                    var parsed = new Date(Date.parse(eventDate));
+                    var tempyear = parsed.getFullYear();
+                    var tempmonth = parsed.getMonth();
+                    var tempday = parsed.getDate();
+
+                    _addEvent(tempyear, tempmonth, tempday, personId, personName, event, undefined, timeFromVal, timeToVal);
                     _render();
 
                     cleanUpModal(modal);
@@ -860,6 +868,12 @@
                     event.timeTo = timeToVal;
                     event.eventName = eventName;
                     event.unsaved = true;
+
+                    var eventDate = modal.find('.eventDate').val();
+                    var parsed = new Date(Date.parse(eventDate));
+                    event.year = parsed.getFullYear();
+                    event.month = parsed.getMonth();
+                    event.day = parsed.getDate();
                         
                     _eventsToEdit.push(event);
 
@@ -898,6 +912,8 @@
                     dd1.html(dateStr);
                     var dd2 = modal.find('.eventDay');
                     dd2.val(day);
+                    var dd3 = modal.find('.eventDate');
+                    dd3.val(dateStr);
 
                     _setModalState(modal, 'add');
                     modal.modal('show');

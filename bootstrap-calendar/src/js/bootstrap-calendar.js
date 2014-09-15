@@ -243,10 +243,16 @@
                     async = false;
                 }
 
+                var formData;
+                if (_filterForm) {
+                    formData = _filterForm.serialize();
+                }
+
                 changeState('load');
                 $.ajax({
                     type: 'GET',
                     url: this.urls.getEvents,
+                    data: formData,
                     success: function (data) {
                         if (data != undefined && data != null) {
                             for (var i = 0; i < data.length; i++) {
@@ -442,6 +448,8 @@
             }
         }
 
+        var _filterForm;
+
         /**
          * Initializes calendar object
          * @constructor
@@ -532,11 +540,8 @@
                 }
 
                 // Event list
-                if (o.showEventList != undefined) {
-                    if (o.showEventList == true ||
-                        o.showEventList == false) {
-                        CONFIG.showEventList = o.showEventList;
-                    }
+                if (o.showEventList) {
+                    CONFIG.showEventList = o.showEventList;
                 }
 
                 var _booleanOrFalse = function (source) {
@@ -544,6 +549,11 @@
                         source = false;
 
                     return source;
+                }
+
+                // Filter form
+                if (o.filterForm && typeof o.filterForm == 'string') {
+                    _filterForm = $(o.filterForm);
                 }
 
                 CONFIG.autosave = _booleanOrFalse(o.autosave);
@@ -1567,6 +1577,11 @@
             loadWeekStrings: _loadWeekDays,
             loadMonthStrings: _loadMonthStrings,
             setPeople: _setPeople,
+            readAllEvents: function () {
+                if (_syncModule && _syncModule.readAllEvents) {
+                    _syncModule.readAllEvents();
+                }
+            },
         };
     };
     

@@ -714,6 +714,7 @@ function program1(depth0,data) {
                 }
             }
 
+            var saveDataLock = false;
             this.saveData = function () {
                 var data = {
                     eventsToAdd: _eventsToSave,
@@ -722,31 +723,36 @@ function program1(depth0,data) {
                 };
 
                 var dataToSend = JSON.stringify(data);
-                changeState('load');
-                
-                $.ajax({
-                    type: 'POST',
-                    url: this.urls.saveData,
-                    contentType: 'application/json',
-                    data: dataToSend,
-                    success: function (dt) {
-                        if (!CONFIG.autosave) {
-                            _showAlert(_resources.EVENTS_SAVED, 'success');
-                        }
 
-                        setUnsaved(_eventsToEdit);
-                        setUnsaved(_eventsToSave);
+                if (!saveDataLock) {
+                    saveDataLock = true;
+                    changeState('load');
 
-                        _clearEvents(false);
-                        _renderEventList();
-                    },
-                    error: function (err) {
-                        _showAlert(_resources.EVENT_SAVE_ERROR, 'danger');
-                    },
-                    complete: function () {
-                        changeState('idle');
-                    },
-                });
+                    $.ajax({
+                        type: 'POST',
+                        url: this.urls.saveData,
+                        contentType: 'application/json',
+                        data: dataToSend,
+                        success: function (dt) {
+                            if (!CONFIG.autosave) {
+                                _showAlert(_resources.EVENTS_SAVED, 'success');
+                            }
+
+                            setUnsaved(_eventsToEdit);
+                            setUnsaved(_eventsToSave);
+
+                            _clearEvents(false);
+                            _renderEventList();
+                        },
+                        error: function (err) {
+                            _showAlert(_resources.EVENT_SAVE_ERROR, 'danger');
+                        },
+                        complete: function () {
+                            changeState('idle');
+                            saveDataLock = false;
+                        },
+                    });
+                }
             };
 
             this.saveAllEvents = function () {
@@ -772,7 +778,8 @@ function program1(depth0,data) {
                     },
                 })
             };
-
+            
+            var getEventsLock = false;
             this.readAllEvents = function (async, callback) {
                 if (async == undefined) {
                     async = false;
@@ -783,34 +790,39 @@ function program1(depth0,data) {
                     formData = _filterForm.serialize();
                 }
 
-                changeState('load');
-                $.ajax({
-                    type: 'GET',
-                    url: this.urls.getEvents,
-                    data: formData,
-                    success: function (data) {
-                        if (data != undefined && data != null) {
-                            for (var i = 0; i < data.length; i++) {
-                                var event = data[i];
+                if (!getEventsLock) {
+                    getEventsLock = true;
 
-                                event.month -= 1; //?
+                    changeState('load');
+                    $.ajax({
+                        type: 'GET',
+                        url: this.urls.getEvents,
+                        data: formData,
+                        success: function (data) {
+                            if (data != undefined && data != null) {
+                                for (var i = 0; i < data.length; i++) {
+                                    var event = data[i];
 
-                                _pushEvent(event, false);
+                                    event.month -= 1; //?
+
+                                    _pushEvent(event, false);
+                                }
                             }
-                        }
 
-                        if (async && callback != undefined) {
-                            callback();
-                        }
-                        _render();
-                    },
-                    error: function (err) {
-                        console.log(err);
-                    },
-                    complete: function () {
-                        changeState('idle');
-                    },
-                });
+                            if (async && callback != undefined) {
+                                callback();
+                            }
+                            _render();
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        },
+                        complete: function () {
+                            changeState('idle');
+                            getEventsLock = false;
+                        },
+                    });
+                }
             };
 
             this.clearAllEvents = function () {

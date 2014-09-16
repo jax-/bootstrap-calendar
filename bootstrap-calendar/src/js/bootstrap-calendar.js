@@ -84,7 +84,7 @@
         };
 
         // Filters
-        var _filterByMonth = false;
+        var _filterByMonth = true;
 
         /**********************************************
          * LocalStorage synchronization module
@@ -734,7 +734,7 @@
         }
 
         var _addPanelEvents = function () {
-            if (CONFIG.tabbedEventList) {
+            if (CONFIG.tabbedEventList && !_filterByMonth) {
                 $(_selector + ' #event-tab-btn').click(function () {
                     var calendarNavigation = $(_selector + ' .calendar-navigation');
                     calendarNavigation.css('visibility', 'hidden');
@@ -1480,6 +1480,17 @@
         };
 
         var _renderEventList = function () {
+            var eventTimeComparer = function (a, b) {
+                var dayDiff = a.day - b.day;
+
+                if (dayDiff != 0) {
+                    return dayDiff;
+                } else {
+                    var timeDiff = a.timeFrom - b.timeFrom;
+                    return timeDiff;
+                }
+            }
+
             if (CONFIG.showEventList) {
                 var evData = null;
                 if (_filterByMonth) {
@@ -1487,6 +1498,8 @@
                 } else {
                     evData = _allEvents;
                 }
+
+                evData.sort(eventTimeComparer);
 
                 var data = {
                     events: evData,
@@ -1496,11 +1509,7 @@
 
                 var eventListHtml = _templates.eventList(data);
 
-                if (evData.length > 0) {
-                    $(_selector + ' .event-container').html(eventListHtml);
-                } else {
-                    $(_selector + ' .event-container').html('');
-                }
+                $(_selector + ' .event-container').html(eventListHtml);
             }
         };
         /* ~ Element rendering functions

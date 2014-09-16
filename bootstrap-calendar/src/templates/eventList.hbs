@@ -1,4 +1,5 @@
 ﻿<div class="event-list">
+    {{#if events.length}}
     <h3>{{{RESOURCES.EVENT_LIST}}}</h3>
     <table class="table  table-hover table-striped table-responsive">
         <thead>
@@ -75,4 +76,7 @@
             {{/each}}
         </tbody>
     </table>
+    {{else}}
+    <h3 class="text-muted" style="padding-left:10px;">No events</h3>
+    {{/if}}
 </div>

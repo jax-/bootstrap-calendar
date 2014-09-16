@@ -168,13 +168,41 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
+  buffer += "\r\n    <h3>";
+  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>#</th>\r\n                ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.showId), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                <th>\r\n                    "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.DATE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </th>\r\n                <th>\r\n                    "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.TIME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </th>\r\n                ";
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                <th>\r\n                    ";
+  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.HEADER_EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                </th>\r\n                ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.events), {hash:{},inverse:self.noop,fn:self.programWithDepth(10, program10, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n        </tbody>\r\n    </table>\r\n    ";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1;
   buffer += "\r\n                <th>\r\n                    "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ID)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n                </th>\r\n                ";
   return buffer;
   }
 
-function program3(depth0,data) {
+function program4(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <th>\r\n                    ";
@@ -184,7 +212,7 @@ function program3(depth0,data) {
   return buffer;
   }
 
-function program5(depth0,data) {
+function program6(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <th>\r\n                    ";
@@ -194,24 +222,24 @@ function program5(depth0,data) {
   return buffer;
   }
 
-function program7(depth0,data) {
+function program8(depth0,data) {
   
   
   return "\r\n                <th></th>\r\n                <th></th>\r\n                ";
   }
 
-function program9(depth0,data,depth1) {
+function program10(depth0,data,depth1) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\r\n            <tr class=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.unsaved), {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\" >\r\n                <td>\r\n                    <div style=\"background-color: ";
   if (helper = helpers.color) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.color); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "; width:18px; height:18px;\"></div>\r\n                </td>\r\n                ";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.showId), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.showId), {hash:{},inverse:self.noop,fn:self.program(13, program13, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                <td>\r\n                    "
     + escapeExpression((helper = helpers.formatDate || (depth0 && depth0.formatDate),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options) : helperMissing.call(depth0, "formatDate", (depth0 && depth0.year), (depth0 && depth0.month), (depth0 && depth0.day), options)))
@@ -220,24 +248,24 @@ function program9(depth0,data,depth1) {
     + " - "
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeTo), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeTo), options)))
     + "\r\n                </td>                \r\n                ";
-  stack1 = helpers.unless.call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                <td>\r\n                    ";
   stack1 = ((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                </td>\r\n                ";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.program(18, program18, data),fn:self.program(16, program16, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.program(19, program19, data),fn:self.program(17, program17, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n            </tr>\r\n            ";
   return buffer;
   }
-function program10(depth0,data) {
+function program11(depth0,data) {
   
   
   return "warning";
   }
 
-function program12(depth0,data) {
+function program13(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <td>\r\n                    "
@@ -246,7 +274,7 @@ function program12(depth0,data) {
   return buffer;
   }
 
-function program14(depth0,data) {
+function program15(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <td>\r\n                    ";
@@ -256,7 +284,7 @@ function program14(depth0,data) {
   return buffer;
   }
 
-function program16(depth0,data) {
+function program17(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <td>\r\n                    <a href=\"#\" class=\"edit-event2\" data-eventid=\""
@@ -267,7 +295,7 @@ function program16(depth0,data) {
   return buffer;
   }
 
-function program18(depth0,data) {
+function program19(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <td>\r\n                    <a href=\"#\" class=\"edit-event2\" data-eventid=\""
@@ -284,29 +312,16 @@ function program18(depth0,data) {
   return buffer;
   }
 
-  buffer += "<div class=\"event-list\">\r\n    <h3>";
-  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EVENT_LIST)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+function program21(depth0,data) {
+  
+  
+  return "\r\n    <h3 class=\"text-muted\" style=\"padding-left:10px;\">No events</h3>\r\n    ";
+  }
+
+  buffer += "<div class=\"event-list\">\r\n    ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.events)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.program(21, program21, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</h3>\r\n    <table class=\"table  table-hover table-striped table-responsive\">\r\n        <thead>\r\n            <tr>\r\n                <th>#</th>\r\n                ";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.showId), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                <th>\r\n                    "
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.DATE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n                </th>\r\n                <th>\r\n                    "
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.TIME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n                </th>\r\n                ";
-  stack1 = helpers.unless.call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                <th>\r\n                    ";
-  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.HEADER_EVENT_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                </th>\r\n                ";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.events), {hash:{},inverse:self.noop,fn:self.programWithDepth(9, program9, data, depth0),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n        </tbody>\r\n    </table>\r\n</div>";
+  buffer += "\r\n</div>";
   return buffer;
   });
 
@@ -321,7 +336,7 @@ function program1(depth0,data) {
   buffer += "\r\n                <div class=\"row row-mar\">\r\n                    <div class=\"col-md-5 col-lg-5\">\r\n                        <b>";
   stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.PERSON_NAME)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ":</b>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                            ";
+  buffer += ":</b>\r\n                    </div>\r\n                    <div class=\"col-md-7 col-lg-7\">\r\n                        ";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.enable_dropdown), {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                    </div>\r\n                </div>\r\n                ";
@@ -330,17 +345,17 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n                            ";
+  buffer += "\r\n                        ";
   stack1 = self.invokePartial(partials.selectPartial, 'selectPartial', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                            ";
+  buffer += "\r\n                        ";
   return buffer;
   }
 
 function program4(depth0,data) {
   
   
-  return "\r\n                            <input class=\"personId form-control\">\r\n                            ";
+  return "\r\n                        <input class=\"personId form-control\">\r\n                        ";
   }
 
   buffer += "<div id=\"calendarEventModal\" class=\"modal fade\">\r\n    <div class=\"modal-dialog\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-header\">\r\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">";
@@ -619,7 +634,7 @@ function program1(depth0,data) {
         };
 
         // Filters
-        var _filterByMonth = false;
+        var _filterByMonth = true;
 
         /**********************************************
          * LocalStorage synchronization module
@@ -1269,7 +1284,7 @@ function program1(depth0,data) {
         }
 
         var _addPanelEvents = function () {
-            if (CONFIG.tabbedEventList) {
+            if (CONFIG.tabbedEventList && !_filterByMonth) {
                 $(_selector + ' #event-tab-btn').click(function () {
                     var calendarNavigation = $(_selector + ' .calendar-navigation');
                     calendarNavigation.css('visibility', 'hidden');
@@ -2015,6 +2030,17 @@ function program1(depth0,data) {
         };
 
         var _renderEventList = function () {
+            var eventTimeComparer = function (a, b) {
+                var dayDiff = a.day - b.day;
+
+                if (dayDiff != 0) {
+                    return dayDiff;
+                } else {
+                    var timeDiff = a.timeFrom - b.timeFrom;
+                    return timeDiff;
+                }
+            }
+
             if (CONFIG.showEventList) {
                 var evData = null;
                 if (_filterByMonth) {
@@ -2022,6 +2048,8 @@ function program1(depth0,data) {
                 } else {
                     evData = _allEvents;
                 }
+
+                evData.sort(eventTimeComparer);
 
                 var data = {
                     events: evData,
@@ -2031,11 +2059,7 @@ function program1(depth0,data) {
 
                 var eventListHtml = _templates.eventList(data);
 
-                if (evData.length > 0) {
-                    $(_selector + ' .event-container').html(eventListHtml);
-                } else {
-                    $(_selector + ' .event-container').html('');
-                }
+                $(_selector + ' .event-container').html(eventListHtml);
             }
         };
         /* ~ Element rendering functions

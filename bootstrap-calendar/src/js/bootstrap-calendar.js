@@ -36,6 +36,7 @@
             EVENT_LIST: 'Event list',
             EVENTS_SAVED: 'Events saved',
             EVENT_SAVE_ERROR: 'There was an error while trying to save events',
+            NO_DATA: 'No data',
         };
 
         var _weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

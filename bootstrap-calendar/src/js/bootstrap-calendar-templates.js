@@ -307,8 +307,12 @@ function program19(depth0,data) {
 
 function program21(depth0,data) {
   
-  
-  return "\r\n    <h3 class=\"text-muted\" style=\"padding-left:10px;\">No events</h3>\r\n    ";
+  var buffer = "", stack1;
+  buffer += "\r\n    <h3 class=\"text-muted\" style=\"padding-left:10px;\">";
+  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.NO_DATA)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</h3>\r\n    ";
+  return buffer;
   }
 
   buffer += "<div class=\"event-list\">\r\n    ";

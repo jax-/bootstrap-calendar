@@ -1317,6 +1317,7 @@
                 }
             }
 
+            event = events.sort(eventTimeComparer);
             return events;
         };
 
@@ -1480,17 +1481,19 @@
             container.html(calendarHtml);
         };
 
-        var _renderEventList = function () {
-            var eventTimeComparer = function (a, b) {
-                var dayDiff = a.day - b.day;
+        var eventTimeComparer = function (a, b) {
+            var dayDiff = a.day - b.day;
 
-                if (dayDiff != 0) {
-                    return dayDiff;
-                } else {
-                    var timeDiff = a.timeFrom - b.timeFrom;
-                    return timeDiff;
-                }
+            if (dayDiff != 0) {
+                return dayDiff;
+            } else {
+                var timeDiff = a.timeFrom - b.timeFrom;
+                return timeDiff;
             }
+        }
+
+        var _renderEventList = function () {
+            
 
             if (CONFIG.showEventList) {
                 var evData = null;

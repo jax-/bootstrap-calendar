@@ -1317,7 +1317,7 @@
                 }
             }
 
-            event = events.sort(eventTimeComparer);
+            events = events.sort(eventTimeComparer);
             return events;
         };
 

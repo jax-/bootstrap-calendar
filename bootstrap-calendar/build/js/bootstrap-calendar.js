@@ -1871,7 +1871,7 @@ function program1(depth0,data) {
                 }
             }
 
-            event = events.sort(eventTimeComparer);
+            events = events.sort(eventTimeComparer);
             return events;
         };
 

@@ -13,9 +13,11 @@
                 <th>
                     {{RESOURCES.DATE}}
                 </th>
+                {{#if CONFIG.showTime}}
                 <th>
                     {{RESOURCES.TIME}}
                 </th>
+                {{/if}}
                 {{#unless CONFIG.hideAttendee}}
                 <th>
                     {{{RESOURCES.HEADER_PERSON_NAME}}}
@@ -24,6 +26,7 @@
                 <th>
                     {{{RESOURCES.HEADER_EVENT_NAME}}}
                 </th>
+                {{#if CONFIG.allowEdit}}
                 {{#if CONFIG.useIcons}}
                 <th>
                     {{{RESOURCES.ACTIONS}}}
@@ -31,6 +34,7 @@
                 {{else}}
                 <th></th>
                 <th></th>
+                {{/if}}
                 {{/if}}
             </tr>
         </thead>
@@ -48,9 +52,11 @@
                 <td>
                     {{formatDate this.year this.month this.day}}
                 </td>
+                {{#if ../CONFIG.showTime}}
                 <td>
                     {{formatTime this.timeFrom}} - {{formatTime this.timeTo}}
                 </td>                
+                {{/if}}
                 {{#unless ../CONFIG.hideAttendee}}
                 <td>
                     {{{this.personName}}}
@@ -59,6 +65,7 @@
                 <td>
                     {{{this.eventName}}}
                 </td>
+                {{#if ../CONFIG.allowEdit}}
                 {{#if ../CONFIG.useIcons}}
                 <td>
                     <a href="#" class="edit-event2" data-eventid="{{this.eventId}}"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -71,6 +78,7 @@
                 <td>
                     <a href="#" class="remove-event2" data-eventid="{{this.eventId}}">{{{RESOURCES.REMOVE}}}</a>
                 </td>
+                {{/if}}
                 {{/if}}
             </tr>
             {{/each}}

@@ -24,14 +24,14 @@ table.calendar tbody td.week-day > div > ul .date {
   font-size: smaller;
 }
 table.calendar tbody td.week-day > div.current {
-  background-color: #428bca;
+  background-color: #6B0041;
   color: white;
 }
 table.calendar tbody td.week-day > div.current:hover {
-  background-color: #80c4ff;
+  background-color: #97005c;
 }
 table.calendar tbody td.week-day > div.current .date {
-  color: black;
+  color: white;
 }
 table.calendar tbody td.week-day > div:hover {
   background-color: #f3f3f3;

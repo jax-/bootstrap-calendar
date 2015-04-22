@@ -82,6 +82,9 @@
             tabbedEventList: false,
             useNameInSelect: false,
             showEventList: true,
+            showTime: false,
+            showEditBar: false,
+            allowEdit: false,
         };
 
         // Filters
@@ -362,10 +365,10 @@
         }
 
         var _formatEventName = function (eventName) {
-            if (eventName.length > 20) {
+            if (eventName && eventName.length > 20) {
                 return eventName.substring(0, 18) + '...';
             } else {
-                return eventName;
+                return eventName || '';
             }
         }
 
@@ -1233,7 +1236,11 @@
                 if (unsaved) {
                     event.unsaved = true;
                     _eventsToSave.push(event);
-                }   
+                }
+
+                if (!event.color) {
+                    event.color = _getRandomColor();
+                }
 
                 if (insertAtStart) {
                     _allEvents.unshift(event);

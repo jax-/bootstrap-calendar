@@ -1,4 +1,5 @@
 ﻿<div class="calendar-panel calendar-nav-panel ">
+    {{#if CONFIG.showEditBar}}
     <div class="pull-left calendar-buttons">
         <button type="button" class="btn btn-primary disabled panel-add-event">{{#if CONFIG.useIcons}}<span class="glyphicon glyphicon-plus"></span>{{/if}}{{{RESOURCES.ADD_EVENT}}}</button>
         <button type="button" class="btn btn-primary disabled panel-edit-event">{{#if CONFIG.useIcons}}<span class="glyphicon glyphicon-pencil"></span>{{/if}}{{{RESOURCES.EDIT_EVENT}}}</button>
@@ -10,6 +11,7 @@
         <input type="checkbox" id="event-autosave" class="event-autosave" />
         {{/unless}}
     </div>
+    {{/if}}
     <div class="pull-right calendar-navigation">
         {{#if CONFIG.navAltVersion}}
         <button type="button" class="btn btn-nav btn-default prev-year btn-lg" title="{{{RESOURCES.PREVIOUS_YEAR}}}"><<</button>

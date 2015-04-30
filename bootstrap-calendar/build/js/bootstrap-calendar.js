@@ -294,13 +294,13 @@ function program12(depth0,data,depth1) {
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.showTime), {hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                ";
-  stack1 = helpers.unless.call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data});
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.hideAttendee), {hash:{},inverse:self.noop,fn:self.program(20, program20, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                <td>\r\n                    ";
   stack1 = ((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                </td>\r\n                ";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.program(23, program23, data),fn:self.program(21, program21, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth1 && depth1.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.program(25, program25, data),fn:self.program(22, program22, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n            </tr>\r\n            ";
   return buffer;
@@ -322,16 +322,25 @@ function program15(depth0,data) {
 
 function program17(depth0,data) {
   
+  var buffer = "", stack1;
+  buffer += "\r\n                <td>\r\n                    ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.showTime), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                </td>                \r\n                ";
+  return buffer;
+  }
+function program18(depth0,data) {
+  
   var buffer = "", helper, options;
-  buffer += "\r\n                <td>\r\n                    "
+  buffer += "\r\n                    "
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeFrom), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeFrom), options)))
     + " - "
     + escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.timeTo), options) : helperMissing.call(depth0, "formatTime", (depth0 && depth0.timeTo), options)))
-    + "\r\n                </td>                \r\n                ";
+    + "\r\n                    ";
   return buffer;
   }
 
-function program19(depth0,data) {
+function program20(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n                <td>\r\n                    ";
@@ -341,35 +350,63 @@ function program19(depth0,data) {
   return buffer;
   }
 
-function program21(depth0,data) {
+function program22(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n                <td>\r\n                    <a href=\"#\" class=\"edit-event2\" data-eventid=\""
-    + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\"><span class=\"glyphicon glyphicon-pencil\"></span></a>\r\n                    <a href=\"#\" class=\"remove-event2\" data-eventid=\""
-    + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\"><span class=\"glyphicon glyphicon-remove\"></span></a>\r\n                </td>\r\n                ";
+  buffer += "\r\n                <td>\r\n                    ";
+  stack1 = helpers.unless.call(depth0, (depth0 && depth0.readonly), {hash:{},inverse:self.noop,fn:self.program(23, program23, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                </td>\r\n                ";
   return buffer;
   }
-
 function program23(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n                <td>\r\n                    <a href=\"#\" class=\"edit-event2\" data-eventid=\""
+  buffer += "\r\n                    <a href=\"#\" class=\"edit-event2\" data-eventid=\""
     + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">";
-  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a>\r\n                </td>\r\n                <td>\r\n                    <a href=\"#\" class=\"remove-event2\" data-eventid=\""
+    + "\"><span class=\"glyphicon glyphicon-pencil\"></span></a>\r\n                    <a href=\"#\" class=\"remove-event2\" data-eventid=\""
     + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">";
-  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.REMOVE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a>\r\n                </td>\r\n                ";
+    + "\"><span class=\"glyphicon glyphicon-remove\"></span></a>\r\n                    ";
   return buffer;
   }
 
 function program25(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                <td>\r\n                    ";
+  stack1 = helpers.unless.call(depth0, (depth0 && depth0.readonly), {hash:{},inverse:self.noop,fn:self.program(26, program26, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                </td>\r\n                <td>\r\n                    ";
+  stack1 = helpers.unless.call(depth0, (depth0 && depth0.readonly), {hash:{},inverse:self.noop,fn:self.program(28, program28, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                </td>\r\n                ";
+  return buffer;
+  }
+function program26(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                    <a href=\"#\" class=\"edit-event2\" data-eventid=\""
+    + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">";
+  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a>\r\n                    ";
+  return buffer;
+  }
+
+function program28(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                    <a href=\"#\" class=\"remove-event2\" data-eventid=\""
+    + escapeExpression(((stack1 = (depth0 && depth0.eventId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">";
+  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.REMOVE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a>\r\n                    ";
+  return buffer;
+  }
+
+function program30(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n    <h3 class=\"text-muted\" style=\"padding-left:10px;\">";
@@ -380,7 +417,7 @@ function program25(depth0,data) {
   }
 
   buffer += "<div class=\"event-list\">\r\n    ";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.events)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.program(25, program25, data),fn:self.program(1, program1, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.events)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.program(30, program30, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n</div>";
   return buffer;

@@ -94,6 +94,9 @@ table.calendar .bold {
 .calendar-buttons {
   margin-left: 3px;
 }
+.calendar-buttons button {
+  background-color: #870052 !important;
+}
 .event-list {
   padding: 10px 0;
 }

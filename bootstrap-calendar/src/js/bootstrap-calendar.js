@@ -82,9 +82,10 @@
             tabbedEventList: false,
             useNameInSelect: false,
             showEventList: true,
-            showTime: false,
-            showEditBar: false,
-            allowEdit: false,
+            showTime: true,
+            showEditBar: true,
+            allowEdit: true,
+            showLoader: false,
         };
 
         // Filters
@@ -949,6 +950,10 @@
             var _openEditModal = function (selectedEvent) {
                 var modal = $(_modalSelector);
 
+                if (selectedEvent && selectedEvent.readonly === true) {
+                    return;
+                }
+
                 if (selectedEvent == undefined) {
                     selectedEvent = $(_selector).find('.event.selected');
                 } else {
@@ -997,8 +1002,10 @@
                     _setEventAddEditState('none');
                 } else {
                     _setEventAddEditState('add');
+
                     $(this).addClass('selected');
                 }
+
             });
             
             //$(_selector).on('dblclick', '.week-day-div', function (e) {
@@ -1008,6 +1015,10 @@
             // On event select
             $(_selector).on('click', '.event', function (e) {
                 e.stopPropagation();
+                var isReadonly = $(this).hasClass('readonly');
+                if (isReadonly) {
+                    return;
+                }
 
                 var isSelected = $(this).hasClass('selected');
 
@@ -1015,12 +1026,18 @@
                     _setEventAddEditState('none');
                 } else {
                     _setEventAddEditState('edit');
+
                     $(this).addClass('selected');
                 }
             });
 
             // Edit on event double click
             $(_selector).on('dblclick', '.event', function (e) {
+                var isReadonly = $(this).hasClass('readonly');
+                if (isReadonly) {
+                    return;
+                }
+
                 _openEditModal($(this));
             });
 
@@ -1088,7 +1105,6 @@
             // Deselect all events & days
             $(_selector + ' ' + '.event').removeClass('selected');
             $(_selector + ' ' + '.week-day-div').removeClass('selected');
-
 
             if (type == 'add') {
                 //addEventButton.show();
@@ -1225,6 +1241,17 @@
             }
         }
 
+        var hasTime = function (event) {
+            if (CONFIG.showTime && 
+                event &&
+                event.timeFrom &&
+                event.timeTo) {
+                return true;
+            }
+
+            return false;
+        }
+
         /**
           * Adds new event with event object and date as arguments
           */
@@ -1241,6 +1268,8 @@
                 if (!event.color) {
                     event.color = _getRandomColor();
                 }
+
+                event.showTime = hasTime(event);
 
                 if (insertAtStart) {
                     _allEvents.unshift(event);

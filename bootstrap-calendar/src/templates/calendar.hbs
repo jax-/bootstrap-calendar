@@ -18,9 +18,12 @@
                     <li><span class="date ">{{date_string}}</span></li>
                     {{#each this.events}}
                     <li>
-                        <span class="event {{computeTextColorClass this.color}}" data-day="{{../dayValue}}" data-eventid="{{eventId}}" style="background-color:{{this.color}};">
+                        <span class="event {{#if this.readonly}}readonly{{/if}} {{computeTextColorClass this.color}}" data-day="{{../dayValue}}" data-eventid="{{eventId}}" style="background-color:{{this.color}};">
+                            {{#if this.readonly}}
+                            <span class="glyphicon glyphicon-lock"></span>
+                            {{/if}}
                             <span> 
-                                   {{#if ../../../CONFIG.showTime}}
+                                   {{#if this.showTime}}
                                    ({{formatTime this.timeFrom}} - {{formatTime this.timeTo}}) 
                                    {{/if}}
                                    <br /> 

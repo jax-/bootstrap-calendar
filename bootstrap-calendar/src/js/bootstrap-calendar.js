@@ -918,6 +918,7 @@
             // Bind event add
             $(_selector).on('click', '.panel-add-event', function () {
                 _openAddModal();
+                return false;
             });
 
             var _openAddModal = function (selectedDay) {
@@ -978,6 +979,7 @@
             // Bind event edit
             $(_selector).on('click', '.panel-edit-event', function () {
                 _openEditModal();
+                return false;
             });
 
             // Bind event remove
@@ -992,6 +994,7 @@
                         _setEventAddEditState('none');
                     }
                 }
+                return false;
             });
 
             // On day select
@@ -1093,9 +1096,9 @@
         };
 
         var _setEventAddEditState = function (type) { // type: 'add' or 'edit' or none (deselect)
-            var addEventButton = $(_selector + ' ' + '.btn.panel-add-event');
-            var editEventButton = $(_selector + ' ' + '.btn.panel-edit-event');
-            var removeEventButton = $(_selector + ' .btn.panel-remove-event')
+            var addEventButton = $(_selector + ' ' + '.panel-add-event');
+            var editEventButton = $(_selector + ' ' + '.panel-edit-event');
+            var removeEventButton = $(_selector + ' .panel-remove-event')
             var disabled = 'disabled';
 
             addEventButton.addClass(disabled);

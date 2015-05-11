@@ -80,7 +80,9 @@ function program7(depth0,data) {
 function program9(depth0,data,depth1,depth3) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\r\n                    <li>\r\n                        <span class=\"event ";
+  buffer += "\r\n                    <li title=\""
+    + escapeExpression(((stack1 = (depth0 && depth0.eventName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n                        <span class=\"event ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.readonly), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += " "
@@ -514,59 +516,35 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n    <div class=\"pull-left calendar-buttons\">\r\n        <button type=\"button\" class=\"btn btn-primary disabled panel-add-event\">";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  buffer += "\r\n    <div class=\"calendar-buttons col-lg-2 pull-right\">\r\n        <div class=\"col-lg-10\">\r\n            ";
+  stack1 = helpers.unless.call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.autosave), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ADD_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\r\n        <button type=\"button\" class=\"btn btn-primary disabled panel-edit-event\">";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\r\n        <button type=\"button\" class=\"btn btn-primary disabled panel-remove-event\">";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.useIcons), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n        </div>\r\n        <div class=\"topicons\">\r\n            <a href=\"\" class=\"iconred disabled panel-remove-event\" title=\"";
   stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.REMOVE_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\r\n\r\n        ";
-  stack1 = helpers.unless.call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.autosave), {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data});
+  buffer += "\"><i class=\"fa fa-times fa-3x\"></i></a>\r\n            <a href=\"\" class=\"iconblue disabled panel-edit-event\" title=\"";
+  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.EDIT_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n    </div>\r\n    ";
+  buffer += "\"><i class=\"fa fa-wrench fa-3x\"></i></a>\r\n            <a href=\"\" class=\"icongreen disabled panel-add-event\" title=\"";
+  stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.ADD_EVENT)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\"><i class=\"fa fa-plus fa-3x\"></i></a>\r\n        </div>\r\n    </div>\r\n    ";
   return buffer;
   }
 function program2(depth0,data) {
   
-  
-  return "<span class=\"glyphicon glyphicon-plus\"></span>";
-  }
-
-function program4(depth0,data) {
-  
-  
-  return "<span class=\"glyphicon glyphicon-pencil\"></span>";
-  }
-
-function program6(depth0,data) {
-  
-  
-  return "<span class=\"glyphicon glyphicon-remove\"></span>";
-  }
-
-function program8(depth0,data) {
-  
   var buffer = "", stack1;
-  buffer += "\r\n        <button class=\"btn btn-primary save-events\" style=\"margin-right:10px;\">";
+  buffer += "\r\n            <button class=\"btn btn-primary save-events\" style=\"margin-right:10px;\">";
   stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.SAVE_EVENTS)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\r\n        <label for=\"event-autosave\">";
+  buffer += "</button>\r\n            <label for=\"event-autosave\">";
   stack1 = ((stack1 = ((stack1 = (depth0 && depth0.RESOURCES)),stack1 == null || stack1 === false ? stack1 : stack1.AUTOSAVE)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</label>\r\n        <input type=\"checkbox\" id=\"event-autosave\" class=\"event-autosave\" />\r\n        ";
+  buffer += "</label>\r\n            <input type=\"checkbox\" id=\"event-autosave\" class=\"event-autosave\" />\r\n            ";
   return buffer;
   }
 
-function program10(depth0,data) {
+function program4(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\r\n        <button type=\"button\" class=\"btn btn-nav btn-default prev-year btn-lg\" title=\"";
@@ -589,7 +567,7 @@ function program10(depth0,data) {
   return buffer;
   }
 
-function program12(depth0,data) {
+function program6(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\r\n        <ul class=\"pagination pagination\">\r\n            <li><a class=\"prev-year\" title=\"";
@@ -615,8 +593,8 @@ function program12(depth0,data) {
   buffer += "<div class=\"calendar-panel calendar-nav-panel \">\r\n    ";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.showEditBar), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n    <div class=\"pull-right calendar-navigation\">\r\n        ";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.navAltVersion), {hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data});
+  buffer += "\r\n    <div class=\"col-lg-10 calendar-navigation pull-left\">\r\n        ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.CONFIG)),stack1 == null || stack1 === false ? stack1 : stack1.navAltVersion), {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    </div>\r\n\r\n    <div style=\"clear:both;\"></div>\r\n</div>\r\n";
   return buffer;

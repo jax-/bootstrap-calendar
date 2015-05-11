@@ -91,9 +91,6 @@ table.calendar .bold {
   height: 20px;
   box-sizing: content-box;
 }
-.calendar-buttons {
-  margin-left: 3px;
-}
 .calendar-buttons button {
   background-color: #870052 !important;
 }

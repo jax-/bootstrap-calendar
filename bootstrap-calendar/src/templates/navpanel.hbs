@@ -1,18 +1,21 @@
 ﻿<div class="calendar-panel calendar-nav-panel ">
     {{#if CONFIG.showEditBar}}
-    <div class="pull-left calendar-buttons">
-        <button type="button" class="btn btn-primary disabled panel-add-event">{{#if CONFIG.useIcons}}<span class="glyphicon glyphicon-plus"></span>{{/if}}{{{RESOURCES.ADD_EVENT}}}</button>
-        <button type="button" class="btn btn-primary disabled panel-edit-event">{{#if CONFIG.useIcons}}<span class="glyphicon glyphicon-pencil"></span>{{/if}}{{{RESOURCES.EDIT_EVENT}}}</button>
-        <button type="button" class="btn btn-primary disabled panel-remove-event">{{#if CONFIG.useIcons}}<span class="glyphicon glyphicon-remove"></span>{{/if}}{{{RESOURCES.REMOVE_EVENT}}}</button>
-
-        {{#unless CONFIG.autosave}}
-        <button class="btn btn-primary save-events" style="margin-right:10px;">{{{RESOURCES.SAVE_EVENTS}}}</button>
-        <label for="event-autosave">{{{RESOURCES.AUTOSAVE}}}</label>
-        <input type="checkbox" id="event-autosave" class="event-autosave" />
-        {{/unless}}
+    <div class="calendar-buttons col-lg-2 pull-right">
+        <div class="col-lg-10">
+            {{#unless CONFIG.autosave}}
+            <button class="btn btn-primary save-events" style="margin-right:10px;">{{{RESOURCES.SAVE_EVENTS}}}</button>
+            <label for="event-autosave">{{{RESOURCES.AUTOSAVE}}}</label>
+            <input type="checkbox" id="event-autosave" class="event-autosave" />
+            {{/unless}}
+        </div>
+        <div class="topicons">
+            <a href="" class="iconred disabled panel-remove-event" title="{{{RESOURCES.REMOVE_EVENT}}}"><i class="fa fa-times fa-3x"></i></a>
+            <a href="" class="iconblue disabled panel-edit-event" title="{{{RESOURCES.EDIT_EVENT}}}"><i class="fa fa-wrench fa-3x"></i></a>
+            <a href="" class="icongreen disabled panel-add-event" title="{{{RESOURCES.ADD_EVENT}}}"><i class="fa fa-plus fa-3x"></i></a>
+        </div>
     </div>
     {{/if}}
-    <div class="pull-right calendar-navigation">
+    <div class="col-lg-10 calendar-navigation pull-left">
         {{#if CONFIG.navAltVersion}}
         <button type="button" class="btn btn-nav btn-default prev-year btn-lg" title="{{{RESOURCES.PREVIOUS_YEAR}}}"><<</button>
         <button type="button" class="btn btn-nav btn-default prev-month btn-lg" title="{{{RESOURCES.PREVIOUS_MONTH}}}"><</button>

@@ -17,7 +17,7 @@
                 <ul style="list-style:none;">
                     <li><span class="date ">{{date_string}}</span></li>
                     {{#each this.events}}
-                    <li>
+                    <li title="{{ this.eventName }}">
                         <span class="event {{#if this.readonly}}readonly{{/if}} {{computeTextColorClass this.color}}" data-day="{{../dayValue}}" data-eventid="{{eventId}}" style="background-color:{{this.color}};">
                             {{#if this.readonly}}
                             <span class="glyphicon glyphicon-lock"></span>
